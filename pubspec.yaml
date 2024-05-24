@@ -19,8 +19,15 @@ flutter:
   uses-material-design: true
   assets:
     - images/white-helen.png
-    - images/bg-login-helen.png
+    - images/login-bg.jpg
     - images/logo-opa.png
+    - images/clouds.png
+    - images/addproduct.png
+    - images/order.png
+    - images/aichat.png
+    - images/upcomingevents.png
+    - images/lemon.png
+    
   fonts:
     - family: Poppins
       fonts:

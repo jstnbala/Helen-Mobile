@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:helen_app/nav-bar.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -12,7 +13,7 @@ class LoginPage extends StatelessWidget {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'images/bg-login-helen.png',
+              'images/login-bg.jpg',
               fit: BoxFit.cover,
               height: size.height, // Match the screen height
             ),
@@ -78,20 +79,21 @@ class LoginPage extends StatelessWidget {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.transparent,
+                            contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0), // Increase padding
                             labelText: 'Username',
                             hintText: 'Enter your username',
                             labelStyle: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
                             hintStyle: TextStyle(color: Colors.white70, fontFamily: 'Poppins'),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: BorderSide(color: Colors.white, width: 2.0), // Increase border width
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: BorderSide(color: Colors.white, width: 2.0), // Increase border width
                               borderRadius: BorderRadius.circular(15),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: BorderSide(color: Colors.white, width: 2.0), // Increase border width
                               borderRadius: BorderRadius.circular(15),
                             ),
                           ),
@@ -107,20 +109,21 @@ class LoginPage extends StatelessWidget {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.transparent,
+                            contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0), // Increase padding
                             labelText: 'Password',
                             hintText: 'Enter your password',
                             labelStyle: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
                             hintStyle: TextStyle(color: Colors.white70, fontFamily: 'Poppins'),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: BorderSide(color: Colors.white, width: 2.0), // Increase border width
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: BorderSide(color: Colors.white, width: 2.0), // Increase border width
                               borderRadius: BorderRadius.circular(15),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: BorderSide(color: Colors.white, width: 2.0), // Increase border width
                               borderRadius: BorderRadius.circular(15),
                             ),
                           ),
@@ -155,7 +158,11 @@ class LoginPage extends StatelessWidget {
                         width: size.width * 0.7, // Set width to 70% of the screen width
                         child: ElevatedButton(
                           onPressed: () {
-                            // Handle login logic here
+                            // Navigate to HomeFarmerSeller
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Navbar()),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
@@ -187,7 +194,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                                          'Mag-register lamang dito.',
+                      'Mag-register lamang dito.',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Poppins',
@@ -214,4 +221,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
