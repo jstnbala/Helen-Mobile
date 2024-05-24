@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 
 class GetStartedPage extends StatelessWidget {
@@ -28,57 +27,62 @@ class GetStartedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(20),
-                color: Colors.transparent,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    Text(
-                      'Kaagapay mo at KA-HELEN',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Text(
-                      'Gabay sa Pamimili, Kaagapay sa Pagsasaka, Kakampi sa Pag-unlad.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login'); // Navigate to login page
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF0C7230),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 80,
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  color: Colors.transparent,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Harnessing Expanded, Livelihood Enterprise and Network',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                      child: Text(
-                        'Simulan Na!!',
+                      SizedBox(height: 30),
+                      Text(
+                        'Gabay sa Pamimili, Kaagapay sa Pagsasaka, Kakampi sa Pag-unlad.',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
                           fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/login'); // Navigate to login page
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF0C7230),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 80,
+                          ),
+                        ),
+                        child: Text(
+                          'Simulan Na!',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
