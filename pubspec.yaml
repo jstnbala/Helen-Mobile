@@ -27,6 +27,7 @@ flutter:
     - images/aichat.png
     - images/upcomingevents.png
     - images/lemon.png
+    - images/carrots.png
     
   fonts:
     - family: Poppins
