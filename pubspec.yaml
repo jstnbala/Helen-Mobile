@@ -28,6 +28,7 @@ flutter:
     - images/upcomingevents.png
     - images/lemon.png
     - images/carrots.png
+    - images/sample-event.png
     
   fonts:
     - family: Poppins
