@@ -46,7 +46,7 @@ class _NavbarState extends State<Navbar> {
                 left: 0,
                 right: 0,
                 child: Image.asset(
-                  'images/white-helen.png',
+                  'images/farmers/white-helen.png',
                   height: 100,
                 ),
               ),

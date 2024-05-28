@@ -23,7 +23,7 @@ class OrdersPage extends StatelessWidget {
           child: Column(
             children: [
               OrderCard(
-                imagePath: 'images/carrots.png',
+                imagePath: 'images/farmers/carrots.png',
                 productName: 'Carrots',
                 kilos: '10 kilos',
                 quantity: '0',
@@ -31,7 +31,7 @@ class OrdersPage extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               OrderCard(
-                imagePath: 'images/carrots.png',
+                imagePath: 'images/farmers/carrots.png',
                 productName: 'Carrots',
                 kilos: '10 kilos',
                 quantity: '0',
