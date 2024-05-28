@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
-import 'package:helen_app/ai-chat.dart';
-import 'package:helen_app/upcoming-events.dart';
+import 'package:helen_app/farmers/ai-chat.dart';
+import 'package:helen_app/farmers/upcoming-events.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
                   height: 140,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('images/clouds.png'),
+                      image: AssetImage('images/farmers/clouds.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
                       child: Stack(
                         children: [
                           Image.asset(
-                            'images/order.png',
+                            'images/farmers/order.png',
                             width: 185,
                             height: 140,
                             fit: BoxFit.cover,
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                       child: Stack(
                         children: [
                           Image.asset(
-                            'images/addproduct.png',
+                            'images/farmers/addproduct.png',
                             width: 185,
                             height: 140,
                             fit: BoxFit.cover,
@@ -147,7 +147,7 @@ class HomePage extends StatelessWidget {
                         child: Stack(
                           children: [
                             Image.asset(
-                              'images/upcomingevents.png',
+                              'images/farmers/upcomingevents.png',
                               width: 185,
                               height: 140,
                               fit: BoxFit.cover,
@@ -200,7 +200,7 @@ class HomePage extends StatelessWidget {
                         child: Stack(
                           children: [
                             Image.asset(
-                              'images/aichat.png',
+                              'images/farmers/aichat.png',
                               width: 185,
                               height: 140,
                               fit: BoxFit.cover,
@@ -267,7 +267,7 @@ class HomePage extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Image.asset(
-                                        'images/lemon.png',
+                                        'images/farmers/lemon.png',
                                         width: 185,
                                         height: 170,
                                         fit: BoxFit.cover,
@@ -331,7 +331,7 @@ class HomePage extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Image.asset(
-                                        'images/lemon.png',
+                                        'images/farmers/lemon.png',
                                         width: 185,
                                         height: 170,
                                         fit: BoxFit.cover,

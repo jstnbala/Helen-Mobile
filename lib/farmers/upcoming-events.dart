@@ -54,7 +54,7 @@ class UpcomingEvents extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Image.asset(
-            'images/sample-event.png',
+            'images/farmers/sample-event.png',
             fit: BoxFit.cover,
           ),
         ),

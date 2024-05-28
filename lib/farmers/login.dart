@@ -1,8 +1,15 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:helen_app/nav-bar.dart';
+import 'package:helen_app/farmers/nav-bar.dart';
+import 'package:helen_app/farmers/forgotpass.dart'; // Import ForgotPassPage class
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _obscurePassword = true;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -13,7 +20,7 @@ class LoginPage extends StatelessWidget {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'images/login-bg.jpg',
+              'images/farmers/login-bg.jpg',
               fit: BoxFit.cover,
               height: size.height, // Match the screen height
             ),
@@ -40,19 +47,19 @@ class LoginPage extends StatelessWidget {
                       children: [
                         SizedBox(
                           height: 140, // Adjust height of logo
-                          child: Image.asset('images/white-helen.png'),
+                          child: Image.asset('images/farmers/white-helen.png'),
                         ),
                         SizedBox(width: 3), // Add some space between the logos
                         SizedBox(
                           height: 140, // Adjust height of logo
-                          child: Image.asset('images/logo-opa.png'),
+                          child: Image.asset('images/farmers/logo-opa.png'),
                         ),
                       ],
                     ),
                     SizedBox(height: 20), // Add some space between logos and text
                     // "Mabuhay, Magsasaka!" text
                     Text(
-                      'Mabuhay, Magsasaka!',
+                      'Welcome, Farmer!',
                       style: TextStyle(
                         fontSize: 28, // Make text bigger
                         fontWeight: FontWeight.bold, // Make text bold
@@ -63,7 +70,7 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 8), // Add some space between lines
                     // "Mangyaring mag-log in gamit ang iyong mga kredensyal sa ibaba" text
                     Text(
-                      'Mangyaring mag-log in gamit ang iyong mga kredensyal sa ibaba',
+                      'Please log in using your credentials below',
                       style: TextStyle(
                         fontSize: 16, // Make text smaller
                         color: Colors.white, // Set text color to white
@@ -126,9 +133,20 @@ class LoginPage extends StatelessWidget {
                               borderSide: BorderSide(color: Colors.white, width: 2.0), // Increase border width
                               borderRadius: BorderRadius.circular(15),
                             ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
                           ),
                           style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-                          obscureText: true,
+                          obscureText: _obscurePassword,
                         ),
                       ),
                     ),
@@ -139,7 +157,11 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 16.0),
                         child: TextButton(
                           onPressed: () {
-                            // Handle Forgot Password logic here
+                            // Navigate to ForgotPassPage
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ForgotPassPage()),
+                            );
                           },
                           child: Text(
                             'Forgot Password?',
@@ -186,7 +208,7 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 15),
                     // Additional text below the login button
                     Text(
-                      'Walang account? ',
+                      'Don\'t have an account?',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Poppins',
@@ -194,7 +216,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Mag-register lamang dito.',
+                      'Register here',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Poppins',
