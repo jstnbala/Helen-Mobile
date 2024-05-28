@@ -60,7 +60,7 @@ class GetStartedPage extends StatelessWidget {
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/login'); // Navigate to login page
+                          Navigator.pushNamed(context, '/account-type'); // Navigate to account type page
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Color(0xFF0C7230),
@@ -73,7 +73,7 @@ class GetStartedPage extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          'Simulan Na!',
+                          'Get Started',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
