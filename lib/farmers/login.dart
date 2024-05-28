@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/farmers/nav-bar.dart';
 import 'package:helen_app/farmers/forgotpass.dart'; // Import ForgotPassPage class
+import 'package:helen_app/farmers/registration-farmer.dart'; // Import FarmerRegistrationPage class
 
 class LoginPage extends StatefulWidget {
   @override
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(height: 20), // Add some space between logos and text
-                    // "Mabuhay, Magsasaka!" text
+                    // "Welcome, Farmer!" text
                     Text(
                       'Welcome, Farmer!',
                       style: TextStyle(
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(height: 8), // Add some space between lines
-                    // "Mangyaring mag-log in gamit ang iyong mga kredensyal sa ibaba" text
+                    // "Please log in using your credentials below" text
                     Text(
                       'Please log in using your credentials below',
                       style: TextStyle(
@@ -215,12 +216,21 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(height: 4),
-                    Text(
-                      'Register here',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
+                    InkWell(
+                      onTap: () {
+                        // Navigate to FarmerRegistrationPage
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FarmerRegistrationPage()),
+                        );
+                      },
+                      child: Text(
+                        'Register here',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
