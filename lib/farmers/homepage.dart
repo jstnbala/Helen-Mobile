@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/farmers/ai-chat.dart';
 import 'package:helen_app/farmers/upcoming-events.dart';
+import 'package:helen_app/farmers/addproduct.dart'; // Import the AddProductPage class
 
 class HomePage extends StatelessWidget {
   @override
@@ -78,48 +79,57 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Container(
-                      width: 185,
-                      height: 140,
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            'images/farmers/addproduct.png',
-                            width: 185,
-                            height: 140,
-                            fit: BoxFit.cover,
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            left: 15,
-                            child: Text(
-                              'Add Product',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                  // Wrap GestureDetector with Navigator
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddProductPage()), // Navigate to AddProductPage
+                      );
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        width: 185,
+                        height: 140,
+                        child: Stack(
+                          children: [
+                            Image.asset(
+                              'images/farmers/addproduct.png',
+                              width: 185,
+                              height: 140,
+                              fit: BoxFit.cover,
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              left: 15,
+                              child: Text(
+                                'Add Product',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            top: 10,
-                            right: 10,
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.green,
+                            Positioned(
+                              top: 10,
+                              right: 10,
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.green,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -278,7 +288,7 @@ class HomePage extends StatelessWidget {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(
+                                            Text (
                                               'Lemon',
                                               style: TextStyle(
                                                 fontFamily: 'Poppins',
