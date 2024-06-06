@@ -1,6 +1,5 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
+import 'package:helen_app/farmers/login.dart';
 import 'homepage.dart';
 import 'messagespage.dart';
 import 'orderspage.dart';
@@ -26,6 +25,7 @@ class _NavbarState extends State<Navbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HalfWhiteDrawer(), // Adding the drawer
       body: Column(
         children: [
           Stack(
@@ -48,6 +48,21 @@ class _NavbarState extends State<Navbar> {
                 child: Image.asset(
                   'images/farmers/white-helen.png',
                   height: 100,
+                ),
+              ),
+              Positioned(
+                bottom: 10,
+                left: 10,
+                child: Builder(
+                  builder: (context) => IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer(); // Open the drawer
+                    },
+                  ),
                 ),
               ),
               Positioned(
@@ -138,6 +153,110 @@ class _NavbarState extends State<Navbar> {
         ),
         type: BottomNavigationBarType.fixed,
         iconSize: 30, // Adjust the size of the navigation icons
+      ),
+    );
+  }
+}
+
+class HalfWhiteDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 30.0), // Adjust the top padding as needed
+        child: Container(
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width / 2, // Adjust width as needed
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Farmer's Name",
+                      style: TextStyle(
+                        color: Color(0xFF0C7230),
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30.0,
+                      ),
+                    ),
+                    SizedBox(height: 40.0), // Added extra space
+                    Row(
+                      children: [
+                        Icon(Icons.info, color: Color(0xFF0C7230), size: 30.0,),
+                        SizedBox(width: 12.0), // Increased spacing
+                        Text(
+                          'About',
+                          style: TextStyle(
+                            color: Color(0xFF0C7230),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0), // Added extra space
+                    Row(
+                      children: [
+                        Icon(Icons.help, color: Color(0xFF0C7230), size: 30.0,),
+                        SizedBox(width: 12.0), // Increased spacing
+                        Text(
+                          'Help',
+                          style: TextStyle(
+                            color: Color(0xFF0C7230),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFF0C7230),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12.0,
+                        horizontal: 20.0,
+                      ),
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -78,19 +78,6 @@ class FarmerRegistrationPage extends StatelessWidget {
             SizedBox(height: 10), // Add space between fields
             TextFormField(
               decoration: InputDecoration(
-                labelText: 'Organization',
-                hintText: 'Your organization',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Add border radius
-                ),
-                labelStyle: TextStyle(fontFamily: 'Poppins'), // Set Poppins font
-              ),
-              style: TextStyle(fontFamily: 'Poppins'), // Set Poppins font for entered text
-              textInputAction: TextInputAction.next,
-            ),
-            SizedBox(height: 10), // Add space between fields
-            TextFormField(
-              decoration: InputDecoration(
                 labelText: 'Contact',
                 hintText: 'Enter your contact number',
                 border: OutlineInputBorder(
