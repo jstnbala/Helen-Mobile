@@ -21,6 +21,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
         ),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -54,7 +55,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20), // Adding some space between the cards
+              SizedBox(height: 20),
 
               // Small Cards Row
               Row(
@@ -177,7 +178,6 @@ class _AddProductPageState extends State<AddProductPage> {
                   color: Colors.black,
                 ),
               ),
-              // Calendar Icon with 'Select Here' hint
               TextFormField(
                 readOnly: true,
                 decoration: InputDecoration(
@@ -205,7 +205,6 @@ class _AddProductPageState extends State<AddProductPage> {
                   color: Colors.black,
                 ),
               ),
-              // Calendar Icon with 'Select Here' hint
               TextFormField(
                 readOnly: true,
                 decoration: InputDecoration(
@@ -234,7 +233,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
               ),
               TextFormField(
-                maxLines: null,
+                maxLines: 5, // Increased height
                 decoration: InputDecoration(
                   hintText: 'Type Here...',
                   hintStyle: TextStyle(
@@ -246,6 +245,107 @@ class _AddProductPageState extends State<AddProductPage> {
                     borderSide: BorderSide(),
                   ),
                 ),
+              ),
+              SizedBox(height: 20),
+
+              // Additional Fields
+              Text(
+                'Minimum Per Order',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.black,
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Numbers Only',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Kilos',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(),
+                        ),
+                      ),
+                      items: null, // Add your dropdown items here
+                      onChanged: null, // Add your onChanged function here
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+
+              Text(
+                'Inventory',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.black,
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Numbers Only',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Kilos',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(),
+                        ),
+                      ),
+                      items: null, // Add your dropdown items here
+                      onChanged: null, // Add your onChanged function here
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 20),
 
@@ -277,4 +377,3 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 }
-

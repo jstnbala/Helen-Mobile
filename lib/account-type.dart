@@ -4,24 +4,33 @@ class AccountTypeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF0C7230),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'Select Account Type',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Select Account Type',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Color(0xFF0C7230),
-                ),
-              ),
-              SizedBox(height: 30),
               Container(
-                height: 150, // Adjust the height to fit your needs
+                height: 200, // Adjust the height to fit your needs
                 child: Image.asset(
                   'images/are-you-a-farmer.png',
                   fit: BoxFit.contain,
@@ -51,7 +60,7 @@ class AccountTypeScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               Container(
-                height: 150, // Adjust the height to fit your needs
+                height: 200, // Adjust the height to fit your needs
                 child: Image.asset(
                   'images/are-you-a-buyer.png',
                   fit: BoxFit.contain,
