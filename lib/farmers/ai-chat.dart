@@ -19,7 +19,7 @@ class ChatAI extends StatelessWidget {
           },
         ),
         title: Text(
-          'AI Chat',
+          'Chat Assistant',
           style: TextStyle(
             color: Colors.white, // Text color
             fontFamily: 'Poppins', // Font family
