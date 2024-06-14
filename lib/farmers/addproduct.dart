@@ -246,57 +246,6 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-
-              // Additional Fields
-              Text(
-                'Minimum Per Order',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.black,
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Numbers Only',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.grey,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    flex: 1,
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Kilos',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.grey,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(),
-                        ),
-                      ),
-                      items: null, // Add your dropdown items here
-                      onChanged: null, // Add your onChanged function here
-                    ),
-                  ),
-                ],
-              ),
               SizedBox(height: 10),
 
               Text(

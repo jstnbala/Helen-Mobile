@@ -42,83 +42,123 @@ class UpcomingEvents extends StatelessWidget {
     );
   }
 
- Widget buildEventCard() {
-  return Card(
-    elevation: 5,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Image.asset(
-            'images/farmers/sample-event.png',
-            fit: BoxFit.cover,
-          ),
-        ),
-        SizedBox(width: 16.0),
-        Expanded(
-          flex: 2,
-          child: Column(
+  Widget buildEventCard() {
+    return EventCard();
+  }
+}
+
+class EventCard extends StatefulWidget {
+  @override
+  _EventCardState createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  'Event Name',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.black,
-                  ),
+              Expanded(
+                flex: 1,
+                child: Image.asset(
+                  'images/farmers/sample-event.png',
+                  fit: BoxFit.cover,
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 4.0),
-                child: Text(
-                  'May 24, 2024',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12.0,
-                    color: Colors.black,
-                  ),
+              SizedBox(width: 16.0),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        'Event Name',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        'May 24, 2024',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        '10:00 AM',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        'Community Hall',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 4.0),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                },
                 child: Text(
-                  '10:00 AM',
+                  '>',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 12.0,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 4.0),
-                child: Text(
-                  'Community Hall',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12.0,
+                    fontSize: 20.0,
                     color: Colors.black,
                   ),
                 ),
               ),
             ],
           ),
-        ),
-        IconButton(
-          icon: Icon(Icons.more_vert),
-          onPressed: () {
-            // Handle button tap
-            },
-          ),
+          if (_isExpanded)
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices consequat nisl eu ultricies. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 12.0,
+                  color: Colors.black,
+                ),
+              ),
+            ),
         ],
       ),
     );
