@@ -1,6 +1,7 @@
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 
-class FarmerRegistrationPage extends StatelessWidget {
+class BuyerRegistrationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +15,7 @@ class FarmerRegistrationPage extends StatelessWidget {
           },
         ),
         title: Text(
-          'Farmer Registration',
+          'Buyer Registration',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,

@@ -1,15 +1,15 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
-import 'package:helen_app/farmers/nav-bar.dart';
-import 'package:helen_app/farmers/forgotpass.dart'; // Import ForgotPassPage class
-import 'package:helen_app/farmers/registration-farmer.dart'; // Import FarmerRegistrationPage class
+import 'package:helen_app/buyers/nav-bar-buyer.dart';
+import 'package:helen_app/buyers/forgot-pass-buyer.dart'; // Import ForgotPassPage class
+import 'package:helen_app/buyers/registration-buyer.dart'; // Import FarmerRegistrationPage class
 
-class LoginPage extends StatefulWidget {
+class LoginPageBuyer extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginPageBuyerState createState() => _LoginPageBuyerState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageBuyerState extends State<LoginPageBuyer> {
   bool _obscurePassword = true;
 
   @override
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                         bottomRight: Radius.circular(40),
                       ),
                       child: Image.asset(
-                        'images/farmers/login-bg.jpg',
+                        'images/buyers/buyer-login-bg.jpg',
                         fit: BoxFit.cover, // Make sure the image covers the entire container
                       ),
                     ),
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         SizedBox(height: 10), // Add some space between logos and text
                         Text(
-                          'Welcome, Farmer!',
+                          'Welcome, Buyer!',
                           style: TextStyle(
                             fontSize: 28, // Make text bigger
                             fontWeight: FontWeight.bold, // Make text bold
@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                       // Navigate to ForgotPassPage
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ForgotPassPage()),
+                        MaterialPageRoute(builder: (context) => ForgotPassBuyer()),
                       );
                     },
                     child: Text(
@@ -216,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                       // Navigate to HomeFarmerSeller
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Navbar()),
+                        MaterialPageRoute(builder: (context) => NavbarBuyer()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -253,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
                   // Navigate to FarmerRegistrationPage
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FarmerRegistrationPage()),
+                    MaterialPageRoute(builder: (context) => BuyerRegistrationPage()),
                   );
                 },
                 child: Text(

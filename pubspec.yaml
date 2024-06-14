@@ -31,6 +31,18 @@ flutter:
     - images/farmers/sample-event.png
     - images/are-you-a-farmer.png
     - images/are-you-a-buyer.png
+    - images/farmers/farmer-profile.png
+    - images/buyers/buyer-login-bg.jpg
+    - images/farmers/dummyproductlist.png
+    - images/buyers/Carrot.png
+    - images/buyers/Corn.png
+    - images/buyers/Lemon.png
+    - images/buyers/Tomatoes.png
+    - images/buyers/product-corn.png
+    - images/buyers/checkout-pic.png
+    - images/buyers/sample-buyer-pic.jpg
+    - images/farmers/lucbantradingpost.jpg
+    - images/farmers/Frame 5.png
     
   fonts:
     - family: Poppins

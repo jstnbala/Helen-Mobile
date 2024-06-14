@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePageBuyer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
                 backgroundColor: Colors.grey,
                 child: ClipOval(
                   child: Image.asset(
-                    'images/farmers/farmer-profile.png',
+                    'images/buyers/sample-buyer-pic.jpg', // Updated image path
                     width: 100.0,
                     height: 100.0,
                     fit: BoxFit.cover,
@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
               ),
               SizedBox(height: 10.0),
               Text(
-                '@akosiNestor',
+                '@jstn_bala',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 24.0,
@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Farmer Information',
+                      'Buyer Information',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 24.0,
@@ -65,7 +65,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Nestor Matimatico',
+                      'Justin Bala',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14.0,
@@ -101,7 +101,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Lucban Agricultural Cooperative Society',
+                      'Organic Valley',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14.0,
@@ -160,36 +160,6 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     Text(
                       'Pending Orders',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0C7230),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Add onPressed action here
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'List of Products',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,

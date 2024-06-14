@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:helen_app/farmers/about-farmer.dart';
-import 'package:helen_app/farmers/help-farmer.dart';
-import 'package:helen_app/farmers/login.dart';
-import 'homepage.dart';
-import 'messagespage.dart';
-import 'orderspage.dart';
-import 'profilepage.dart';
+import 'package:helen_app/buyers/help-buyer.dart';
+import 'package:helen_app/buyers/login-buyer.dart';
+import 'package:helen_app/buyers/previousorders.dart';
+import 'homepage-buyer.dart';
+import 'messages-buyer.dart';
+import 'orderlists-buyer.dart';
+import 'profile-buyer.dart';
+import 'about-buyer.dart'; // Import the AboutBuyer class
 
-class Navbar extends StatefulWidget {
+class NavbarBuyer extends StatefulWidget {
   @override
-  _NavbarState createState() => _NavbarState();
+  _NavbarBuyerState createState() => _NavbarBuyerState();
 }
 
-class _NavbarState extends State<Navbar> {
+class _NavbarBuyerState extends State<NavbarBuyer> {
   int _selectedIndex = 0;
 
   static const Color selectedColor = Color(0xFF0C7230);
@@ -113,10 +114,10 @@ class _NavbarState extends State<Navbar> {
             child: IndexedStack(
               index: _selectedIndex,
               children: [
-                HomePage(),
-                MessagesPage(),
-                OrdersPage(),
-                ProfilePage(),
+                HomePageBuyer(),
+                MessagesPageBuyer(),
+                OrdersListsBuyer(),
+                ProfilePageBuyer(),
               ],
             ),
           ),
@@ -178,20 +179,44 @@ class HalfWhiteDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Nestor Matimatico",
+                      "Buyer's Name",
                       style: TextStyle(
                         color: Color(0xFF0C7230),
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
+                        fontSize: 30.0,
                       ),
                     ),
                     SizedBox(height: 40.0), // Added extra space
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AboutFarmer()), // Navigate to AboutFarmer
+                          MaterialPageRoute(builder: (context) => PreviousOrdersBuyer()),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.history, color: Color(0xFF0C7230), size: 30.0,),
+                          SizedBox(width: 12.0), // Increased spacing
+                          Text(
+                            'Previous Orders',
+                            style: TextStyle(
+                              color: Color(0xFF0C7230),
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.0), // Added extra space
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AboutBuyer()),
                         );
                       },
                       child: Row(
@@ -211,11 +236,11 @@ class HalfWhiteDrawer extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20.0), // Added extra space
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HelpFarmerScreen()),
+                          MaterialPageRoute(builder: (context) => HelpBuyerScreen()),
                         );
                       },
                       child: Row(
@@ -225,11 +250,11 @@ class HalfWhiteDrawer extends StatelessWidget {
                           Text(
                             'Help',
                             style: TextStyle(
-                              color: Color(0xFF0C7230),
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                            ),
+                            color: Color(0xFF0C7230),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
                           ),
                         ],
                       ),
@@ -244,9 +269,9 @@ class HalfWhiteDrawer extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => LoginPageBuyer()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
