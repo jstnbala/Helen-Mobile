@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helen_app/buyers/login-buyer.dart';
 
 class AccountTypeScreen extends StatelessWidget {
   @override
@@ -46,7 +47,7 @@ class AccountTypeScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login'); // Navigate to LoginPage
+                  Navigator.pushNamed(context, '/login'); // Navigate to LoginPageFarmer
                 },
                 child: Text(
                   'Are you a Farmer?',
@@ -75,9 +76,13 @@ class AccountTypeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
+                 onPressed: () {
+                     // Navigate to LoginPageBuyer
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPageBuyer()),
+                   );
+                 },
                 child: Text(
                   'Are you a Buyer?',
                   style: TextStyle(
