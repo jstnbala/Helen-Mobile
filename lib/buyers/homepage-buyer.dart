@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:helen_app/buyers/order-buyer.dart';
+import 'package:helen_app/buyers/sample-tomatoes.dart';
 
 class HomePageBuyer extends StatelessWidget {
   @override
@@ -62,7 +63,16 @@ class HomePageBuyer extends StatelessWidget {
                     child: Image.asset('images/buyers/Lemon.png'),
                   ),
                   Expanded(
-                    child: Image.asset('images/buyers/Tomatoes.png'),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SampleTomatoesClass()),
+                        );
+                      },
+                    child: Image.asset('images/buyers/Corn.png'),
+                    
+                  ),
                   ),
                 ],
               ),

@@ -43,6 +43,7 @@ flutter:
     - images/buyers/sample-buyer-pic.jpg
     - images/farmers/lucbantradingpost.jpg
     - images/farmers/Frame 5.png
+    - images/buyers/sample-tomatoes.png
     
   fonts:
     - family: Poppins

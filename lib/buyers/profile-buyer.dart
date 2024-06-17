@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 
 class ProfilePageBuyer extends StatelessWidget {
@@ -17,7 +16,7 @@ class ProfilePageBuyer extends StatelessWidget {
                 backgroundColor: Colors.grey,
                 child: ClipOval(
                   child: Image.asset(
-                    'images/buyers/sample-buyer-pic.jpg', // Updated image path
+                    'images/buyers/sample-buyer-pic.jpg',
                     width: 100.0,
                     height: 100.0,
                     fit: BoxFit.cover,
@@ -25,14 +24,25 @@ class ProfilePageBuyer extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.0),
-              Text(
-                '@jstn_bala',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 24.0,
-                  color: Color(0xFF0C7230),
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '@jstn_bala',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 24.0,
+                      color: Color(0xFF0C7230),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 5.0),
+                  Icon(
+                    Icons.check_circle,
+                    color: Colors.blue, // Adjust color as needed
+                    size: 24.0,
+                  ),
+                ],
               ),
               SizedBox(height: 20.0),
               Container(
@@ -147,36 +157,6 @@ class ProfilePageBuyer extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Add onPressed action here
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Pending Orders',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0C7230),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
