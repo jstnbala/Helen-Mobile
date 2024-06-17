@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/buyers/checkout.dart';
-import 'package:helen_app/buyers/sample-tomatoes-checkout.dart';
 
 class SampleTomatoesClass extends StatelessWidget {
  @override
