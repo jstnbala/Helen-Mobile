@@ -1,14 +1,24 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 
-class OrdersListsBuyer extends StatelessWidget {
+class OrdersListsBuyer extends StatefulWidget {
+  @override
+  _OrdersListsBuyerState createState() => _OrdersListsBuyerState();
+}
+
+class _OrdersListsBuyerState extends State<OrdersListsBuyer> {
+  // Variables to manage visibility of messages
+  bool showPendingMessage = false;
+  bool showCanceledMessage = false;
+  bool showCompletedMessage = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Orders List',
+          'Orders',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
@@ -22,21 +32,193 @@ class OrdersListsBuyer extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              OrderCard(
-                imagePath: 'images/farmers/carrots.png',
-                productName: 'Carrots',
-                kilos: '10 kilos',
-                quantity: '0',
-                price: 'P00.00',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Pending Orders Card
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showPendingMessage = true;
+                          showCanceledMessage = false;
+                          showCompletedMessage = false;
+                        });
+                      },
+                      child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0C7230),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Orders',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                '02',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  // Canceled Orders Card
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showCanceledMessage = true;
+                          showPendingMessage = false;
+                          showCompletedMessage = false;
+                        });
+                      },
+                      child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0C7230),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Canceled',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                '00',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  // Completed Orders Card
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showCompletedMessage = true;
+                          showPendingMessage = false;
+                          showCanceledMessage = false;
+                        });
+                      },
+                      child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0C7230),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Completed',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                '00',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 16.0),
-              OrderCard(
-                imagePath: 'images/farmers/carrots.png',
-                productName: 'Carrots',
-                kilos: '10 kilos',
-                quantity: '0',
-                price: 'P00.00',
-              ),
+              if (showPendingMessage)
+                Column(
+                  children: [
+                    SizedBox(height: 16.0),
+                    OrderCard(
+                      imagePath: 'images/farmers/carrots.png',
+                      productName: 'Carrots',
+                      kilos: '10 kilos',
+                      quantity: '0',
+                      price: 'P00.00',
+                    ),
+                    SizedBox(height: 16.0),
+                    OrderCard(
+                      imagePath: 'images/farmers/carrots.png',
+                      productName: 'Carrots',
+                      kilos: '10 kilos',
+                      quantity: '0',
+                      price: 'P00.00',
+                    ),
+                  ],
+                ),
+              if (showCanceledMessage)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(
+                    'Your Canceled Orders will reflect here',
+                    style: TextStyle(
+                      color: Color(0xFF0C7230),
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              if (showCompletedMessage)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(
+                    'Your Completed Orders will reflect here',
+                    style: TextStyle(
+                      color: Color(0xFF0C7230),
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -241,7 +423,7 @@ class _OrderCardState extends State<OrderCard> {
                         color: Colors.white,
                       ),
                     ),
-                     SizedBox(height: 4.0),
+                    SizedBox(height: 4.0),
                     Text(
                       '00/00/00',
                       style: TextStyle(
@@ -267,70 +449,73 @@ class _OrderCardState extends State<OrderCard> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          onPrimary: Color(0xFF0C7230),
-                          side: BorderSide(color: Color(0xFF0C7230)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            onPrimary: Color(0xFF0C7230),
+                            side: BorderSide(color: Color(0xFF0C7230)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          'Message',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8.0), // Adjusted space
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          onPrimary: Color(0xFF0C7230),
-                          side: BorderSide(color: Color(0xFF0C7230)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
+                          onPressed: () {},
+                          child: Text(
+                            'Message',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 8.0), // Adjusted space
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          onPrimary: Color(0xFF0C7230),
-                          side: BorderSide(color: Color(0xFF0C7230)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                        SizedBox(width: 8.0), // Adjusted space
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            onPrimary: Color(0xFF0C7230),
+                            side: BorderSide(color: Color(0xFF0C7230)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 20.0), // Adjust padding
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          'Received',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
+                          onPressed: () {},
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(width: 8.0), // Adjusted space
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            onPrimary: Color(0xFF0C7230),
+                            side: BorderSide(color: Color(0xFF0C7230)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding
+                          ),
+                          onPressed: () {},
+                          child: Text(
+                            'Received',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -340,3 +525,4 @@ class _OrderCardState extends State<OrderCard> {
     );
   }
 }
+
