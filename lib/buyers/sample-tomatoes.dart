@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/buyers/checkout.dart';
+import 'package:helen_app/buyers/sample-tomatoes-checkout.dart';
 
-class OrderBuyer extends StatelessWidget {
-  @override
+class SampleTomatoesClass extends StatelessWidget {
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
@@ -211,7 +212,7 @@ class OrderBuyer extends StatelessWidget {
                                 'Message',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
-                                  fontSize: 13.0,
+                                  fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -227,29 +228,7 @@ class OrderBuyer extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),
                               ),
-                              onPressed: () {},
-                              child: Text(
-                                'Pre-Order',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10.0),
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.grey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () {Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => CheckoutPage()),
                                 );
