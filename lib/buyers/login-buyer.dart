@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:helen_app/buyers/nav-bar-buyer.dart';
 import 'package:helen_app/buyers/forgot-pass-buyer.dart'; // Import ForgotPassPage class
-import 'package:helen_app/buyers/registration-buyer.dart'; // Import FarmerRegistrationPage class
+import 'package:helen_app/buyers/registration-buyer.dart'; // Import BuyerRegistrationPage class
 
 class LoginPageBuyer extends StatefulWidget {
   @override
@@ -11,6 +10,12 @@ class LoginPageBuyer extends StatefulWidget {
 
 class _LoginPageBuyerState extends State<LoginPageBuyer> {
   bool _obscurePassword = true;
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  // Expected credentials
+  final String _expectedUsername = 'jstn_bala';
+  final String _expectedPassword = '@Buying31';
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +41,17 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        bottomRight: Radius.circular(40),
-                      ),
-                      child: Image.asset(
-                        'images/buyers/buyer-login-bg.jpg',
-                        fit: BoxFit.cover, // Make sure the image covers the entire container
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(40),
+                          bottomRight: Radius.circular(40),
+                        ),
+                        child: Image.asset(
+                          'images/buyers/buyer-login-bg.jpg',
+                          fit: BoxFit.cover, // Make sure the image covers the entire container
+                        ),
                       ),
                     ),
-                  ),
                     Container(
                       height: size.height * 0.4, // Adjust height to fit header content
                       decoration: BoxDecoration(
@@ -116,6 +121,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                 child: Container(
                   width: size.width * 0.8, // Set width to 80% of the screen width
                   child: TextField(
+                    controller: _usernameController, // Assign the controller
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -146,6 +152,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                 child: Container(
                   width: size.width * 0.8, // Set width to 80% of the screen width
                   child: TextField(
+                    controller: _passwordController, // Assign the controller
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -208,16 +215,40 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                 ),
               ),
               SizedBox(height: 20),
+              // Login Button
               Center(
                 child: Container(
-                  width: size.width * 0.7, // Set width to 70% of the screen width
+                  width: size.width * 0.7,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate to HomeFarmerSeller
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => NavbarBuyer()),
-                      );
+                      // Perform login validation
+                      String enteredUsername = _usernameController.text.trim();
+                      String enteredPassword = _passwordController.text.trim();
+
+                      if (enteredUsername == _expectedUsername && enteredPassword == _expectedPassword) {
+                        // Navigate to Navbar on successful login
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => NavbarBuyer()),
+                        );
+                      } else {
+                        // Show error if credentials do not match
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Login Failed'),
+                            content: Text('Invalid username or password. Please try again.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xFF0C7230),
@@ -250,7 +281,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
               SizedBox(height: 4),
               InkWell(
                 onTap: () {
-                  // Navigate to FarmerRegistrationPage
+                  // Navigate to BuyerRegistrationPage
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => BuyerRegistrationPage()),
