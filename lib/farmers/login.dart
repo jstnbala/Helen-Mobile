@@ -14,7 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _passwordController = TextEditingController();
 
   // Expected credentials
-  String _expectedUsername = '@akosiNestor';
+  String _expectedUsername = 'akosiNestor';
   String _expectedPassword = '@Farming31';
 
   @override
