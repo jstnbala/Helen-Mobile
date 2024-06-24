@@ -93,7 +93,7 @@ class ProfilePageBuyer extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '123 Rizal Street, Barangay 5, Lucban, Quezon, Philippines 4328',
+                      '28 Everest Street Lucban',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14.0,

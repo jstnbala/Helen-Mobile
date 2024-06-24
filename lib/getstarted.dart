@@ -20,7 +20,7 @@ class GetStartedPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: Center(
                   child: Image.asset(
-                    'images/white-helen.png',
+                    'images/farmers/white-helen.png',
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width * 0.8,
                     height: MediaQuery.of(context).size.height * 0.4,
