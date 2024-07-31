@@ -15,7 +15,7 @@ class _AddProductPageState extends State<AddProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF0C7230),
+        backgroundColor: Color(0xFFCA771A),
         title: Text(
           'Add Products',
           style: TextStyle(
@@ -123,7 +123,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
             // Price
             Text(
-              'Price',
+              'Selling Price',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
@@ -355,7 +355,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 // Add functionality here
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0C7230),
+                primary: Color(0xFFCA771A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

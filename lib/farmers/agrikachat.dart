@@ -5,7 +5,7 @@ class ChatAI extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF0C7230), // Background color
+        backgroundColor: Color(0xFFCA771A), // Background color
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.0), // Border radius for lower left corner
@@ -80,7 +80,7 @@ class ChatAI extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.camera_alt, color: Color(0xFF0C7230)), // Camera icon
+                  icon: Icon(Icons.camera_alt, color: Color(0xFFCA771A)), // Camera icon
                   onPressed: () {
                     // Add functionality for camera icon onPressed
                   },
@@ -104,7 +104,7 @@ class ChatAI extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send, color: Color(0xFF0C7230)), // Send icon
+                  icon: Icon(Icons.send, color: Color(0xFFCA771A)), // Send icon
                   onPressed: () {
                     // Add functionality for send icon onPressed
                   },
@@ -119,7 +119,7 @@ class ChatAI extends StatelessWidget {
 
   Widget buildCard(BuildContext context, String question) {
     return Card(
-      color: Color(0xFF0C7230), // Card background color
+      color: Color(0xFFCA771A), // Card background color
       margin: EdgeInsets.symmetric(vertical: 10.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       child: InkWell(
