@@ -6,6 +6,7 @@ import 'homepage.dart';
 import 'messagespage.dart';
 import 'orderspage.dart';
 import 'profilepage.dart';
+import 'package:helen_app/farmers/addproduct.dart'; // Import the AddProductPage
 
 class Navbar extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class Navbar extends StatefulWidget {
 class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
 
-  static const Color selectedColor = Color(0xFF0C7230);
+  static const Color selectedColor = Color(0xFFCA771A);
   static const Color unselectedColor = Color(0xFF606060);
 
   void _onItemTapped(int index) {
@@ -38,7 +39,7 @@ class _NavbarState extends State<Navbar> {
                   bottomRight: Radius.circular(30),
                 ),
                 child: Container(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   width: double.infinity,
                   height: 150,
                 ),
@@ -60,6 +61,7 @@ class _NavbarState extends State<Navbar> {
                     icon: Icon(
                       Icons.menu,
                       color: Colors.white,
+                      size: 30, // Adjust icon size if needed
                     ),
                     onPressed: () {
                       Scaffold.of(context).openDrawer(); // Open the drawer
@@ -122,39 +124,68 @@ class _NavbarState extends State<Navbar> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: Stack(
+        children: [
+          BottomAppBar(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home),
+                  color: _selectedIndex == 0 ? selectedColor : unselectedColor,
+                  iconSize: 30, // Increased icon size
+                  onPressed: () => _onItemTapped(0),
+                ),
+                IconButton(
+                  icon: Icon(Icons.message),
+                  color: _selectedIndex == 1 ? selectedColor : unselectedColor,
+                  iconSize: 30, // Increased icon size
+                  onPressed: () => _onItemTapped(1),
+                ),
+                SizedBox(width: 50), // Space for the floating button
+                IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  color: _selectedIndex == 2 ? selectedColor : unselectedColor,
+                  iconSize: 30, // Increased icon size
+                  onPressed: () => _onItemTapped(2),
+                ),
+                IconButton(
+                  icon: Icon(Icons.person),
+                  color: _selectedIndex == 3 ? selectedColor : unselectedColor,
+                  iconSize: 30, // Increased icon size
+                  onPressed: () => _onItemTapped(3),
+                ),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+          Positioned(
+            bottom: 0,
+            left: MediaQuery.of(context).size.width / 2 - 30,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddProductPage()),
+                );
+              },
+              child: Container(
+                width: 60,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: Color(0xFFCA771A),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: selectedColor,
-        unselectedItemColor: unselectedColor,
-        onTap: _onItemTapped,
-        selectedLabelStyle: TextStyle(
-          color: selectedColor,
-          fontFamily: 'Poppins',
-        ),
-        unselectedLabelStyle: TextStyle(
-          color: unselectedColor,
-          fontFamily: 'Poppins',
-        ),
-        type: BottomNavigationBarType.fixed,
-        iconSize: 30, // Adjust the size of the navigation icons
       ),
     );
   }

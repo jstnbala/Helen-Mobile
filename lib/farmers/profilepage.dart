@@ -25,23 +25,38 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '@akosiNestor',
+                    'Nestor Matimatico',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 24.0,
-                      color: Color(0xFF0C7230),
+                      color: Color(0xFFCA771A),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 5.0),
-                  Icon(
-                    Icons.check_circle,
-                    color: Colors.blue, // Adjust color as needed
-                    size: 24.0,
+                  SizedBox(height: 5.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center, // Ensure vertical alignment
+                    children: [
+                      Text(
+                        '@akosiNestor',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16.0,
+                          color: Color(0xFFCA771A),
+                        ),
+                      ),
+                      SizedBox(width: 10.0), // Adjust spacing if needed
+                      Icon(
+                        Icons.check_circle,
+                        color: Color(0xFFCA771A),
+                        size: 24.0,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -49,7 +64,7 @@ class ProfilePage extends StatelessWidget {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 padding: EdgeInsets.all(20.0),
@@ -121,6 +136,24 @@ class ProfilePage extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     Text(
+                      'Accreditation Level:',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Provincial',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                    Text(
                       'Contact No:',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -154,40 +187,10 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0C7230),
+                  primary: Color(0xFFCA771A),
                   padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Add onPressed action here
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'List of Products',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0C7230),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),

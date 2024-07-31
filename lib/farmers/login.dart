@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       height: size.height * 0.4,
                       decoration: BoxDecoration(
-                        color: Color(0xFF0C7230).withOpacity(0.7),
+                        color: Color(0xFFCA771A).withOpacity(0.7),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40),
@@ -129,18 +129,18 @@ class _LoginPageState extends State<LoginPage> {
                       contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                       labelText: 'Username',
                       hintText: 'Enter your username',
-                      labelStyle: TextStyle(color: Color(0xFF0C7230), fontFamily: 'Poppins'),
+                      labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
                       hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
@@ -161,24 +161,24 @@ class _LoginPageState extends State<LoginPage> {
                       contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                       labelText: 'Password',
                       hintText: 'Enter your password',
-                      labelStyle: TextStyle(color: Color(0xFF0C7230), fontFamily: 'Poppins'),
+                      labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
                       hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          color: Color(0xFF0C7230),
+                          color: Color(0xFFCA771A),
                         ),
                         onPressed: () {
                           setState(() {
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       'Forgot Password?',
                       style: TextStyle(
-                        color: Color(0xFF0C7230),
+                        color: Color(0xFFCA771A),
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                       ),
@@ -253,10 +253,10 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF0C7230),
+                      primary: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
-                        side: BorderSide(color: Color(0xFF0C7230)),
+                        side: BorderSide(color: Color(0xFFCA771A)),
                       ),
                     ),
                     child: Text(
@@ -277,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 'Don\'t have an account?',
                 style: TextStyle(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   fontFamily: 'Poppins',
                 ),
               ),
@@ -292,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   'Register here',
                   style: TextStyle(
-                    color: Color(0xFF0C7230),
+                    color: Color(0xFFCA771A),
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
                   ),
@@ -303,7 +303,7 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 '© 2024 Helen. All Rights Reserved',
                 style: TextStyle(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   fontFamily: 'Poppins',
                   fontSize: 14,
                 ),

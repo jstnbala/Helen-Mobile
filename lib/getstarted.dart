@@ -9,7 +9,7 @@ class GetStartedPage extends StatelessWidget {
           ClipPath(
             clipper: GreenClipper(),
             child: Container(
-              color: Color(0xFF0C7230),
+              color: Color(0xFFCA771A),
               height: MediaQuery.of(context).size.height * 0.6,
               width: MediaQuery.of(context).size.width,
             ),
@@ -63,7 +63,7 @@ class GetStartedPage extends StatelessWidget {
                           Navigator.pushNamed(context, '/account-type'); // Navigate to account type page
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF0C7230),
+                          primary: Color(0xFFCA771A),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),

@@ -21,7 +21,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
             Container(
               padding: EdgeInsets.only(top: 40, left: 10, right: 10),
               decoration: BoxDecoration(
-                color: Color(0xFF0C7230),
+                color: Color(0xFFCA771A),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -58,7 +58,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
             Icon(
               Icons.lock_outline,
               size: 100,
-              color: Color(0xFF0C7230),
+              color: Color(0xFFCA771A),
             ),
             SizedBox(height: 20),
 
@@ -158,7 +158,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0C7230),
+                  primary: Color(0xFFCA771A),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

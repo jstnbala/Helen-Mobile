@@ -5,7 +5,7 @@ class ProductListFarmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF0C7230), // Header color
+        backgroundColor: Color(0xFFCA771A), // Header color
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           color: Colors.white, // Back button color
