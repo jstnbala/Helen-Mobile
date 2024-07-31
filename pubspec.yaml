@@ -21,11 +21,6 @@ flutter:
     - images/farmers/white-helen.png
     - images/farmers/login-bg.jpg
     - images/farmers/logo-opa.png
-    - images/farmers/clouds.png
-    - images/farmers/addproduct.png
-    - images/farmers/order.png
-    - images/farmers/aichat.png
-    - images/farmers/upcomingevents.png
     - images/farmers/lemon.png
     - images/farmers/carrots.png
     - images/farmers/sample-event.png
@@ -44,6 +39,13 @@ flutter:
     - images/farmers/lucbantradingpost.jpg
     - images/farmers/Frame 5.png
     - images/buyers/sample-tomatoes.png
+    - images/farmers/Kadiwa.png
+    - images/farmers/Skills.png
+    - images/farmers/Cocolym.png
+    - images/farmers/agrikachat.png
+    - images/farmers/events.png
+    - images/farmers/listofproduct.png
+    - images/farmers/orders.png
     
   fonts:
     - family: Poppins

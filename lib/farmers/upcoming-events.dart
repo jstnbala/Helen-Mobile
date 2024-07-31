@@ -5,7 +5,7 @@ class UpcomingEvents extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF0C7230),
+        backgroundColor: Color(0xFFCA771A),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.0),
@@ -32,22 +32,73 @@ class UpcomingEvents extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         children: [
-          buildEventCard(),
+          buildEventCard(
+            imageUrl: 'images/farmers/Kadiwa.png',
+            title: 'Kadiwa ng Pangulo',
+            date: 'June 24, 2024',
+            time: '10:00 AM - 12:00 PM',
+            location: 'Community Hall',
+            description: ' Kadiwa ng Pangulo event, a special gathering dedicated to empowering our hardworking farmers. This event is designed to provide you with the tools and knowledge to enhance your agricultural practices, improve market access.',
+          ),
           SizedBox(height: 16.0), // Add space between cards
-          buildEventCard(),
+          buildEventCard(
+            imageUrl: 'images/farmers/Skills.png',
+            title: 'Skills Training on Herbal Tea Processing',
+            date: 'June 16, 2024',
+            time: '6:00 AM - 5:00 PM',
+            location: 'Quezon Food and Herbal Processing Center',
+            description: 'Join us at the Quezon Food and Herbal Processing Center for an exciting and informative event dedicated to empowering our local farmers. Discover innovative food processing techniques, explore herbal product development, and gain valuable insights into sustainable farming practices. .',
+          ),
           SizedBox(height: 16.0), // Add space between cards
-          buildEventCard(),
+          buildEventCard(
+            imageUrl: 'images/farmers/Cocolym.png',
+            title: '2024 Cocolympics',
+            date: 'July 28, 2024',
+            time: '8:00 AM - 10:00 AM',
+            location: 'Lucena Capitol Compound',
+            description: 'This years Cocolympics will bring together farmers, producers, industry experts, and coconut enthusiasts from around the world for a series of exciting competitions, exhibitions, and workshops. .',
+          ),
         ],
       ),
     );
   }
 
-  Widget buildEventCard() {
-    return EventCard();
+  Widget buildEventCard({
+    required String imageUrl,
+    required String title,
+    required String date,
+    required String time,
+    required String location,
+    required String description,
+  }) {
+    return EventCard(
+      imageUrl: imageUrl,
+      title: title,
+      date: date,
+      time: time,
+      location: location,
+      description: description,
+    );
   }
 }
 
 class EventCard extends StatefulWidget {
+  final String imageUrl;
+  final String title;
+  final String date;
+  final String time;
+  final String location;
+  final String description;
+
+  EventCard({
+    required this.imageUrl,
+    required this.title,
+    required this.date,
+    required this.time,
+    required this.location,
+    required this.description,
+  });
+
   @override
   _EventCardState createState() => _EventCardState();
 }
@@ -71,7 +122,7 @@ class _EventCardState extends State<EventCard> {
               Expanded(
                 flex: 1,
                 child: Image.asset(
-                  'images/farmers/sample-event.png',
+                  widget.imageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -84,7 +135,7 @@ class _EventCardState extends State<EventCard> {
                     Container(
                       margin: EdgeInsets.only(top: 8.0),
                       child: Text(
-                        'Event Name',
+                        widget.title,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
@@ -96,7 +147,7 @@ class _EventCardState extends State<EventCard> {
                     Container(
                       margin: EdgeInsets.only(top: 4.0),
                       child: Text(
-                        'May 24, 2024',
+                        widget.date,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
@@ -108,7 +159,7 @@ class _EventCardState extends State<EventCard> {
                     Container(
                       margin: EdgeInsets.only(top: 4.0),
                       child: Text(
-                        '10:00 AM',
+                        widget.time,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12.0,
@@ -119,7 +170,7 @@ class _EventCardState extends State<EventCard> {
                     Container(
                       margin: EdgeInsets.only(top: 4.0),
                       child: Text(
-                        'Community Hall',
+                        widget.location,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12.0,
@@ -151,7 +202,7 @@ class _EventCardState extends State<EventCard> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices consequat nisl eu ultricies. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices',
+                widget.description,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12.0,
