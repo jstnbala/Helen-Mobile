@@ -201,21 +201,46 @@ class HalfWhiteDrawer extends StatelessWidget {
           color: Colors.white,
           width: MediaQuery.of(context).size.width / 2, // Adjust width as needed
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center, // Center content horizontally
             children: [
               Container(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center, // Center text horizontally
                   children: [
+                    CircleAvatar(
+                      radius: 50, // Adjust size as needed
+                      backgroundImage: AssetImage('images/profile.jpg'), // Replace with the path to your image
+                    ),
+                    SizedBox(height: 20.0), // Added extra space
                     Text(
                       "Nestor Matimatico",
                       style: TextStyle(
-                        color: Color(0xFF0C7230),
+                        color: Color(0xFFCA771A),
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         fontSize: 25.0,
                       ),
+                    ),
+                    SizedBox(height: 8.0), // Space between name and username
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center, // Center row contents
+                      children: [
+                        Text(
+                          "@akosiNestor",
+                          style: TextStyle(
+                            color: Color(0xFFCA771A),
+                            fontFamily: 'Poppins',
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        SizedBox(width: 8.0), // Space between username and checkmark
+                        Icon(
+                          Icons.check_circle,
+                          color: Color(0xFFCA771A),
+                          size: 18.0,
+                        ),
+                      ],
                     ),
                     SizedBox(height: 40.0), // Added extra space
                     InkWell(
@@ -227,12 +252,12 @@ class HalfWhiteDrawer extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.info, color: Color(0xFF0C7230), size: 30.0,),
+                          Icon(Icons.info, color: Color(0xFFCA771A), size: 30.0,),
                           SizedBox(width: 12.0), // Increased spacing
                           Text(
                             'About',
                             style: TextStyle(
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 20.0,
@@ -251,12 +276,12 @@ class HalfWhiteDrawer extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.help, color: Color(0xFF0C7230), size: 30.0,),
+                          Icon(Icons.help, color: Color(0xFFCA771A), size: 30.0,),
                           SizedBox(width: 12.0), // Increased spacing
                           Text(
                             'Help',
                             style: TextStyle(
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 20.0,
@@ -281,7 +306,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF0C7230),
+                      primary: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
