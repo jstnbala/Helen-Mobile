@@ -46,7 +46,9 @@ flutter:
     - images/farmers/events.png
     - images/farmers/listofproduct.png
     - images/farmers/orders.png
-    
+    - images/farmers/about-cover.jpg
+    - images/farmers/dev-goals.jpg
+    - images/farmers/vision-mission.jpg
   fonts:
     - family: Poppins
       fonts:
