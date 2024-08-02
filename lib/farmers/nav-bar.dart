@@ -210,7 +210,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 50, // Adjust size as needed
-                      backgroundImage: AssetImage('images/profile.jpg'), // Replace with the path to your image
+                      backgroundImage: AssetImage('images/farmers/farmer-profile.png'), // Replace with the path to your image
                     ),
                     SizedBox(height: 20.0), // Added extra space
                     Text(
