@@ -28,7 +28,6 @@ flutter:
     - images/are-you-a-buyer.png
     - images/farmers/farmer-profile.png
     - images/buyers/buyer-login-bg.jpg
-    - images/farmers/dummyproductlist.png
     - images/buyers/Carrot.png
     - images/buyers/Corn.png
     - images/buyers/Lemon.png
@@ -49,6 +48,8 @@ flutter:
     - images/farmers/about-cover.jpg
     - images/farmers/dev-goals.jpg
     - images/farmers/vision-mission.jpg
+    - images/farmers/product-add.png
+
   fonts:
     - family: Poppins
       fonts:
