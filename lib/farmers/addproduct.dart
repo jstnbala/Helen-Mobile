@@ -7,25 +7,39 @@ class AddProductPage extends StatefulWidget {
 }
 
 class _AddProductPageState extends State<AddProductPage> {
-  DateTime? pickupDate;
-  DateTime? deliveryDate;
   String? selectedInventory;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFCA771A),
-        title: Text(
-          'Add Products',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20.0),
+            bottomRight: Radius.circular(20.0),
+          ),
+          child: AppBar(
+            backgroundColor: Color(0xFFCA771A),
+            elevation: 0,
+            title: Text(
+              'Add Products',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ),
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -103,7 +117,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: Colors.black,
+                color: Color(0xFFCA771A),
               ),
             ),
             TextFormField(
@@ -115,20 +129,28 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 10),
 
-            // Price
+            // Selling Price
             Text(
               'Selling Price',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: Colors.black,
+                color: Color(0xFFCA771A),
               ),
             ),
             TextFormField(
@@ -140,7 +162,15 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
                 ),
               ),
             ),
@@ -153,7 +183,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: Colors.black,
+                color: Color(0xFFCA771A),
               ),
             ),
             TextFormField(
@@ -165,94 +195,16 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 10),
-
-            // Pickup Dates
-            Text(
-              'Pickup Dates',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                color: Colors.black,
-              ),
-            ),
-            TextFormField(
-              readOnly: true,
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(2100),
-                  // Optional: You can add more customization here
-                );
-                if (pickedDate != null) {
-                  setState(() {
-                    pickupDate = pickedDate;
-                  });
-                }
-              },
-              decoration: InputDecoration(
-                hintText: pickupDate != null
-                    ? '${pickupDate!.day}/${pickupDate!.month}/${pickupDate!.year}'
-                    : 'Select Here',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontStyle: FontStyle.italic,
-                ),
-                border: OutlineInputBorder(
+                focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
                 ),
-                prefixIcon: Icon(Icons.calendar_today),
-              ),
-            ),
-            SizedBox(height: 10),
-
-            // Delivery Dates
-            Text(
-              'Delivery Dates',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                color: Colors.black,
-              ),
-            ),
-            TextFormField(
-              readOnly: true,
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(2100),
-                  // Optional: You can add more customization here
-                );
-                if (pickedDate != null) {
-                  setState(() {
-                    deliveryDate = pickedDate;
-                  });
-                }
-              },
-              decoration: InputDecoration(
-                hintText: deliveryDate != null
-                    ? '${deliveryDate!.day}/${deliveryDate!.month}/${deliveryDate!.year}'
-                    : 'Select Here',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontStyle: FontStyle.italic,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(),
-                ),
-                prefixIcon: Icon(Icons.calendar_today),
               ),
             ),
             SizedBox(height: 10),
@@ -264,7 +216,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: Colors.black,
+                color: Color(0xFFCA771A),
               ),
             ),
             TextFormField(
@@ -277,7 +229,15 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: Color(0xFFCA771A),
+                  ),
                 ),
               ),
             ),
@@ -290,7 +250,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: Colors.black,
+                color: Color(0xFFCA771A),
               ),
             ),
             Row(
@@ -306,7 +266,15 @@ class _AddProductPageState extends State<AddProductPage> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(),
+                        borderSide: BorderSide(
+                          color: Color(0xFFCA771A),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: Color(0xFFCA771A),
+                        ),
                       ),
                     ),
                   ),
@@ -329,7 +297,15 @@ class _AddProductPageState extends State<AddProductPage> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(),
+                        borderSide: BorderSide(
+                          color: Color(0xFFCA771A),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: Color(0xFFCA771A),
+                        ),
                       ),
                     ),
                     items: [
