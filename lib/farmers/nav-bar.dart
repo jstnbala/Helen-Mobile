@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:helen_app/farmers/about-farmer.dart';
 import 'package:helen_app/farmers/help-farmer.dart';
@@ -7,6 +8,7 @@ import 'messagespage.dart';
 import 'orderspage.dart';
 import 'profilepage.dart';
 import 'package:helen_app/farmers/addproduct.dart'; // Import the AddProductPage
+
 
 class Navbar extends StatefulWidget {
   @override
@@ -306,7 +308,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFCA771A),
+                      backgroundColor: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

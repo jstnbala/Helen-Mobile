@@ -331,7 +331,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 // Add functionality here
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFFCA771A),
+                backgroundColor: Color(0xFFCA771A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

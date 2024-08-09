@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 
 class OrdersPage extends StatefulWidget {
@@ -32,8 +33,8 @@ class _OrdersPageState extends State<OrdersPage> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: selectedPendingButton == 'Buyer' ? Color(0xFFCA771A) : Colors.white,
-                    onPrimary: selectedPendingButton == 'Buyer' ? Colors.white : Color(0xFFCA771A),
+                    backgroundColor: selectedPendingButton == 'Buyer' ? Color(0xFFCA771A) : Colors.white,
+                    foregroundColor: selectedPendingButton == 'Buyer' ? Colors.white : Color(0xFFCA771A),
                     side: BorderSide(color: Color(0xFFCA771A)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -56,8 +57,8 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: selectedPendingButton == 'Institutional Buyer' ? Color(0xFFCA771A) : Colors.white,
-                    onPrimary: selectedPendingButton == 'Institutional Buyer' ? Colors.white : Color(0xFFCA771A),
+                    backgroundColor: selectedPendingButton == 'Institutional Buyer' ? Color(0xFFCA771A) : Colors.white,
+                    foregroundColor: selectedPendingButton == 'Institutional Buyer' ? Colors.white : Color(0xFFCA771A),
                     side: BorderSide(color: Color(0xFFCA771A)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -155,8 +156,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                   children: [
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
-                                        onPrimary: Color(0xFFCA771A),
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Color(0xFFCA771A),
                                         side: BorderSide(color: Color(0xFFCA771A)),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10),
@@ -179,8 +180,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                     SizedBox(width: 8.0),
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
-                                        onPrimary: Color(0xFFCA771A),
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Color(0xFFCA771A),
                                         side: BorderSide(color: Color(0xFFCA771A)),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10),
@@ -290,8 +291,8 @@ class _OrdersPageState extends State<OrdersPage> {
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              onPrimary: Color(0xFFCA771A),
+                              backgroundColor: Colors.white,
+                              foregroundColor: Color(0xFFCA771A),
                               side: BorderSide(color: Color(0xFFCA771A)),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -314,8 +315,8 @@ class _OrdersPageState extends State<OrdersPage> {
                           SizedBox(width: 8.0),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              onPrimary: Color(0xFFCA771A),
+                              backgroundColor: Colors.white,
+                              foregroundColor: Color(0xFFCA771A),
                               side: BorderSide(color: Color(0xFFCA771A)),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -338,8 +339,8 @@ class _OrdersPageState extends State<OrdersPage> {
                           SizedBox(width: 8.0),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              onPrimary: Color(0xFFCA771A),
+                              backgroundColor: Colors.white,
+                              foregroundColor: Color(0xFFCA771A),
                               side: BorderSide(color: Color(0xFFCA771A)),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -381,8 +382,8 @@ class _OrdersPageState extends State<OrdersPage> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: selectedHistoryButton == 'Completed' ? Color(0xFFCA771A) : Colors.white,
-                    onPrimary: selectedHistoryButton == 'Completed' ? Colors.white : Color(0xFFCA771A),
+                    backgroundColor: selectedHistoryButton == 'Completed' ? Color(0xFFCA771A) : Colors.white,
+                    foregroundColor: selectedHistoryButton == 'Completed' ? Colors.white : Color(0xFFCA771A),
                     side: BorderSide(color: Color(0xFFCA771A)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -405,8 +406,8 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: selectedHistoryButton == 'Cancelled' ? Color(0xFFCA771A) : Colors.white,
-                    onPrimary: selectedHistoryButton == 'Cancelled' ? Colors.white : Color(0xFFCA771A),
+                    backgroundColor: selectedHistoryButton == 'Cancelled' ? Color(0xFFCA771A) : Colors.white,
+                    foregroundColor: selectedHistoryButton == 'Cancelled' ? Colors.white : Color(0xFFCA771A),
                     side: BorderSide(color: Color(0xFFCA771A)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),

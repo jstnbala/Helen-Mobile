@@ -1,16 +1,134 @@
 import 'package:flutter/material.dart';
- 
+import 'package:file_picker/file_picker.dart';
+
 class BuyerRegistrationPage extends StatefulWidget {
   @override
   _BuyerRegistrationPageState createState() => _BuyerRegistrationPageState();
 }
- 
+
 class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
- 
+  String? _selectedAccountType;
+  String? _businessPermitFileName;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showPrivacyNotice();
+    });
+  }
+
+  void _showPrivacyNotice() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          backgroundColor: Colors.white,
+          contentPadding: EdgeInsets.all(20.0),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Privacy Notice',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFCA771A),
+                  fontSize: 18.0,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 10),
+              Text(
+                "We are committed to safeguarding your privacy and ensuring compliance with the Philippine Data Privacy Act of 2012. When you register, we collect personal information. We also gather usage data, and we use this information to create and manage your account, enhance your experience, communicate updates, and maintain app security. We may share your data with service providers to help operate our app and with legal authorities if required by law. You have the right to access, update, or request the deletion of your information and to opt out of marketing communications. We employ security measures to protect your data but cannot guarantee complete security. By registering, you consent to our data practices under the Data Privacy Act. If you have any questions, please contact us at opa_quezon@yahoo.com.",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Color(0xFF606060),
+                  fontSize: 14.0,
+                ),
+                textAlign: TextAlign.justify,
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFCA771A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        'I do not accept',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFCA771A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        'I accept',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'jpg', 'png'],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        _businessPermitFileName = result.files.single.name;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +150,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Color(0xFF0C7230),
+        backgroundColor: Color(0xFFCA771A),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(30),
@@ -41,7 +159,6 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
       ),
       body: GestureDetector(
         onTap: () {
-          // Unfocus the form when tapping outside of a field
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
@@ -72,7 +189,6 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Username is required';
                     }
-                    // Validate username format using regex
                     if (!RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(value)) {
                       return 'Enter a valid username';
                     }
@@ -80,12 +196,12 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   },
                 ),
                 SizedBox(height: 10),
- 
+
                 // Full Name field
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    hintText: 'Enter your full name',
+                    labelText: 'Full Name / Business Name',
+                    hintText: 'Enter your full name / business name',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -95,22 +211,21 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Full Name is required';
+                      return 'Full Name / Business Name is required';
                     }
                     if (value.length > 30) {
-                      return 'Full Name should not exceed 30 characters';
+                      return 'Should not exceed 30 characters';
                     }
-                    // Add any additional specific requirements if needed
                     return null;
                   },
                 ),
                 SizedBox(height: 10),
- 
+
                 // Address field
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Address',
-                    hintText: 'Enter your address',
+                    labelText: 'Address / Business Address',
+                    hintText: 'Enter your address / business address',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -122,9 +237,6 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Address is required';
                     }
-                    // Add regex validation if needed
-                    // Example: Validate letters, numbers, spaces, commas, and hyphens
-                    // Modify the regex pattern as per your specific requirements
                     if (!RegExp(r'^[a-zA-Z0-9\s\-,]+$').hasMatch(value)) {
                       return 'Enter a valid address';
                     }
@@ -132,27 +244,11 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   },
                 ),
                 SizedBox(height: 10),
- 
-                // Organization field (optional)
+
+                // Contact field
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Organization',
-                    hintText: 'Enter your organization (optional)',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
-                  ),
-                  style: TextStyle(fontFamily: 'Poppins'),
-                  textInputAction: TextInputAction.next,
-                  // No validator for optional field
-                ),
-                SizedBox(height: 10),
- 
-                // Contact field with regex validation
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Contact',
+                    labelText: 'Contact No.',
                     hintText: 'Enter your contact number',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -166,7 +262,6 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Contact number is required';
                     }
-                    // Validate contact number format using regex
                     if (!RegExp(r'^[0-9]{11}$').hasMatch(value)) {
                       return 'Enter a valid 11-digit contact number';
                     }
@@ -174,7 +269,60 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   },
                 ),
                 SizedBox(height: 10),
- 
+
+                // Business Permit field
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Business Permit',
+                    hintText: _businessPermitFileName ?? 'Upload your business permit',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.upload_file,
+                        color: Color(0xFFCA771A),
+                      ),
+                      onPressed: _pickFile,
+                    ),
+                  ),
+                  readOnly: true,
+                  style: TextStyle(fontFamily: 'Poppins'),
+                ),
+                SizedBox(height: 10),
+
+                // Account Type field
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Account Type',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                  ),
+                  style: TextStyle(fontFamily: 'Poppins'),
+                  value: _selectedAccountType,
+                  items: ['Direct Buyer', 'Institutional Buyer']
+                      .map((type) => DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(type, style: TextStyle(color: Colors.black)),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedAccountType = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select an account type';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+
                 // Password field
                 TextFormField(
                   controller: _passwordController,
@@ -186,7 +334,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
-                      icon: _isPasswordVisible ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                      icon: _isPasswordVisible
+                          ? Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off),
                       onPressed: () {
                         setState(() {
                           _isPasswordVisible = !_isPasswordVisible;
@@ -201,42 +351,26 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Password is required';
                     }
- 
-                    // Check for minimum length
                     if (value.length < 8) {
                       return 'Password must be at least 8 characters long';
                     }
- 
-                    // Check for uppercase letter
-                    RegExp uppercaseRegex = RegExp(r'^(?=.*?[A-Z])');
-                    if (!uppercaseRegex.hasMatch(value)) {
+                    if (!RegExp(r'(?=.*?[A-Z])').hasMatch(value)) {
                       return 'Password must include at least one uppercase letter';
                     }
- 
-                    // Check for lowercase letter
-                    RegExp lowercaseRegex = RegExp(r'^(?=.*?[a-z])');
-                    if (!lowercaseRegex.hasMatch(value)) {
+                    if (!RegExp(r'(?=.*?[a-z])').hasMatch(value)) {
                       return 'Password must include at least one lowercase letter';
                     }
- 
-                    // Check for digit
-                    RegExp digitRegex = RegExp(r'^(?=.*?[0-9])');
-                    if (!digitRegex.hasMatch(value)) {
+                    if (!RegExp(r'(?=.*?[0-9])').hasMatch(value)) {
                       return 'Password must include at least one number';
                     }
- 
-                    // Check for special character
-                    RegExp specialCharRegex = RegExp(r'^(?=.*?[!@#\$%\^&*()_+\-=\{\}\[\]|:;\"\<>,.\?/])');
-                    if (!specialCharRegex.hasMatch(value)) {
+                    if (!RegExp(r'(?=.*?[!@#\$%\^&*()_+\-=\{\}\[\]|:;\"<>,.?/])').hasMatch(value)) {
                       return 'Password must include at least one special character';
                     }
- 
-                    return null; // Return null if the password is valid
+                    return null;
                   },
                 ),
- 
                 SizedBox(height: 10),
- 
+
                 // Confirm Password field
                 TextFormField(
                   decoration: InputDecoration(
@@ -247,7 +381,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
-                      icon: _isConfirmPasswordVisible ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                      icon: _isConfirmPasswordVisible
+                          ? Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off),
                       onPressed: () {
                         setState(() {
                           _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
@@ -262,7 +398,6 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Confirm Password is required';
                     }
-                    // Check if the password matches the original password
                     if (value != _passwordController.text) {
                       return 'Passwords do not match';
                     }
@@ -270,7 +405,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   },
                 ),
                 SizedBox(height: 20),
- 
+
                 // Register Button
                 ElevatedButton(
                   onPressed: () {
@@ -285,7 +420,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF0C7230),
+                    backgroundColor: Color(0xFFCA771A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

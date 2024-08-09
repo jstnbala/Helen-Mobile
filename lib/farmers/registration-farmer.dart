@@ -1,4 +1,6 @@
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
+import 'package:helen_app/farmer-api_service.dart';
 
 class FarmerRegistrationPage extends StatefulWidget {
   @override
@@ -8,7 +10,13 @@ class FarmerRegistrationPage extends StatefulWidget {
 class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController(); // New controller
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _organizationController = TextEditingController();
+  final TextEditingController _contactNoController = TextEditingController();
+  final TextEditingController _rsbsaNoController = TextEditingController();
+  
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
@@ -65,7 +73,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFCA771A),
+                      backgroundColor: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -87,7 +95,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFCA771A),
+                      backgroundColor: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -188,6 +196,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // Full Name field
                 TextFormField(
+                  controller: _fullNameController,
                   decoration: InputDecoration(
                     labelText: 'Full Name',
                     hintText: 'Enter your full name',
@@ -212,6 +221,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // Address field
                 TextFormField(
+                  controller: _addressController,
                   decoration: InputDecoration(
                     labelText: 'Address',
                     hintText: 'Enter your address',
@@ -236,6 +246,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // Organization field (optional)
                 TextFormField(
+                  controller: _organizationController,
                   decoration: InputDecoration(
                     labelText: 'Organization',
                     hintText: 'Enter your organization (optional)',
@@ -251,6 +262,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // Contact field with regex validation
                 TextFormField(
+                  controller: _contactNoController,
                   decoration: InputDecoration(
                     labelText: 'Contact No.',
                     hintText: 'Enter your contact number',
@@ -276,6 +288,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // RSBSA No. field
                 TextFormField(
+                  controller: _rsbsaNoController,
                   decoration: InputDecoration(
                     labelText: 'RSBSA No.',
                     hintText: 'Enter your RSBSA No.',
@@ -384,19 +397,38 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // Register Button
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Registration Successful'),
-                          backgroundColor: Colors.green,
-                        ),
+                      final success = await registerFarmer(
+                        username: _usernameController.text,
+                        fullName: _fullNameController.text,
+                        address: _addressController.text,
+                        organization: _organizationController.text,
+                        contactNo: _contactNoController.text,
+                        rsbsaNo: _rsbsaNoController.text,
+                        password: _passwordController.text,
                       );
-                      // Perform registration logic here
+
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Registration Successful'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        // Navigate to another page or perform another action
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Registration Failed'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFCA771A),
+                    backgroundColor: Color(0xFFCA771A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

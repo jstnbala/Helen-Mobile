@@ -12,7 +12,7 @@ class MessagesPageBuyer extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
-            color: Color(0xFF0C7230),
+            color: Color(0xFFCA771A),
           ),
         ),
         centerTitle: true,
@@ -32,7 +32,7 @@ class MessagesPageBuyer extends StatelessWidget {
                   children: const [
                     CircleAvatar(
                       radius: 20,
-                      backgroundColor: Color(0xFF0C7230),
+                      backgroundColor: Color(0xFFCA771A),
                       child: Icon(
                         Icons.person,
                         color: Colors.white,
@@ -44,20 +44,20 @@ class MessagesPageBuyer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Farmers Name',
+                            'Sharlene Chaingan',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                           Text(
-                            '10:32 AM',
+                            'July 23, 2024 10:32 AM',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16.0,
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                           Text(
@@ -87,7 +87,7 @@ class MessagesPageBuyer extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundColor: Color(0xFF0C7230),
+                      backgroundColor: Color(0xFFCA771A),
                       child: Icon(
                         Icons.person,
                         color: Colors.white,
@@ -99,20 +99,20 @@ class MessagesPageBuyer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Farmers Name',
+                            'Kervy Gulmatico',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                           Text(
-                            '10:32 AM',
+                            'July 23, 2024 10:32 AM',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16.0,
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                           Text(
@@ -142,7 +142,7 @@ class MessagesPageBuyer extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundColor: Color(0xFF0C7230),
+                      backgroundColor: Color(0xFFCA771A),
                       child: Icon(
                         Icons.person,
                         color: Colors.white,
@@ -154,20 +154,20 @@ class MessagesPageBuyer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Farmers Name',
+                            'Nestor Matimatico',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                           Text(
-                            '10:32 AM',
+                            'July 23, 2024 10:32 AM',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16.0,
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                           Text(

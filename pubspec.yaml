@@ -1,58 +1,59 @@
-name: helen_app
-description: "A new Flutter project."
-publish_to: 'none'
-version: 1.0.0+1
-environment:
-  sdk: '>=3.2.5 <4.0.0'
+  name: helen_app
+  description: "A new Flutter project."
+  publish_to: 'none'
+  version: 1.0.0+1
+  environment:
+    sdk: '>=3.2.5 <4.0.0'
 
-dependencies:
+  dependencies:
+    flutter:
+      sdk: flutter
+    cupertino_icons: ^1.0.2
+    intl: ^0.17.0
+    file_picker: ^5.2.2
+    http: ^1.2.2
+    bcrypt: ^1.0.8
+    
+  dev_dependencies:
+    flutter_test:
+      sdk: flutter
+    flutter_lints: ^2.0.0
+
   flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.2
-  
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
+    uses-material-design: true
+    assets:
+      - images/farmers/white-helen.png
+      - images/farmers/login-bg.jpg
+      - images/farmers/logo-opa.png
+      - images/farmers/lemon.png
+      - images/farmers/carrots.png
+      - images/farmers/sample-event.png
+      - images/are-you-a-farmer.png
+      - images/are-you-a-buyer.png
+      - images/farmers/farmer-profile.png
+      - images/buyers/buyer-login-bg.jpg
+      - images/buyers/product-corn.png
+      - images/buyers/tomato.png
+      - images/buyers/checkout-pic.png
+      - images/buyers/sample-buyer-pic.jpg
+      - images/farmers/lucbantradingpost.jpg
+      - images/farmers/Frame 5.png
+      - images/buyers/sample-tomatoes.png
+      - images/farmers/Kadiwa.png
+      - images/farmers/Skills.png
+      - images/farmers/Cocolym.png
+      - images/farmers/agrikachat.png
+      - images/farmers/events.png
+      - images/farmers/listofproduct.png
+      - images/farmers/orders.png
+      - images/farmers/about-cover.jpg
+      - images/farmers/dev-goals.jpg
+      - images/farmers/vision-mission.jpg
+      - images/farmers/product-add.png
 
-flutter:
-  uses-material-design: true
-  assets:
-    - images/farmers/white-helen.png
-    - images/farmers/login-bg.jpg
-    - images/farmers/logo-opa.png
-    - images/farmers/lemon.png
-    - images/farmers/carrots.png
-    - images/farmers/sample-event.png
-    - images/are-you-a-farmer.png
-    - images/are-you-a-buyer.png
-    - images/farmers/farmer-profile.png
-    - images/buyers/buyer-login-bg.jpg
-    - images/buyers/Carrot.png
-    - images/buyers/Corn.png
-    - images/buyers/Lemon.png
-    - images/buyers/Tomatoes.png
-    - images/buyers/product-corn.png
-    - images/buyers/checkout-pic.png
-    - images/buyers/sample-buyer-pic.jpg
-    - images/farmers/lucbantradingpost.jpg
-    - images/farmers/Frame 5.png
-    - images/buyers/sample-tomatoes.png
-    - images/farmers/Kadiwa.png
-    - images/farmers/Skills.png
-    - images/farmers/Cocolym.png
-    - images/farmers/agrikachat.png
-    - images/farmers/events.png
-    - images/farmers/listofproduct.png
-    - images/farmers/orders.png
-    - images/farmers/about-cover.jpg
-    - images/farmers/dev-goals.jpg
-    - images/farmers/vision-mission.jpg
-    - images/farmers/product-add.png
-
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: fonts/Poppins-Regular.ttf
-        - asset: fonts/Poppins-Bold.ttf
-          weight: 700
+    fonts:
+      - family: Poppins
+        fonts:
+          - asset: fonts/Poppins-Regular.ttf
+          - asset: fonts/Poppins-Bold.ttf
+            weight: 700

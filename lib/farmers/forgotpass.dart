@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 
 class ForgotPassPage extends StatefulWidget {
@@ -158,7 +158,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFCA771A),
+                  backgroundColor: Color(0xFFCA771A),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
