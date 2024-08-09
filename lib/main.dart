@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/account-type.dart';
-import 'package:helen_app/getstarted.dart';
-import 'package:helen_app/farmers/login.dart'; // Import the login.dart file
+import 'package:helen_app/farmers/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xFF4A5299),
       ),
-      home: GetStartedPage(),
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
       routes: {
         '/account-type': (context) => AccountTypeScreen(), // Define the route

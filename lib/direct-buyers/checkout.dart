@@ -1,5 +1,5 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // For date formatting
 
 class CheckoutPage extends StatefulWidget {
   @override
@@ -7,26 +7,31 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  bool isDeliverySelected = false;
-  bool isPickupSelected = false;
+  bool isCashSelected = false;
+  bool isGcashSelected = false;
+  bool isBankTransferSelected = false;
+  DateTime? selectedDate;
+  TimeOfDay? selectedTime;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF0C7230),
+        backgroundColor: Color(0xFFCA771A),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.0),
             bottomRight: Radius.circular(20.0),
           ),
         ),
-        title: Text(
-          "Checkout",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        title: Center(
+          child: Text(
+            'Checkout',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
         leading: IconButton(
@@ -35,6 +40,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Navigator.pop(context);
           },
         ),
+        actions: [SizedBox(width: 56)],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -47,7 +53,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Image.asset(
-                  'images/buyers/product-corn.png',
+                  'images/buyers/tomato.png',
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.2,
                   fit: BoxFit.cover,
@@ -62,12 +68,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Corn",
+                          "Tomato",
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
-                            color: Colors.black,
+                            color: Color(0xFFCA771A),
                           ),
                         ),
                         Text(
@@ -76,7 +82,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Colors.black,
+                            color: Color(0xFFCA771A),
                           ),
                         ),
                       ],
@@ -88,7 +94,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: Colors.black,
+                      color: Color(0xFFCA771A),
                     ),
                   ),
                 ],
@@ -149,12 +155,93 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Options",
+                  "Pickup Address:",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xFFCA771A),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "123 Lucban Trading Post, Brgy 23, Quezon Province",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Pickup Date & Time:",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xFFCA771A),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            labelText: selectedDate != null
+                                ? DateFormat.yMd().format(selectedDate!)
+                                : 'Select Date',
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.calendar_today, color: Color(0xFFCA771A)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        _selectTime(context);
+                      },
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            labelText: selectedTime != null
+                                ? selectedTime!.format(context)
+                                : 'Select Time',
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.access_time, color: Color(0xFFCA771A)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Payment Options",
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Colors.black,
+                    color: Color(0xFFCA771A),
                   ),
                 ),
               ),
@@ -164,21 +251,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: isDeliverySelected ? Color(0xFF0C7230) : Colors.grey[300],
+                        backgroundColor: isCashSelected ? Color(0xFFCA771A) : Colors.white,
+                        side: BorderSide(color: Color(0xFFCA771A)),
                       ),
                       onPressed: () {
                         setState(() {
-                          isDeliverySelected = true;
-                          isPickupSelected = false;
+                          isCashSelected = true;
+                          isGcashSelected = false;
+                          isBankTransferSelected = false;
                         });
                       },
                       child: Text(
-                        "Delivery",
+                        "Cash",
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: isDeliverySelected ? Colors.white : Colors.black,
+                          color: isCashSelected ? Colors.white : Color(0xFFCA771A),
                         ),
                       ),
                     ),
@@ -187,29 +276,59 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: isPickupSelected ? Color(0xFF0C7230) : Colors.grey[300],
+                        backgroundColor: isGcashSelected ? Color(0xFFCA771A) : Colors.white,
+                        side: BorderSide(color: Color(0xFFCA771A)),
                       ),
                       onPressed: () {
                         setState(() {
-                          isDeliverySelected = false;
-                          isPickupSelected = true;
+                          isCashSelected = false;
+                          isGcashSelected = true;
+                          isBankTransferSelected = false;
                         });
                       },
                       child: Text(
-                        "Pickup",
+                        "GCash",
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: isPickupSelected ? Colors.white : Colors.black,
+                          color: isGcashSelected ? Colors.white : Color(0xFFCA771A),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isBankTransferSelected ? Color(0xFFCA771A) : Colors.white,
+                        side: BorderSide(color: Color(0xFFCA771A)),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isCashSelected = false;
+                          isGcashSelected = false;
+                          isBankTransferSelected = true;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Text(
+                          "Bank Transfer",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: isBankTransferSelected ? Colors.white : Color(0xFFCA771A),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-              if (isDeliverySelected) buildDeliverySection(),
-              if (isPickupSelected) buildPickupSection(),
+              if (isCashSelected) buildCashSection(),
             ],
           ),
         ),
@@ -217,37 +336,40 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget buildDeliverySection() {
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime ?? TimeOfDay.now(),
+    );
+    if (pickedTime != null && pickedTime != selectedTime) {
+      setState(() {
+        selectedTime = pickedTime;
+      });
+    }
+  }
+
+  Widget buildCashSection() {
     return Column(
       children: [
-        Divider(),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Delivery Address: 123 Sample Address, Consumer's Address City",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Delivery Date: 00/00/00",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Divider(),
-        buildSummaryRow("Subtotal (# items)", "00.00"),
-        buildSummaryRow("Delivery Fee", "00.00"),
-        buildSummaryRow("Total", "00.00", isTotal: true),
-        Divider(),
+        SizedBox(height: 20),
+        buildSummaryRow("Price:", "25.00", isTotal: false, color: Color(0xFFCA771A)),
+        buildSummaryRow("Quantity:", "10 kilos", isTotal: false, color: Color(0xFFCA771A)),
+        buildSummaryRow("Total:", "250.00", isTotal: true, color: Color(0xFFCA771A)),
+        SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -259,60 +381,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget buildPickupSection() {
-    return Column(
-      children: [
-        Divider(),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Pickup Address: 123 Sample Address, Lucban Quezon Province.",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Pickup Dates",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        SizedBox(height: 10),
-        DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          ),
-          items: [],
-          onChanged: (value) {
-            // Handle change
-          },
-          icon: Icon(Icons.calendar_today),
-        ),
-        Divider(),
-        buildSummaryRow("Subtotal (# items)", "00.00"),
-        buildSummaryRow("Total", "00.00", isTotal: true),
-        Divider(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildActionButton("Cancel"),
-            buildActionButton("Confirm"),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget buildSummaryRow(String label, String amount, {bool isTotal = false}) {
+  Widget buildSummaryRow(String label, String amount, {bool isTotal = false, Color color = Colors.black}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -322,7 +391,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             fontFamily: 'Poppins',
             fontSize: isTotal ? 20 : 14,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: Colors.black,
+            color: color,
           ),
         ),
         Text(
@@ -331,7 +400,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             fontFamily: 'Poppins',
             fontSize: isTotal ? 20 : 14,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: color,
           ),
         ),
       ],
@@ -341,7 +410,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget buildActionButton(String text) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Colors.grey[300],
+        backgroundColor: Colors.white,
+        side: BorderSide(color: Color(0xFFCA771A)),
       ),
       onPressed: () {
         setState(() {
@@ -354,7 +424,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           fontFamily: 'Poppins',
           fontWeight: FontWeight.bold,
           fontSize: 16,
-          color: Colors.black,
+          color: Color(0xFFCA771A),
         ),
       ),
     );

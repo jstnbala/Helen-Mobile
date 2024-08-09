@@ -187,7 +187,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFCA771A),
+                  backgroundColor: Color(0xFFCA771A),
                   padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

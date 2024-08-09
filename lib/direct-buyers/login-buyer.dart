@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:helen_app/buyers/nav-bar-buyer.dart';
-import 'package:helen_app/buyers/forgot-pass-buyer.dart'; // Import ForgotPassPage class
-import 'package:helen_app/buyers/registration-buyer.dart'; // Import BuyerRegistrationPage class
+import 'package:helen_app/direct-buyers/nav-bar-buyer.dart';
+import 'package:helen_app/direct-buyers/forgot-pass-buyer.dart'; // Import ForgotPassPage class
+import 'package:helen_app/direct-buyers/registration-buyer.dart'; // Import BuyerRegistrationPage class
 
 class LoginPageBuyer extends StatefulWidget {
   @override
@@ -56,7 +56,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                     Container(
                       height: size.height * 0.4, // Adjust height to fit header content
                       decoration: BoxDecoration(
-                        color: Color(0xFF0C7230).withOpacity(0.7),
+                        color: Color(0xFFCA771A).withOpacity(0.7),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40),
@@ -129,18 +129,18 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                       contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0), // Increase padding
                       labelText: 'Username',
                       hintText: 'Enter your username',
-                      labelStyle: TextStyle(color: Color(0xFF0C7230), fontFamily: 'Poppins'),
+                      labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
                       hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
@@ -160,24 +160,24 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                       contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0), // Increase padding
                       labelText: 'Password',
                       hintText: 'Enter your password',
-                      labelStyle: TextStyle(color: Color(0xFF0C7230), fontFamily: 'Poppins'),
+                      labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
                       hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0C7230), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
                         borderRadius: BorderRadius.circular(15),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          color: Color(0xFF0C7230), // Set icon color
+                          color: Color(0xFFCA771A), // Set icon color
                         ),
                         onPressed: () {
                           setState(() {
@@ -207,7 +207,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                     child: Text(
                       'Forgot Password?',
                       style: TextStyle(
-                        color: Color(0xFF0C7230),
+                        color: Color(0xFFCA771A),
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                       ),
@@ -252,10 +252,10 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF0C7230),
+                      backgroundColor: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
-                        side: BorderSide(color: Color(0xFF0C7230)),
+                        side: BorderSide(color: Color(0xFFCA771A)),
                       ),
                     ),
                     child: Text(
@@ -275,7 +275,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
               Text(
                 'Don\'t have an account?',
                 style: TextStyle(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   fontFamily: 'Poppins',
                 ),
               ),
@@ -291,7 +291,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                 child: Text(
                   'Register here',
                   style: TextStyle(
-                    color: Color(0xFF0C7230),
+                    color: Color(0xFFCA771A),
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
                   ),
@@ -302,7 +302,7 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
               Text(
                 '© 2024 Helen. All Rights Reserved',
                 style: TextStyle(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   fontFamily: 'Poppins',
                   fontSize: 14,
                 ),

@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:helen_app/buyers/checkout.dart';
+import 'package:helen_app/direct-buyers/checkout.dart';
 
-class OrderBuyer extends StatelessWidget {
+class SampleTomatoesClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             expandedHeight: 300.0,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    'images/buyers/product-corn.png',
+                    'images/buyers/tomato.png',
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
@@ -64,7 +70,7 @@ class OrderBuyer extends StatelessWidget {
                                     fontFamily: 'Poppins',
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: Color(0xFFCA771A)
                                   ),
                                 ),
                                 Text(
@@ -72,7 +78,7 @@ class OrderBuyer extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 16.0,
-                                    color: Colors.black,
+                                    color: Color(0xFFCA771A),
                                   ),
                                 ),
                               ],
@@ -83,7 +89,7 @@ class OrderBuyer extends StatelessWidget {
                                 fontFamily: 'Poppins',
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Color(0xFFCA771A),
                               ),
                             ),
                           ],
@@ -95,27 +101,18 @@ class OrderBuyer extends StatelessWidget {
                         children: [
                           Center(
                             child: Text(
-                              'Pickup and Delivery Option',
+                              'Pickup Address',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Color(0xFFCA771A),
                               ),
                             ),
                           ),
                           SizedBox(height: 8.0),
                           Text(
-                            'Pickup: 123 Sample Address, Lucban, Quezon Province',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                            'Delivery: 123 Sample Address, Consumer',
+                            '123 Sample Address, Lucban, Quezon Province',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14.0,
@@ -135,13 +132,13 @@ class OrderBuyer extends StatelessWidget {
                                 fontFamily: 'Poppins',
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Color(0xFFCA771A),
                               ),
                             ),
                           ),
                           SizedBox(height: 8.0),
                           Text(
-                            'Name: Sample Name',
+                            'Name: Nestor Matimatico',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14.0,
@@ -150,16 +147,7 @@ class OrderBuyer extends StatelessWidget {
                           ),
                           SizedBox(height: 4.0),
                           Text(
-                            'Contact: 0123589614',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                            'Organization: Sample Organization',
+                            'Organization: Lucban Farmer Organization',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14.0,
@@ -179,7 +167,7 @@ class OrderBuyer extends StatelessWidget {
                                 fontFamily: 'Poppins',
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Color(0xFFCA771A),
                               ),
                             ),
                           ),
@@ -201,7 +189,7 @@ class OrderBuyer extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Color(0xFF878787),
+                                backgroundColor: Color(0xFFCA771A),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),
@@ -211,7 +199,7 @@ class OrderBuyer extends StatelessWidget {
                                 'Message',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
-                                  fontSize: 13.0,
+                                  fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -222,28 +210,7 @@ class OrderBuyer extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.grey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: Text(
-                                'Pre-Order',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10.0),
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.grey,
+                                backgroundColor: Color(0xFFCA771A),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),

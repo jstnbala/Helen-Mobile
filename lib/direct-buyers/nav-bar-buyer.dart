@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:helen_app/buyers/help-buyer.dart';
-import 'package:helen_app/buyers/login-buyer.dart';
-import 'package:helen_app/buyers/previousorders.dart';
+import 'package:helen_app/direct-buyers/help-buyer.dart';
+import 'package:helen_app/direct-buyers/login-buyer.dart';
+import 'package:helen_app/direct-buyers/previousorders.dart';
 import 'homepage-buyer.dart';
 import 'messages-buyer.dart';
 import 'orderlists-buyer.dart';
@@ -16,7 +16,7 @@ class NavbarBuyer extends StatefulWidget {
 class _NavbarBuyerState extends State<NavbarBuyer> {
   int _selectedIndex = 0;
 
-  static const Color selectedColor = Color(0xFF0C7230);
+  static const Color selectedColor = Color(0xFFCA771A);
   static const Color unselectedColor = Color(0xFF606060);
 
   void _onItemTapped(int index) {
@@ -39,7 +39,7 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
                   bottomRight: Radius.circular(30),
                 ),
                 child: Container(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   width: double.infinity,
                   height: 150,
                 ),
@@ -176,18 +176,51 @@ class HalfWhiteDrawer extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center, // Centering content
                   children: [
+                    CircleAvatar(
+                      radius: 40.0,
+                      backgroundImage: AssetImage('images/profile.png'), // Replace with your profile image asset
+                    ),
+                    SizedBox(height: 16.0), // Space between image and text
                     Text(
-                      "Buyer's Name",
+                      "Justin Bala",
                       style: TextStyle(
-                        color: Color(0xFF0C7230),
+                        color: Color(0xFFCA771A),
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         fontSize: 30.0,
                       ),
                     ),
-                    SizedBox(height: 40.0), // Added extra space
+                    SizedBox(height: 8.0), // Space between name and username
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "@jstn_bala",
+                          style: TextStyle(
+                            color: Color(0xFFCA771A),
+                            fontFamily: 'Poppins',
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(width: 4.0), // Space between username and checkmark
+                        Container(
+                          width: 16.0,
+                          height: 16.0,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFCA771A),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 10.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 40.0), // Added extra space before menu items
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -197,12 +230,12 @@ class HalfWhiteDrawer extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.history, color: Color(0xFF0C7230), size: 30.0,),
+                          Icon(Icons.history, color: Color(0xFFCA771A), size: 30.0,),
                           SizedBox(width: 12.0), // Increased spacing
                           Text(
                             'Previous Orders',
                             style: TextStyle(
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 20.0,
@@ -221,12 +254,12 @@ class HalfWhiteDrawer extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.info, color: Color(0xFF0C7230), size: 30.0,),
+                          Icon(Icons.info, color: Color(0xFFCA771A), size: 30.0,),
                           SizedBox(width: 12.0), // Increased spacing
                           Text(
                             'About',
                             style: TextStyle(
-                              color: Color(0xFF0C7230),
+                              color: Color(0xFFCA771A),
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 20.0,
@@ -245,12 +278,12 @@ class HalfWhiteDrawer extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.help, color: Color(0xFF0C7230), size: 30.0,),
+                          Icon(Icons.help, color: Color(0xFFCA771A), size: 30.0,),
                           SizedBox(width: 12.0), // Increased spacing
                           Text(
                             'Help',
                             style: TextStyle(
-                            color: Color(0xFF0C7230),
+                            color: Color(0xFFCA771A),
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 20.0,
@@ -275,7 +308,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF0C7230),
+                      backgroundColor: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

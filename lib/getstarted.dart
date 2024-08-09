@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 
 class GetStartedPage extends StatelessWidget {
@@ -63,7 +64,7 @@ class GetStartedPage extends StatelessWidget {
                           Navigator.pushNamed(context, '/account-type'); // Navigate to account type page
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xFFCA771A),
+                          backgroundColor: Color(0xFFCA771A),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -86,6 +87,18 @@ class GetStartedPage extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          Positioned(
+            top: 16,
+            left: 16,
+            child: SafeArea(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
           ),
         ],
       ),

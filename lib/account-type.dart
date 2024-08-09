@@ -1,5 +1,7 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:helen_app/buyers/login-buyer.dart';
+import 'package:helen_app/direct-buyers/registration-buyer.dart';
+import 'package:helen_app/farmers/registration-farmer.dart';
 
 class AccountTypeScreen extends StatelessWidget {
   @override
@@ -40,15 +42,18 @@ class AccountTypeScreen extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFCA771A),
+                  backgroundColor: Color(0xFFCA771A),
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login'); // Navigate to LoginPageFarmer
-                },
+                  onPressed: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FarmerRegistrationPage()),
+                   );
+                 },
                 child: Text(
                   'Are you a Farmer?',
                   style: TextStyle(
@@ -70,17 +75,16 @@ class AccountTypeScreen extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFCA771A),
+                  backgroundColor: Color(0xFFCA771A),
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                  onPressed: () {
-                     // Navigate to LoginPageBuyer
                       Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPageBuyer()),
+                      MaterialPageRoute(builder: (context) => BuyerRegistrationPage()),
                    );
                  },
                 child: Text(
