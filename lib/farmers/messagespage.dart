@@ -41,7 +41,7 @@ class _MessagesPageState extends State<MessagesPage> {
                   child: ElevatedButton(
                     onPressed: () => _onButtonPressed('Buyer'),
                     style: ElevatedButton.styleFrom(
-                      primary: _selectedButton == 'Buyer' ? Color(0xFFCA771A) : Colors.white,
+                      backgroundColor: _selectedButton == 'Buyer' ? Color(0xFFCA771A) : Colors.white,
                       side: BorderSide(
                         color: _selectedButton == 'Buyer' ? Colors.transparent : Color(0xFFCA771A),
                         width: 2.0,
@@ -67,7 +67,7 @@ class _MessagesPageState extends State<MessagesPage> {
                   child: ElevatedButton(
                     onPressed: () => _onButtonPressed('Farmer Orgs'),
                     style: ElevatedButton.styleFrom(
-                      primary: _selectedButton == 'Farmer Orgs' ? Color(0xFFCA771A) : Colors.white,
+                      backgroundColor: _selectedButton == 'Farmer Orgs' ? Color(0xFFCA771A) : Colors.white,
                       side: BorderSide(
                         color: _selectedButton == 'Farmer Orgs' ? Colors.transparent : Color(0xFFCA771A),
                         width: 2.0,
@@ -93,7 +93,7 @@ class _MessagesPageState extends State<MessagesPage> {
                   child: ElevatedButton(
                     onPressed: () => _onButtonPressed('Farmer Support'),
                     style: ElevatedButton.styleFrom(
-                      primary: _selectedButton == 'Farmer Support' ? Color(0xFFCA771A) : Colors.white,
+                      backgroundColor: _selectedButton == 'Farmer Support' ? Color(0xFFCA771A) : Colors.white,
                       side: BorderSide(
                         color: _selectedButton == 'Farmer Support' ? Colors.transparent : Color(0xFFCA771A),
                         width: 2.0,

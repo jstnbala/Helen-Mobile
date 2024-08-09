@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:helen_app/farmers/nav-bar.dart';
+import 'package:helen_app/farmer-api_service.dart';
 import 'package:helen_app/farmers/forgotpass.dart'; // Import ForgotPassPage class
-import 'package:helen_app/farmers/registration-farmer.dart'; // Import FarmerRegistrationPage class
+import 'package:helen_app/farmers/nav-bar.dart';
+import 'package:helen_app/getstarted.dart'; // Import FarmerRegistrationPage class
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,8 +15,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _passwordController = TextEditingController();
 
   // Expected credentials
-  String _expectedUsername = 'akosiNestor';
-  String _expectedPassword = '@Farming31';
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +61,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 16,
-                      left: 16,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -93,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Welcome, Farmer!',
+                          'Welcome, Ka-HELEN!',
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
@@ -222,24 +211,26 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   width: size.width * 0.7,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Perform login validation
-                      String enteredUsername = _usernameController.text.trim();
-                      String enteredPassword = _passwordController.text.trim();
+                    onPressed: () async {
+                   
+                      final success = await loginFarmer(
+                        username: _usernameController.text,
+                        password: _passwordController.text,
+                      );
 
-                      if (enteredUsername == _expectedUsername && enteredPassword == _expectedPassword) {
-                        // Navigate to Navbar on successful login
+                      if (success) {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Navbar()),
-                        );
-                      } else {
+                    context,
+                    MaterialPageRoute(builder: (context) =>Navbar()),
+                  );
+                 }// Navigate to another page or perform another action
+                      else {
                         // Show error if credentials do not match
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text('Login Failed'),
-                            content: Text('Invalid username or password. Please try again.'),
+                            content: Text('Invalid username or password. Please try agaitn.'),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -253,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFCA771A),
+                      backgroundColor: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                         side: BorderSide(color: Color(0xFFCA771A)),
@@ -286,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FarmerRegistrationPage()),
+                    MaterialPageRoute(builder: (context) => GetStartedPage()),
                   );
                 },
                 child: Text(

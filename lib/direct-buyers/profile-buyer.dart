@@ -24,6 +24,17 @@ class ProfilePageBuyer extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.0),
+              Text(
+                'Justin Bala',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 28.0,
+                  color: Color(0xFFCA771A),
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 5.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -31,15 +42,14 @@ class ProfilePageBuyer extends StatelessWidget {
                     '@jstn_bala',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 24.0,
-                      color: Color(0xFF0C7230),
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                      color: Color(0xFFCA771A),
                     ),
                   ),
                   SizedBox(width: 5.0),
                   Icon(
                     Icons.check_circle,
-                    color: Colors.blue, // Adjust color as needed
+                    color: Color(0xFFCA771A), // Adjust color as needed
                     size: 24.0,
                   ),
                 ],
@@ -48,7 +58,7 @@ class ProfilePageBuyer extends StatelessWidget {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 padding: EdgeInsets.all(20.0),
@@ -102,24 +112,6 @@ class ProfilePageBuyer extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     Text(
-                      'Organization:',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Organic Valley',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(
                       'Contact No:',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -153,7 +145,7 @@ class ProfilePageBuyer extends StatelessWidget {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0C7230),
+                  backgroundColor: Color(0xFFCA771A),
                   padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

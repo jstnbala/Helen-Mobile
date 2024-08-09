@@ -4,27 +4,34 @@ class PreviousOrdersBuyer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF0C7230), // Header color
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20.0), // Radius for the lower left corner
+            bottomRight: Radius.circular(20.0), // Radius for the lower right corner
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Container(
-          alignment: Alignment.centerLeft, // Align text to the left
-          child: Text(
-            'Previous Orders',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-              color: Colors.white, // Set text color to white
+          child: AppBar(
+            backgroundColor: Color(0xFFCA771A), // Header color
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
+            title: Text(
+              'Previous Orders',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                color: Colors.white, // Set text color to white
+              ),
+            ),
+            centerTitle: true, // Center the title text
           ),
         ),
       ),
@@ -34,7 +41,7 @@ class PreviousOrdersBuyer extends StatelessWidget {
           // Wrap the Icon widget with a Container and provide a background color and border radius
           Container(
             decoration: BoxDecoration(
-              color: Color(0xFF0C7230), // Background color
+              color: Color(0xFFCA771A), // Background color
               borderRadius: BorderRadius.circular(50.0), // Border radius
             ),
             padding: EdgeInsets.all(20.0), // Adjust padding as needed
@@ -52,7 +59,7 @@ class PreviousOrdersBuyer extends StatelessWidget {
               fontFamily: 'Poppins',
               fontWeight: FontWeight.bold,
               fontSize: 24.0,
-              color: Color(0xFF0C7230),
+              color: Color(0xFFCA771A),
             ),
           ),
         ],
