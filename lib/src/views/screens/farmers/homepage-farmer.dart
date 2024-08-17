@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
-import 'package:helen_app/farmers/agrikachat.dart';
-import 'package:helen_app/farmers/product-list.dart';
-import 'package:helen_app/farmers/upcoming-events.dart'; 
-import 'package:helen_app/farmers/orderspage.dart'; // Import the OrdersPage class
+import 'package:helen_app/src/views/screens/farmers/agrikachat.dart';
+import 'package:helen_app/src/views/screens/farmers/product-list.dart';
+import 'package:helen_app/src/views/screens/farmers/upcoming-events.dart'; 
+import 'package:helen_app/src/views/screens/farmers/orderspage.dart'; // Import the OrdersPage class
 
-class HomePage extends StatelessWidget {
+class HomePageFarmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

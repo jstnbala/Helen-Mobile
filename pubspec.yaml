@@ -9,10 +9,15 @@
     flutter:
       sdk: flutter
     cupertino_icons: ^1.0.2
-    intl: ^0.17.0
+    intl: ^0.19.0
     file_picker: ^5.2.2
     http: ^1.2.2
     bcrypt: ^1.0.8
+    flutter_secure_storage: ^9.2.2
+    image_picker: ^1.1.2
+    dash_chat_2: ^0.0.18  
+    chat_gpt_sdk: ^2.2.5
+
     
   dev_dependencies:
     flutter_test:
