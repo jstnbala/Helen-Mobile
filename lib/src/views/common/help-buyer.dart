@@ -6,7 +6,7 @@ class HelpBuyerScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xFF0C7230),
+        backgroundColor: Color(0xFFCA771A),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -36,13 +36,13 @@ class HelpBuyerScreen extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0C7230),
+                  color: Color(0xFFCA771A),
                 ),
               ),
             ),
             SizedBox(height: 16.0),
             Card(
-              color: Color(0xFF0C7230),
+              color: Color(0xFFCA771A),
               margin: EdgeInsets.only(top: 8.0), // Adjusted top margin
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -79,7 +79,7 @@ class HelpBuyerScreen extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             Card(
-              color: Color(0xFF0C7230),
+              color: Color(0xFFCA771A),
               margin: EdgeInsets.only(top: 8.0), // Adjusted top margin
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

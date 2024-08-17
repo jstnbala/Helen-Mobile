@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:helen_app/direct-buyers/help-buyer.dart';
-import 'package:helen_app/direct-buyers/login-buyer.dart';
-import 'package:helen_app/direct-buyers/previousorders.dart';
-import 'homepage-buyer.dart';
-import 'messages-buyer.dart';
-import 'orderlists-buyer.dart';
-import 'profile-buyer.dart';
-import 'about-buyer.dart'; // Import the AboutBuyer class
+import 'package:helen_app/src/views/common/help-buyer.dart';
+import 'package:helen_app/src/views/common/about.dart';
+import 'package:helen_app/src/views/common/login.dart';
+import 'package:helen_app/src/views/screens/buyers/institutional-buyers/insti-profile.dart';
+import 'insti-homepage.dart';
+import 'insti-messages.dart';
+import 'insti-orderlists.dart';
 
-class NavbarBuyer extends StatefulWidget {
+
+class InstiNavbar extends StatefulWidget {
+  final int initialIndex;
+
+  const InstiNavbar({Key? key, this.initialIndex = 0}) : super(key: key);
+
   @override
-  _NavbarBuyerState createState() => _NavbarBuyerState();
+  _InstiNavbarState createState() => _InstiNavbarState();
 }
 
-class _NavbarBuyerState extends State<NavbarBuyer> {
-  int _selectedIndex = 0;
+class _InstiNavbarState extends State<InstiNavbar> {
+  late int _selectedIndex;
 
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
+
+  // Selected Color for Bottom Nav Bar
   static const Color selectedColor = Color(0xFFCA771A);
   static const Color unselectedColor = Color(0xFF606060);
 
@@ -28,18 +39,18 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: HalfWhiteDrawer(), // Adding the drawer
+      drawer: const HalfWhiteDrawer(), // Adding the drawer
       body: Column(
         children: [
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
                 child: Container(
-                  color: Color(0xFFCA771A),
+                  color: const Color(0xFFCA771A),
                   width: double.infinity,
                   height: 150,
                 ),
@@ -58,7 +69,7 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
                 left: 10,
                 child: Builder(
                   builder: (context) => IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.menu,
                       color: Colors.white,
                     ),
@@ -74,7 +85,7 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
                 child: IconButton(
                   icon: Stack(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.notifications,
                         color: Colors.white,
                         size: 30,
@@ -82,16 +93,16 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
                       Positioned(
                         right: 0,
                         child: Container(
-                          padding: EdgeInsets.all(1),
+                          padding: const EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             minWidth: 12,
                             minHeight: 12,
                           ),
-                          child: Text(
+                          child: const Text(
                             '0',
                             style: TextStyle(
                               color: Colors.white,
@@ -114,10 +125,10 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
             child: IndexedStack(
               index: _selectedIndex,
               children: [
-                HomePageBuyer(),
-                MessagesPageBuyer(),
-                OrdersListsBuyer(),
-                ProfilePageBuyer(),
+                HomepageInsti(),
+                MessagesInsti(),
+                OrderListsInsti(),
+                ProfileInsti(),
               ],
             ),
           ),
@@ -146,11 +157,11 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
         selectedItemColor: selectedColor,
         unselectedItemColor: unselectedColor,
         onTap: _onItemTapped,
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           color: selectedColor,
           fontFamily: 'Poppins',
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           color: unselectedColor,
           fontFamily: 'Poppins',
         ),
@@ -161,7 +172,10 @@ class _NavbarBuyerState extends State<NavbarBuyer> {
   }
 }
 
+
 class HalfWhiteDrawer extends StatelessWidget {
+  const HalfWhiteDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -178,13 +192,14 @@ class HalfWhiteDrawer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center, // Centering content
                   children: [
-                    CircleAvatar(
-                      radius: 40.0,
-                      backgroundImage: AssetImage('images/profile.png'), // Replace with your profile image asset
+                    Icon(
+                      Icons.account_circle,
+                      size: 80.0, // Size of the profile icon
+                      color: Colors.grey, // Gray color for the icon
                     ),
-                    SizedBox(height: 16.0), // Space between image and text
+                    SizedBox(height: 16.0), // Space between icon and text
                     Text(
-                      "Justin Bala",
+                      "Jollibee",
                       style: TextStyle(
                         color: Color(0xFFCA771A),
                         fontFamily: 'Poppins',
@@ -197,7 +212,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "@jstn_bala",
+                          "@jollibee_candelaria",
                           style: TextStyle(
                             color: Color(0xFFCA771A),
                             fontFamily: 'Poppins',
@@ -220,118 +235,74 @@ class HalfWhiteDrawer extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 40.0), // Added extra space before menu items
-                    GestureDetector(
+                    SizedBox(height: 20.0),
+                    _drawerItem(
+                      context,
+                      icon: Icons.info,
+                      text: 'About',
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => PreviousOrdersBuyer()),
+                          MaterialPageRoute(builder: (context) => AboutPage()),
                         );
                       },
-                      child: Row(
-                        children: [
-                          Icon(Icons.history, color: Color(0xFFCA771A), size: 30.0,),
-                          SizedBox(width: 12.0), // Increased spacing
-                          Text(
-                            'Previous Orders',
-                            style: TextStyle(
-                              color: Color(0xFFCA771A),
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                    SizedBox(height: 20.0), // Added extra space
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AboutBuyer()),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.info, color: Color(0xFFCA771A), size: 30.0,),
-                          SizedBox(width: 12.0), // Increased spacing
-                          Text(
-                            'About',
-                            style: TextStyle(
-                              color: Color(0xFFCA771A),
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20.0), // Added extra space
-                    GestureDetector(
+                    SizedBox(height: 5.0),
+                    _drawerItem(
+                      context,
+                      icon: Icons.help,
+                      text: 'Help',
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => HelpBuyerScreen()),
                         );
                       },
-                      child: Row(
-                        children: [
-                          Icon(Icons.help, color: Color(0xFFCA771A), size: 30.0,),
-                          SizedBox(width: 12.0), // Increased spacing
-                          Text(
-                            'Help',
-                            style: TextStyle(
-                            color: Color(0xFFCA771A),
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                          ),
-                          ),
-                        ],
-                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    const Divider(), // Line separator
+                    _drawerItem(
+                      context,
+                      icon: Icons.exit_to_app,
+                      text: 'Logout',
+                      onTap: () {
+                        // Handle logout functionality
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
-              Spacer(),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                     Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPageBuyer()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFCA771A),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12.0,
-                        horizontal: 20.0,
-                      ),
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method to create drawer items
+  Widget _drawerItem(BuildContext context, {required IconData icon, required String text, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+        child: Row(
+          children: [
+            Icon(icon, color: const Color(0xFFCA771A), size: 30.0),
+            const SizedBox(width: 12.0),
+            Text(
+              text,
+              style: const TextStyle(
+                color: Color(0xFFCA771A),
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+              ),
+            ),
+          ],
         ),
       ),
     );

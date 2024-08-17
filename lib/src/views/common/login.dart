@@ -1,22 +1,19 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:helen_app/direct-buyers/nav-bar-buyer.dart';
-import 'package:helen_app/direct-buyers/forgot-pass-buyer.dart'; // Import ForgotPassPage class
-import 'package:helen_app/direct-buyers/registration-buyer.dart'; // Import BuyerRegistrationPage class
+import 'package:helen_app/src/services/api_service.dart';
+import 'package:helen_app/src/views/screens/farmers/farmer-navbar.dart';
+import 'package:helen_app/src/views/common/forgotpass.dart'; // Import ForgotPassPage class
+import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
 
-class LoginPageBuyer extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _LoginPageBuyerState createState() => _LoginPageBuyerState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageBuyerState extends State<LoginPageBuyer> {
+class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
-  // Expected credentials
-  final String _expectedUsername = 'jstn_bala';
-  final String _expectedPassword = '@Buying31';
+  bool _isLoading = false; // Loading state
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +26,10 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
           height: size.height,
           child: Column(
             children: [
-              // Container for the background image and overlay
+              // Background and header section
               Container(
                 width: size.width,
-                height: size.height * 0.4, // Adjust height to fit header content
+                height: size.height * 0.4,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(40),
@@ -48,29 +45,19 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                           bottomRight: Radius.circular(40),
                         ),
                         child: Image.asset(
-                          'images/buyers/buyer-login-bg.jpg',
-                          fit: BoxFit.cover, // Make sure the image covers the entire container
+                          'images/farmers/login-bg.jpg',
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     Container(
-                      height: size.height * 0.4, // Adjust height to fit header content
+                      height: size.height * 0.4,
                       decoration: BoxDecoration(
                         color: Color(0xFFCA771A).withOpacity(0.7),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40),
                         ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 16,
-                      left: 16,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
                       ),
                     ),
                     Column(
@@ -81,66 +68,67 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                height: 140, // Adjust height of logo
+                                height: 140,
                                 child: Image.asset('images/farmers/white-helen.png'),
                               ),
-                              SizedBox(width: 3), // Add some space between the logos
+                              SizedBox(width: 3),
                               SizedBox(
-                                height: 140, // Adjust height of logo
+                                height: 140,
                                 child: Image.asset('images/farmers/logo-opa.png'),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 10), // Add some space between logos and text
-                        Text(
-                          'Welcome, Buyer!',
+                        SizedBox(height: 10),
+                        const Text(
+                          'Welcome, Ka-HELEN!',
                           style: TextStyle(
-                            fontSize: 28, // Make text bigger
-                            fontWeight: FontWeight.bold, // Make text bold
-                            color: Colors.white, // Set text color to white
-                            fontFamily: 'Poppins', // Set font to Poppins
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
                           ),
                         ),
-                        SizedBox(height: 8), // Add some space between lines
-                        Text(
+                        SizedBox(height: 8),
+                        const Text(
                           'Please log in using your credentials below',
                           style: TextStyle(
-                            fontSize: 16, // Make text smaller
-                            color: Colors.white, // Set text color to white
-                            fontFamily: 'Poppins', // Set font to Poppins
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
                           ),
-                          textAlign: TextAlign.center, // Align text center
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 20), // Add some space between text and form
+              SizedBox(height: 20),
+              // Username TextField
               Center(
                 child: Container(
-                  width: size.width * 0.8, // Set width to 80% of the screen width
+                  width: size.width * 0.8,
                   child: TextField(
-                    controller: _usernameController, // Assign the controller
+                    controller: _usernameController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0), // Increase padding
+                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                       labelText: 'Username',
                       hintText: 'Enter your username',
                       labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
                       hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
@@ -149,35 +137,36 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                 ),
               ),
               SizedBox(height: 20),
+              // Password TextField
               Center(
                 child: Container(
-                  width: size.width * 0.8, // Set width to 80% of the screen width
+                  width: size.width * 0.8,
                   child: TextField(
-                    controller: _passwordController, // Assign the controller
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0), // Increase padding
+                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                       labelText: 'Password',
                       hintText: 'Enter your password',
                       labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
                       hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0), // Set border color and width
+                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          color: Color(0xFFCA771A), // Set icon color
+                          color: Color(0xFFCA771A),
                         ),
                         onPressed: () {
                           setState(() {
@@ -191,17 +180,17 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                   ),
                 ),
               ),
-              SizedBox(height: 8), // Add some space between password field and Forgot Password text
+              SizedBox(height: 8),
+              // Forgot Password TextButton
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: TextButton(
                     onPressed: () {
-                      // Navigate to ForgotPassPage
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ForgotPassBuyer()),
+                        MaterialPageRoute(builder: (context) => ForgotPassPage()),
                       );
                     },
                     child: Text(
@@ -221,36 +210,46 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                 child: Container(
                   width: size.width * 0.7,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Perform login validation
-                      String enteredUsername = _usernameController.text.trim();
-                      String enteredPassword = _passwordController.text.trim();
+                    onPressed: _isLoading
+                        ? null
+                        : () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
 
-                      if (enteredUsername == _expectedUsername && enteredPassword == _expectedPassword) {
-                        // Navigate to Navbar on successful login
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => NavbarBuyer()),
-                        );
-                      } else {
-                        // Show error if credentials do not match
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Login Failed'),
-                            content: Text('Invalid username or password. Please try again.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
+                            final success = await loginFarmer(
+                              username: _usernameController.text,
+                              password: _passwordController.text,
+                            );
+
+                            setState(() {
+                              _isLoading = false;
+                            });
+
+                            if (success) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => FarmerNavbar()),
+                              );
+                            } else {
+                              // Show error if credentials do not match
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Login Failed'),
+                                  content: Text('Invalid username or password. Please try again.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
@@ -258,20 +257,25 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
                         side: BorderSide(color: Color(0xFFCA771A)),
                       ),
                     ),
-                    child: Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold, // Make text bold
+                    child: _isLoading
+                    ? CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        backgroundColor: Color(0xFFCA771A),
+                      )
+                    : Text(
+                        'LOGIN',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
                   ),
                 ),
               ),
               SizedBox(height: 15),
-              // Additional text below the login button
+              // Register Text and Link
               Text(
                 'Don\'t have an account?',
                 style: TextStyle(
@@ -282,10 +286,9 @@ class _LoginPageBuyerState extends State<LoginPageBuyer> {
               SizedBox(height: 4),
               InkWell(
                 onTap: () {
-                  // Navigate to BuyerRegistrationPage
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BuyerRegistrationPage()),
+                    MaterialPageRoute(builder: (context) => GetStartedPage()),
                   );
                 },
                 child: Text(

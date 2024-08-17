@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:helen_app/direct-buyers/checkout.dart';
+import 'package:helen_app/src/views/screens/buyers/direct-buyers/direct-checkout.dart';
 
 class SampleTomatoesClass extends StatelessWidget {
   @override
@@ -65,7 +65,7 @@ class SampleTomatoesClass extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Corn',
+                                  'Tomatoes',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 20.0,
