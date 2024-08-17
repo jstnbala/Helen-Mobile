@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
-import 'package:helen_app/farmers/addproduct.dart';
+import 'package:helen_app/src/views/screens/farmers/addproduct.dart';
 
 class ProductListFarmer extends StatelessWidget {
   @override

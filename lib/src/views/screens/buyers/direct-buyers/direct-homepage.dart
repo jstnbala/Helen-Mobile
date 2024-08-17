@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:helen_app/direct-buyers/sample-tomatoes.dart';
+import 'package:helen_app/src/views/screens/buyers/direct-buyers/direct-product_details.dart';
 
 class HomePageBuyer extends StatelessWidget {
   @override
