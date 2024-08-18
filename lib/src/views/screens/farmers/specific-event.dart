@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/services/api_service.dart';
+import 'dart:convert'; // For base64 decoding
 
 class SpecificEvent extends StatelessWidget {
+  final Event event;
+
+  SpecificEvent({required this.event});
+
   @override
   Widget build(BuildContext context) {
+    // Decode the base64 image
+    final bytes = base64Decode(event.photo.split(',')[1]);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFCA771A),
-        shape: RoundedRectangleBorder(
+        backgroundColor: const Color(0xFFCA771A),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.0),
             bottomRight: Radius.circular(20.0),
@@ -14,13 +23,13 @@ class SpecificEvent extends StatelessWidget {
         ),
         elevation: 5,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Specific Event',
+        title: const Text(
+          'Event Details',
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Poppins',
@@ -29,34 +38,33 @@ class SpecificEvent extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center, // Center the content horizontally
           children: [
             Center(
               child: Container(
-                height: 200.0,
+                height: 300.0,
                 width: 350.0,  // Increase the width of the image container
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                    color: Color(0xFFCA771A),
+                    color: const Color(0xFFCA771A),
                     width: 2.0,
                   ),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Icon(
-                  Icons.image_not_supported,
-                  size: 150.0,
-                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(12.0),
+                  image: DecorationImage(
+                    image: MemoryImage(bytes),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Text(
-              'Title of the Event',
-              style: TextStyle(
+              event.title, // Event Title
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -64,12 +72,12 @@ class SpecificEvent extends StatelessWidget {
               ),
               textAlign: TextAlign.center, // Center the text within its container
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Start Date',
-                style: TextStyle(
+                'Start Date: ${event.startDate}', // Start Date
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
@@ -77,12 +85,12 @@ class SpecificEvent extends StatelessWidget {
                 ),
               ),
             ),
-             SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'End Date',
-                style: TextStyle(
+                'End Date: ${event.endDate}', // End Date
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
@@ -90,12 +98,12 @@ class SpecificEvent extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 5.0),
+            const SizedBox(height: 5.0),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Time',
-                style: TextStyle(
+                'Time: ${event.time}', // Event Time
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal,
@@ -103,12 +111,12 @@ class SpecificEvent extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 5.0),
+            const SizedBox(height: 5.0),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Location',
-                style: TextStyle(
+                'Location: ${event.location}', // Event Location
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal,
@@ -116,16 +124,16 @@ class SpecificEvent extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Text(
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries',
-              style: TextStyle(
+              event.description, // Event Description
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14.0,
                 fontWeight: FontWeight.normal,
                 color: Colors.black,
               ),
-              textAlign: TextAlign.left, // Align the text to the left
+              textAlign: TextAlign.justify, // Justify the text
             ),
           ],
         ),
