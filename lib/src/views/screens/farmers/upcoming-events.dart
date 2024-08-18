@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart'; // Import your service where `fetchUpcomingEvents` is defined
 import 'dart:convert'; // For base64 decoding
+import 'package:helen_app/src/views/screens/farmers/specific-event.dart'; // Import the SpecificEvent widget
 
 class UpcomingEvents extends StatefulWidget {
   @override
@@ -20,8 +21,8 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFCA771A),
-        shape: RoundedRectangleBorder(
+        backgroundColor: const Color(0xFFCA771A),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.0),
             bottomRight: Radius.circular(20.0),
@@ -29,12 +30,12 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
         ),
         elevation: 5,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           'Upcoming Events',
           style: TextStyle(
             color: Colors.white,
@@ -48,11 +49,11 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
         future: _eventsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error loading events: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No upcoming events found.'));
+            return const Center(child: Text('No upcoming events found.'));
           } else {
             // When events are successfully loaded
             final events = snapshot.data!;
@@ -61,97 +62,108 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
               itemCount: events.length,
               itemBuilder: (context, index) {
                 final event = events[index];
-                
+
                 // Decode the base64 image
                 final bytes = base64Decode(event.photo.split(',')[1]);
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Container(
-                    height: 200.0, // Increased height of the card
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                return GestureDetector(
+                  onTap: () {
+                    // Navigate to the SpecificEvent page with the selected event data
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SpecificEvent(event: event),
                       ),
-                      elevation: 5,
-                      shadowColor: Colors.grey.withOpacity(0.5),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Event Photo
-                            Container(
-                              width: 120.0,
-                              height: 150.0,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(10.0),
-                                image: DecorationImage(
-                                  image: MemoryImage(bytes),
-                                  fit: BoxFit.cover,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Container(
+                      height: 200.0, // Increased height of the card
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 5,
+                        shadowColor: Colors.grey.withOpacity(0.5),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Event Photo
+                              Container(
+                                width: 120.0,
+                                height: 150.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  image: DecorationImage(
+                                    image: MemoryImage(bytes),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 16.0),
-                            // Event details
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    event.title, // Event title
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                              const SizedBox(width: 16.0),
+                              // Event details
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      event.title, // Event title
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    'Start: ${event.startDate}', // Start Date
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
+                                    const SizedBox(height: 4.0),
+                                    Text(
+                                      'Start: ${event.startDate}', // Start Date
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    'End: ${event.endDate}', // End Date
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
+                                    const SizedBox(height: 4.0),
+                                    Text(
+                                      'End: ${event.endDate}', // End Date
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    event.time, // Event time
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
+                                    const SizedBox(height: 4.0),
+                                    Text(
+                                      event.time, // Event time
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    event.location, // Event location
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
+                                    const SizedBox(height: 4.0),
+                                    Text(
+                                      event.location, // Event location
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
