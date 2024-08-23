@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/common/help-buyer.dart';
 import 'package:helen_app/src/views/common/about.dart';
@@ -8,6 +10,8 @@ import 'direct-orderlists.dart';
 import 'direct-profile.dart';
 
 class DirectNavbar extends StatefulWidget {
+  const DirectNavbar({super.key});
+
   @override
   _DirectNavbarState createState() => _DirectNavbarState();
 }
@@ -27,18 +31,18 @@ class _DirectNavbarState extends State<DirectNavbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: HalfWhiteDrawer(), // Adding the drawer
+      drawer: const HalfWhiteDrawer(), // Adding the drawer
       body: Column(
         children: [
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
                 child: Container(
-                  color: Color(0xFFCA771A),
+                  color: const Color(0xFFCA771A),
                   width: double.infinity,
                   height: 150,
                 ),
@@ -57,7 +61,7 @@ class _DirectNavbarState extends State<DirectNavbar> {
                 left: 10,
                 child: Builder(
                   builder: (context) => IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.menu,
                       color: Colors.white,
                     ),
@@ -73,7 +77,7 @@ class _DirectNavbarState extends State<DirectNavbar> {
                 child: IconButton(
                   icon: Stack(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.notifications,
                         color: Colors.white,
                         size: 30,
@@ -81,16 +85,16 @@ class _DirectNavbarState extends State<DirectNavbar> {
                       Positioned(
                         right: 0,
                         child: Container(
-                          padding: EdgeInsets.all(1),
+                          padding: const EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             minWidth: 12,
                             minHeight: 12,
                           ),
-                          child: Text(
+                          child: const Text(
                             '0',
                             style: TextStyle(
                               color: Colors.white,
@@ -112,7 +116,7 @@ class _DirectNavbarState extends State<DirectNavbar> {
           Expanded(
             child: IndexedStack(
               index: _selectedIndex,
-              children: [
+              children: const [
                 HomePageBuyer(),
                 MessagesPageBuyer(),
                 OrdersListsBuyer(),
@@ -145,11 +149,11 @@ class _DirectNavbarState extends State<DirectNavbar> {
         selectedItemColor: selectedColor,
         unselectedItemColor: unselectedColor,
         onTap: _onItemTapped,
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           color: selectedColor,
           fontFamily: 'Poppins',
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           color: unselectedColor,
           fontFamily: 'Poppins',
         ),
@@ -161,6 +165,8 @@ class _DirectNavbarState extends State<DirectNavbar> {
 }
 
 class HalfWhiteDrawer extends StatelessWidget {
+  const HalfWhiteDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -173,17 +179,17 @@ class HalfWhiteDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center, // Centering content
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.account_circle,
                       size: 80.0, // Size of the profile icon
                       color: Colors.grey, // Gray color for the icon
                     ),
-                    SizedBox(height: 16.0), // Space between icon and text
-                    Text(
+                    const SizedBox(height: 16.0), // Space between icon and text
+                    const Text(
                       "Mark Cayabyab",
                       style: TextStyle(
                         color: Color(0xFFCA771A),
@@ -192,11 +198,11 @@ class HalfWhiteDrawer extends StatelessWidget {
                         fontSize: 30.0,
                       ),
                     ),
-                    SizedBox(height: 8.0), // Space between name and username
+                    const SizedBox(height: 8.0), // Space between name and username
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "@markcayabyab17",
                           style: TextStyle(
                             color: Color(0xFFCA771A),
@@ -204,15 +210,15 @@ class HalfWhiteDrawer extends StatelessWidget {
                             fontSize: 16.0,
                           ),
                         ),
-                        SizedBox(width: 4.0), // Space between username and checkmark
+                        const SizedBox(width: 4.0), // Space between username and checkmark
                         Container(
                           width: 16.0,
                           height: 16.0,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xFFCA771A),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.check,
                             color: Colors.white,
                             size: 10.0,
@@ -220,7 +226,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     _drawerItem(
                       context,
                       icon: Icons.info,
@@ -232,7 +238,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(height: 5.0),
+                    const SizedBox(height: 5.0),
                     _drawerItem(
                       context,
                       icon: Icons.help,
@@ -240,11 +246,11 @@ class HalfWhiteDrawer extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HelpBuyerScreen()),
+                          MaterialPageRoute(builder: (context) => const HelpBuyerScreen()),
                         );
                       },
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     const Divider(), // Line separator
                     _drawerItem(
                       context,
@@ -254,7 +260,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                         // Handle logout functionality
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
                         );
                       },
                     ),

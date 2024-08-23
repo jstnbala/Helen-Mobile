@@ -1,1 +1,2 @@
-const OPENAI_API_KEY = "sk-mgdYTUoE82FeY7QYjAji4Ia_zI3592fn3NMb5oNOI5T3BlbkFJdAsZPcRO2PSGVnpbhFEVyg9WOfJsNmbXsoP8SCbyUA";
+// ignore: constant_identifier_names
+const OPENAI_API_KEY = "sk-YL8dVchvIv7CWZ87t-TyS8m6YyGfkfKimqPCSK0eXYT3BlbkFJlwIzxZ-gV9QbuDtVIes7SDjsGL4dbt2ymIzzvVxlgA";

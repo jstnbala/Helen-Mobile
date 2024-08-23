@@ -1,7 +1,9 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
 
 class OrdersListsBuyer extends StatefulWidget {
+  const OrdersListsBuyer({super.key});
+
   @override
   _OrdersListsBuyerState createState() => _OrdersListsBuyerState();
 }
@@ -131,8 +133,8 @@ class _OrdersListsBuyerState extends State<OrdersListsBuyer> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 115,
-                          height: 170,
+                          width: 105,
+                          height: 115,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(10),
@@ -339,7 +341,7 @@ class _OrdersListsBuyerState extends State<OrdersListsBuyer> {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const [
                                 Text(
                                   'Spinach',
                                   style: TextStyle(
@@ -416,7 +418,7 @@ class _OrdersListsBuyerState extends State<OrdersListsBuyer> {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const [
                                 Text(
                                   'Carrots',
                                   style: TextStyle(

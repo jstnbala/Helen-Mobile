@@ -1,11 +1,13 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/farmers/agrikachat.dart';
+import 'package:helen_app/src/views/screens/farmers/farmer-navbar.dart';
 import 'package:helen_app/src/views/screens/farmers/product-list.dart';
-import 'package:helen_app/src/views/screens/farmers/upcoming-events.dart'; 
-import 'package:helen_app/src/views/screens/farmers/orderspage.dart'; // Import the OrdersPage class
+import 'package:helen_app/src/views/screens/farmers/upcoming-events.dart';  
 
 class HomePageFarmer extends StatelessWidget {
+  const HomePageFarmer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +23,11 @@ class HomePageFarmer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => OrdersPage()),
+                    MaterialPageRoute(builder: (context) => FarmerNavbar(initialIndex: 2)
+                    ), 
                   );
                 },
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
                   height: 120,
                   child: ClipRRect(
@@ -78,7 +81,7 @@ class HomePageFarmer extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => ProductListFarmer()),
                   );
                 },
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
                   height: 120,
                   child: ClipRRect(
@@ -119,7 +122,7 @@ class HomePageFarmer extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => UpcomingEvents()),
                   );
                 },
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
                   height: 120,
                   child: ClipRRect(
@@ -137,7 +140,7 @@ class HomePageFarmer extends StatelessWidget {
                           left: 15,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: const [
                               Text(
                                 'Upcoming',
                                 style: TextStyle(
@@ -174,7 +177,7 @@ class HomePageFarmer extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => ChatAI()),
                   );
                 },
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
                   height: 130,
                   child: ClipRRect(

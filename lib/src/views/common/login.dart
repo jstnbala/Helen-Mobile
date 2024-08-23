@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
 import 'package:helen_app/src/views/screens/farmers/farmer-navbar.dart';
@@ -5,6 +7,8 @@ import 'package:helen_app/src/views/common/forgotpass.dart'; // Import ForgotPas
 import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -30,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 width: size.width,
                 height: size.height * 0.4,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(40),
                     bottomRight: Radius.circular(40),
@@ -40,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Positioned.fill(
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40),
                         ),
@@ -53,8 +57,8 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       height: size.height * 0.4,
                       decoration: BoxDecoration(
-                        color: Color(0xFFCA771A).withOpacity(0.7),
-                        borderRadius: BorderRadius.only(
+                        color: const Color(0xFFCA771A).withOpacity(0.7),
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40),
                         ),
@@ -71,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 140,
                                 child: Image.asset('images/farmers/white-helen.png'),
                               ),
-                              SizedBox(width: 3),
+                              const SizedBox(width: 3),
                               SizedBox(
                                 height: 140,
                                 child: Image.asset('images/farmers/logo-opa.png'),
@@ -79,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         const Text(
                           'Welcome, Ka-HELEN!',
                           style: TextStyle(
@@ -89,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontFamily: 'Poppins',
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         const Text(
                           'Please log in using your credentials below',
                           style: TextStyle(
@@ -104,69 +108,69 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Username TextField
               Center(
-                child: Container(
+                child: SizedBox(
                   width: size.width * 0.8,
                   child: TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                       labelText: 'Username',
                       hintText: 'Enter your username',
-                      labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
-                      hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
+                      labelStyle: const TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
+                      hintStyle: const TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    style: TextStyle(color: Colors.black, fontFamily: 'Poppins'),
+                    style: const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Password TextField
               Center(
-                child: Container(
+                child: SizedBox(
                   width: size.width * 0.8,
                   child: TextField(
                     controller: _passwordController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                       labelText: 'Password',
                       hintText: 'Enter your password',
-                      labelStyle: TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
-                      hintStyle: TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
+                      labelStyle: const TextStyle(color: Color(0xFFCA771A), fontFamily: 'Poppins'),
+                      hintStyle: const TextStyle(color: Colors.black54, fontFamily: 'Poppins'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          color: Color(0xFFCA771A),
+                          color: const Color(0xFFCA771A),
                         ),
                         onPressed: () {
                           setState(() {
@@ -175,12 +179,12 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                     ),
-                    style: TextStyle(color: Colors.black, fontFamily: 'Poppins'),
+                    style: const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
                     obscureText: _obscurePassword,
                   ),
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               // Forgot Password TextButton
               Align(
                 alignment: Alignment.centerRight,
@@ -190,10 +194,10 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ForgotPassPage()),
+                        MaterialPageRoute(builder: (context) => const ForgotPassPage()),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Forgot Password?',
                       style: TextStyle(
                         color: Color(0xFFCA771A),
@@ -204,10 +208,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Login Button
               Center(
-                child: Container(
+                child: SizedBox(
                   width: size.width * 0.7,
                   child: ElevatedButton(
                     onPressed: _isLoading
@@ -229,21 +233,21 @@ class _LoginPageState extends State<LoginPage> {
                             if (success) {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => FarmerNavbar()),
+                                MaterialPageRoute(builder: (context) => const FarmerNavbar()),
                               );
                             } else {
                               // Show error if credentials do not match
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text('Login Failed'),
-                                  content: Text('Invalid username or password. Please try again.'),
+                                  title: const Text('Login Failed'),
+                                  content: const Text('Invalid username or password. Please try again.'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('OK'),
+                                      child: const Text('OK'),
                                     ),
                                   ],
                                 ),
@@ -251,18 +255,18 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFCA771A),
+                      backgroundColor: const Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
-                        side: BorderSide(color: Color(0xFFCA771A)),
+                        side: const BorderSide(color: Color(0xFFCA771A)),
                       ),
                     ),
                     child: _isLoading
-                    ? CircularProgressIndicator(
+                    ? const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         backgroundColor: Color(0xFFCA771A),
                       )
-                    : Text(
+                    : const Text(
                         'LOGIN',
                         style: TextStyle(
                           color: Colors.white,
@@ -274,24 +278,24 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               // Register Text and Link
-              Text(
+              const Text(
                 'Don\'t have an account?',
                 style: TextStyle(
                   color: Color(0xFFCA771A),
                   fontFamily: 'Poppins',
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => GetStartedPage()),
+                    MaterialPageRoute(builder: (context) => const GetStartedPage()),
                   );
                 },
-                child: Text(
+                child: const Text(
                   'Register here',
                   style: TextStyle(
                     color: Color(0xFFCA771A),
@@ -300,9 +304,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               // Footer text
-              Text(
+              const Text(
                 '© 2024 Helen. All Rights Reserved',
                 style: TextStyle(
                   color: Color(0xFFCA771A),

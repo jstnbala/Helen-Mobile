@@ -1,3 +1,6 @@
+// ignore_for_file: avoid_print, prefer_const_declarations, non_constant_identifier_names
+
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // For jsonEncode
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -23,7 +26,7 @@ Future<bool> registerFarmer({
     'Username': username,
     'FullName': fullName,
     'Address': address,
-    'Organization': organization, 
+    'Organization': organization,  
     'Contact': contactNo,
     'RSBSA_No': rsbsaNo,
     'Password': password,
@@ -54,6 +57,27 @@ Future<bool> registerFarmer({
   }
 }
 
+Future<List<String>> fetchOrganizations() async {
+  try {
+    final response = await http.get(Uri.parse('https://helen-project.onrender.com/api/organizations'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      List<String> organizations = data
+        .map<String>((org) => org['OrgName']?.toString() ?? '')
+        .where((name) => name.isNotEmpty)
+        .toList();
+
+      return organizations;
+    } else {
+      throw Exception('Failed to load organizations');
+    }
+  } catch (e) {
+    print('Failed to fetch organizations: $e');
+    return [];
+  }
+}
+
 Future<bool> loginFarmer({
   required String username,
   required String password,
@@ -69,7 +93,7 @@ Future<bool> loginFarmer({
   };
 
 print('payload: $payload');
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   try {
     final response = await http.post(
@@ -91,6 +115,7 @@ print('payload: $payload');
         await storage.write(key: 'Username', value: responseData["Username"]);
         await storage.write(key: 'Password', value: responseData["Password"]);
         await storage.write(key: 'FullName', value: responseData["FullName"]);
+        await storage.write(key: 'RSBSA_No', value: responseData["RSBSA_No"]);
         await storage.write(key: 'Contact', value: responseData["Contact"]);
         await storage.write(key: 'Address', value: responseData["Address"]);
         await storage.write(key: 'Organization', value: responseData["Organization"]);
@@ -152,7 +177,7 @@ class Event {
 }
 
 Future<List<Event>> fetchUpcomingEvents() async {
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   final OrgName = await storage.read(key: 'Organization');
 
   if (OrgName == null) {
@@ -182,4 +207,80 @@ Future<List<Event>> fetchUpcomingEvents() async {
     return [];
   }
 }
+
+Future<bool> addProduct({
+  required String productName,
+  required String farmerName,
+  required String price,
+  required String unit,
+  required String inventory,
+  required File productPic,
+
+}) async {
+  final storage = const FlutterSecureStorage();
+  final orgname = await storage.read(key: 'Organization');
+  print("price: $price");
+
+  if (orgname == null) {
+    print('Organization name is missing');
+    return false;
+  }
+
+  // Construct the URL
+  final url = 'https://helen-project.onrender.com/api/organizations/$orgname/products';
+
+  final dateAdded = DateTime.now().toString();
+
+  int? number = int.tryParse(inventory);
+  double? convertedPrice = double.tryParse(price);
+
+// Read and encode the image file to Base64
+  String productPicBase64;
+  try {
+    final imageBytes = await productPic.readAsBytes();
+    productPicBase64 = base64Encode(imageBytes);
+  } catch (e) {
+    print('Failed to read or encode the image file: $e');
+    return false;
+  }
+
+  // Create the payload
+  final payload = {
+    'DateAdded': dateAdded,
+    'ProductName': productName, 
+    'FarmerName': farmerName,
+    'Price': convertedPrice,
+    'Unit': unit,
+    'status': 'Pending',
+    'Inventory': number,
+    'ProductPic': productPicBase64,
+  };
+
+  try {
+    // Make the POST request
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(payload),
+    );
+
+    // Check the response status
+    if (response.statusCode == 201) { // Assuming 201 Created is the success status
+      print('Product added successfully');
+      return true;
+    } else {
+      print('Failed to add product: ${response.body}');
+      print(payload);
+      return false;
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+    return false;
+  }
+}
+
+
+
 

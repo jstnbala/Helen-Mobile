@@ -1,6 +1,10 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class OrderForm extends StatefulWidget {
+  const OrderForm({super.key});
+
   @override
   _OrderFormState createState() => _OrderFormState();
 }
@@ -66,9 +70,10 @@ class _OrderFormState extends State<OrderForm> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
+       resizeToAvoidBottomInset: true, // Ensures the view adjusts when the keyboard appears
+        body: SingleChildScrollView( // Allows the content to be scrollable
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
           key: _formKey,
           child: Column(
             children: [

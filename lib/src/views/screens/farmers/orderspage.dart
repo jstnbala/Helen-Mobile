@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 
 class OrdersPage extends StatefulWidget {
+  const OrdersPage({super.key});
+
   @override
   _OrdersPageState createState() => _OrdersPageState();
 }
@@ -241,7 +243,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const [
                                 Text(
                                   'Cabbage',
                                   style: TextStyle(
@@ -460,7 +462,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const [
                                 Text(
                                   'Spinach',
                                   style: TextStyle(
@@ -537,7 +539,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const [
                                 Text(
                                   'Broccoli',
                                   style: TextStyle(

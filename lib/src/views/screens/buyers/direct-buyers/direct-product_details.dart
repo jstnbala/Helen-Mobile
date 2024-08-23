@@ -1,7 +1,11 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/direct-checkout.dart';
 
 class SampleTomatoesClass extends StatelessWidget {
+  const SampleTomatoesClass({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,7 +13,7 @@ class SampleTomatoesClass extends StatelessWidget {
         slivers: [
           SliverAppBar(
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -31,10 +35,10 @@ class SampleTomatoesClass extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(5, (index) {
                         return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 3.0),
+                          margin: const EdgeInsets.symmetric(horizontal: 3.0),
                           width: 10.0,
                           height: 10.0,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
                           ),
@@ -55,9 +59,9 @@ class SampleTomatoesClass extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      const Divider(),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -95,8 +99,8 @@ class SampleTomatoesClass extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Divider(),
-                      Column(
+                      const Divider(),
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
@@ -121,8 +125,8 @@ class SampleTomatoesClass extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Divider(),
-                      Column(
+                      const Divider(),
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
@@ -156,8 +160,8 @@ class SampleTomatoesClass extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Divider(),
-                      Column(
+                      const Divider(),
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
@@ -182,20 +186,20 @@ class SampleTomatoesClass extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFCA771A),
+                                backgroundColor: const Color(0xFFCA771A),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),
                               ),
                               onPressed: () {},
-                              child: Text(
+                              child: const Text(
                                 'Message',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -206,11 +210,11 @@ class SampleTomatoesClass extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10.0),
+                          const SizedBox(width: 10.0),
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFCA771A),
+                                backgroundColor: const Color(0xFFCA771A),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),
@@ -218,10 +222,10 @@ class SampleTomatoesClass extends StatelessWidget {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => CheckoutPage()),
+                                  MaterialPageRoute(builder: (context) => const CheckoutPage()),
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 'Order',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',

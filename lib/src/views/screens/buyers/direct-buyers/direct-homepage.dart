@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, file_names
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/direct-product_details.dart';
 
 class HomePageBuyer extends StatelessWidget {
+  const HomePageBuyer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +48,7 @@ class HomePageBuyer extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
-                          children: [
+                          children: const [
                             Icon(Icons.image, size: 120, color: Colors.grey),
                             SizedBox(height: 10),
                             Row(
@@ -77,9 +79,10 @@ class HomePageBuyer extends StatelessWidget {
                                 Text(
                                   'P40.00',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 15,
                                     color: Color(0xFFCA771A),
                                     fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -106,7 +109,7 @@ class HomePageBuyer extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
-                            children: [
+                            children: const [
                               Icon(Icons.image, size: 120, color: Colors.grey),
                               SizedBox(height: 10),
                               Row(
@@ -137,9 +140,10 @@ class HomePageBuyer extends StatelessWidget {
                                   Text(
                                     'P25.00',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       color: Color(0xFFCA771A),
                                       fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
@@ -164,7 +168,7 @@ class HomePageBuyer extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
-                          children: [
+                          children: const [
                             Icon(Icons.image, size: 120, color: Colors.grey),
                             SizedBox(height: 10),
                             Row(
@@ -195,9 +199,10 @@ class HomePageBuyer extends StatelessWidget {
                                 Text(
                                   'P100.00',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 15,
                                     color: Color(0xFFCA771A),
                                     fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -217,7 +222,7 @@ class HomePageBuyer extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
-                          children: [
+                          children: const [
                             Icon(Icons.image, size: 120, color: Colors.grey),
                             SizedBox(height: 10),
                             Row(
@@ -248,9 +253,10 @@ class HomePageBuyer extends StatelessWidget {
                                 Text(
                                   'P30.00',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 15,
                                     color: Color(0xFFCA771A),
                                     fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],

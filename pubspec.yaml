@@ -17,6 +17,7 @@
     image_picker: ^1.1.2
     dash_chat_2: ^0.0.18  
     chat_gpt_sdk: ^2.2.5
+    twilio_flutter: ^0.9.0
 
     
   dev_dependencies:
@@ -55,6 +56,7 @@
       - images/farmers/dev-goals.jpg
       - images/farmers/vision-mission.jpg
       - images/farmers/product-add.png
+      - images/buyers/QR.png
 
     fonts:
       - family: Poppins

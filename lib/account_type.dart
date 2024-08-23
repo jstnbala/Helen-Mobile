@@ -4,6 +4,8 @@ import 'package:helen_app/src/views/common/registration-buyer.dart';
 import 'package:helen_app/src/views/common/registration-farmer.dart';
 
 class AccountTypeScreen extends StatelessWidget {
+  const AccountTypeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,7 @@ class AccountTypeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 height: 200, // Adjust the height to fit your needs
                 child: Image.asset(
                   'images/are-you-a-farmer.png',
@@ -65,7 +67,7 @@ class AccountTypeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              Container(
+              SizedBox(
                 height: 200, // Adjust the height to fit your needs
                 child: Image.asset(
                   'images/are-you-a-buyer.png',

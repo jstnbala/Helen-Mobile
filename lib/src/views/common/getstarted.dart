@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 
 class GetStartedPage extends StatelessWidget {
+  const GetStartedPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class GetStartedPage extends StatelessWidget {
           ),
           Column(
             children: [
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: Center(
                   child: Image.asset(

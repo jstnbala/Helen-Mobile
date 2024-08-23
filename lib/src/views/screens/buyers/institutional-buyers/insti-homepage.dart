@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/buyers/institutional-buyers/insti-navbar.dart';
 import 'package:helen_app/src/views/screens/buyers/institutional-buyers/insti-orderform.dart';
@@ -27,7 +29,7 @@ class _HomepageInstiState extends State<HomepageInsti> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => OrderForm()),
+                    MaterialPageRoute(builder: (context) => const OrderForm()),
                   );
                 },
                 child: Container(
@@ -181,7 +183,7 @@ if (_isRequestedSelected)
               ),
             ),
             const SizedBox(width: 16.0),
-            Expanded(
+            const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -194,7 +196,7 @@ if (_isRequestedSelected)
                       color: Color(0xFFCA771A),
                     ),
                   ),
-                  const SizedBox(height: 4.0),
+                  SizedBox(height: 4.0),
                   Text(
                     'Quantity: 10 Kilos',
                     style: TextStyle(
@@ -203,7 +205,7 @@ if (_isRequestedSelected)
                       color: Color(0xFFCA771A),
                     ),
                   ),
-                  const SizedBox(height: 4.0),
+                  SizedBox(height: 4.0),
                   Text(
                     'Total: P100.00',
                     style: TextStyle(
@@ -213,7 +215,7 @@ if (_isRequestedSelected)
                       color: Color(0xFFCA771A),
                     ),
                   ),
-                  const SizedBox(height: 10.0),
+                  SizedBox(height: 10.0),
                 ],
               ),
             ),
@@ -236,7 +238,7 @@ if (_isRequestedSelected)
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text(
+                        title: const Text(
                           'Confirm Cancellation',
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -245,7 +247,7 @@ if (_isRequestedSelected)
                             color: Color(0xFFCA771A),
                           ),
                         ),
-                        content: Text(
+                        content: const Text(
                           'Please confirm if you want to cancel your order. Thank you!',
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -258,9 +260,9 @@ if (_isRequestedSelected)
                               Navigator.of(context).pop(); // Close the dialog
                             },
                             style: TextButton.styleFrom(
-                              side: BorderSide(color: Color(0xFFCA771A)),
+                              side: const BorderSide(color: Color(0xFFCA771A)),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Cancel',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -275,10 +277,10 @@ if (_isRequestedSelected)
                               // Add your cancellation logic here
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFCA771A), // Background color
+                              backgroundColor: const Color(0xFFCA771A), // Background color
                               foregroundColor: Colors.white, // Text color
                             ),
-                            child: Text(
+                            child: const Text(
                               'Confirm',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -292,7 +294,7 @@ if (_isRequestedSelected)
                     },
                   );
                 },
-                child: Text(
+                child: const Text(
                   'Cancel',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -321,7 +323,7 @@ if (_isRequestedSelected)
                     ),
                   );
                 },
-                child: Text(
+                child: const Text(
                   'Chat',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -508,7 +510,7 @@ if (_isRequestedSelected)
                               Navigator.of(context).pop(); // Close the dialog
                             },
                             style: TextButton.styleFrom(
-                              side: BorderSide(color: Color(0xFFCA771A)),
+                              side: const BorderSide(color: Color(0xFFCA771A)),
                             ),
                             child: const Text(
                               'Cancel',
@@ -525,7 +527,7 @@ if (_isRequestedSelected)
                               // Add your confirmation logic here
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFCA771A), // Background color
+                              backgroundColor: const Color(0xFFCA771A), // Background color
                               foregroundColor: Colors.white, // Text color
                             ),
                             child: const Text(

@@ -1,7 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 
 class MessagesPage extends StatefulWidget {
+  const MessagesPage({super.key});
+
   @override
   _MessagesPageState createState() => _MessagesPageState();
 }
@@ -51,7 +53,7 @@ class _MessagesPageState extends State<MessagesPage> {
                       ),
                     ),
                     child: Text(
-                      'Buyer',
+                      'BUYER',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
@@ -77,12 +79,12 @@ class _MessagesPageState extends State<MessagesPage> {
                       ),
                     ),
                     child: Text(
-                      'Farmer Organization',
+                      'FARMER ORGS',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         color: _selectedButton == 'Farmer Orgs' ? Colors.white : Color(0xFFCA771A),
-                        fontSize: 10.5, // Adjust font size if needed
+                        fontSize: 12.5, // Adjust font size if needed
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -103,12 +105,12 @@ class _MessagesPageState extends State<MessagesPage> {
                       ),
                     ),
                     child: Text(
-                      'Farmer Chat Support',
+                      'CHAT SUPPORT',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         color: _selectedButton == 'Farmer Support' ? Colors.white : Color(0xFFCA771A),
-                        fontSize: 10.5, // Adjust font size if needed
+                        fontSize: 12.5, // Adjust font size if needed
                       ),
                       textAlign: TextAlign.center,
                     ),
