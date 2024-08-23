@@ -1,9 +1,13 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart'; // Import your service where `fetchUpcomingEvents` is defined
 import 'dart:convert'; // For base64 decoding
 import 'package:helen_app/src/views/screens/farmers/specific-event.dart'; // Import the SpecificEvent widget
 
 class UpcomingEvents extends StatefulWidget {
+  const UpcomingEvents({super.key});
+
   @override
   _UpcomingEventsState createState() => _UpcomingEventsState();
 }
@@ -78,7 +82,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Container(
+                    child: SizedBox(
                       height: 200.0, // Increased height of the card
                       child: Card(
                         shape: RoundedRectangleBorder(

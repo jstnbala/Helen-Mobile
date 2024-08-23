@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
 import 'dart:convert'; // For base64 decoding
@@ -5,7 +7,7 @@ import 'dart:convert'; // For base64 decoding
 class SpecificEvent extends StatelessWidget {
   final Event event;
 
-  SpecificEvent({required this.event});
+  const SpecificEvent({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {

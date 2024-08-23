@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
@@ -33,13 +33,13 @@ class _ChatAIState extends State<ChatAI> {
   final ChatUser _gptChatUser = 
     ChatUser(
       id: '2', 
-      firstName: 'GPT', 
-      lastName: 'Turbo'
+      firstName: 'AgriKaChat', 
+      lastName: 'Bot'
       );
 
 
-  List<ChatMessage> _messages = <ChatMessage>[];
-  List<ChatUser> _typingUsers = <ChatUser>[];
+  final List<ChatMessage> _messages = <ChatMessage>[];
+  final List<ChatUser> _typingUsers = <ChatUser>[];
 
   @override
   void initState() {

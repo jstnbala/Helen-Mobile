@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/common/about.dart';
 import 'package:helen_app/src/views/common/help-farmer.dart';
 import 'package:helen_app/src/views/common/login.dart';
+import 'package:helen_app/src/views/screens/farmers/farmer-notif.dart';
 import 'homepage-farmer.dart';
 import 'messagespage.dart';
 import 'orderspage.dart';
@@ -14,15 +15,26 @@ import 'dart:typed_data';
 
 
 class FarmerNavbar extends StatefulWidget {
+  final int initialIndex; 
+
+  const FarmerNavbar({Key? key, this.initialIndex = 0}) : super(key: key); // Modify constructor
+
   @override
   _FarmerNavbarState createState() => _FarmerNavbarState();
 }
 
 class _FarmerNavbarState extends State<FarmerNavbar> {
   int _selectedIndex = 0;
+  
 
   static const Color selectedColor = Color(0xFFCA771A);
   static const Color unselectedColor = Color(0xFF606060);
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex; // Initialize _selectedIndex with widget.initialIndex
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -110,7 +122,10 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
                     ],
                   ),
                   onPressed: () {
-                    // Handle notification tap
+                    Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FarmerNotifPage()),
+                    );
                   },
                 ),
               ),
@@ -119,7 +134,7 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
           Expanded(
             child: IndexedStack(
               index: _selectedIndex,
-              children: [
+              children: const [
                 HomePageFarmer(),
                 MessagesPage(),
                 OrdersPage(),
@@ -197,247 +212,212 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
   }
 }
 
-class HalfWhiteDrawer extends StatelessWidget {
+class HalfWhiteDrawer extends StatefulWidget {
+  const HalfWhiteDrawer({super.key});
+
+  @override
+  _HalfWhiteDrawerState createState() => _HalfWhiteDrawerState();
+}
+
+class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
   Future<String?> getProfilePicture() async {
-    final profilePicture = await storage.read(key: 'ProfilePicture');
-    print("ProfilePicture: $profilePicture");
-    return profilePicture;
+    return await storage.read(key: 'ProfilePicture');
   }
 
   Future<String?> getFullName() async {
-    final fullName = await storage.read(key: 'FullName');
-    print("FullName: $fullName");
-    return fullName;
+    return await storage.read(key: 'FullName');
   }
 
   Future<String?> getUsername() async {
-    final username = await storage.read(key: 'Username');
-    print("Username: $username");
-    return username;
+    return await storage.read(key: 'Username');
   }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Padding(
-        padding: const EdgeInsets.only(top: 30.0), // Adjust the top padding as needed
+        padding: const EdgeInsets.only(top: 30.0),
         child: Container(
           color: Colors.white,
-          width: MediaQuery.of(context).size.width / 2, // Adjust width as needed
+          width: MediaQuery.of(context).size.width / 2,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, // Center content horizontally
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center, // Center text horizontally
-                  children: [
-                    FutureBuilder<String?>(
-                      future: getProfilePicture(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          print('Error: ${snapshot.error}');
-                          return CircleAvatar(
-                            radius: 50.0,
-                            backgroundColor: Colors.grey,
-                            child: Icon(
-                              Icons.person,
-                              size: 100.0,
-                              color: Colors.white,
-                            ),
-                          );
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          print('Profile picture data is empty or null');
-                          return CircleAvatar(
-                            radius: 50.0,
-                            backgroundColor: Colors.grey,
-                            child: Icon(
-                              Icons.person,
-                              size: 100.0,
-                              color: Colors.white,
-                            ),
-                          );
-                        } else {
-                          String base64Image = snapshot.data!;
-                          try {
-                            if (base64Image.startsWith('data:image/')) {
-                              base64Image = base64Image.split(',').last;
-                            }
-                            int mod = base64Image.length % 4;
-                            if (mod > 0) {
-                              base64Image += '=' * (4 - mod);
-                            }
-                            Uint8List bytes = base64Decode(base64Image);
-                            print('Decoded image bytes length: ${bytes.length}');
-                            return CircleAvatar(
-                              radius: 50.0,
-                              backgroundColor: Colors.grey,
-                              backgroundImage: MemoryImage(bytes),
-                            );
-                          } catch (e) {
-                            print('Failed to decode base64 image: $e');
-                            return CircleAvatar(
-                              radius: 50.0,
-                              backgroundColor: Colors.grey,
-                              child: Icon(
-                                Icons.person,
-                                size: 100.0,
-                                color: Colors.white,
-                              ),
-                            );
-                          }
-                        }
-                      },
-                    ),
-                    SizedBox(height: 20.0), // Added extra space
-                    FutureBuilder<String?>(
-                      future: getFullName(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return Text(
-                            'Full Name',
-                            style: TextStyle(
-                              color: Color(0xFFCA771A),
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25.0,
-                            ),
-                          );
-                        } else {
-                          String fullName = snapshot.data!;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                fullName,
-                                style: TextStyle(
-                                  color: Color(0xFFCA771A),
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25.0,
-                                ),
-                              ),
-                              SizedBox(height: 5.0),
-                              FutureBuilder<String?>(
-                                future: getUsername(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                    return Center(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '@Username',
-                                            style: TextStyle(
-                                              color: Color(0xFFCA771A),
-                                              fontFamily: 'Poppins',
-                                              fontSize: 18.0,
-                                            ),
-                                          ),
-                                          SizedBox(width: 8.0),
-                                          Icon(
-                                            Icons.check_circle,
-                                            color: Color(0xFFCA771A),
-                                            size: 18.0,
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  } else {
-                                    String username = snapshot.data!;
-                                    return Center(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '@$username',
-                                            style: TextStyle(
-                                              color: Color(0xFFCA771A),
-                                              fontFamily: 'Poppins',
-                                              fontSize: 18.0,
-                                            ),
-                                          ),
-                                          SizedBox(width: 8.0),
-                                          Icon(
-                                            Icons.check_circle,
-                                            color: Color(0xFFCA771A),
-                                            size: 18.0,
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 20.0),
-            _drawerItem(
-              context,
-              icon: Icons.info,
-              text: 'About',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AboutPage()),
-                );
-              },
-            ),
-            const SizedBox(height: 5.0),
-            _drawerItem(
-              context,
-              icon: Icons.help,
-              text: 'Help',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HelpFarmerScreen()),
-                );
-              },
-            ),
-            const SizedBox(height: 20.0),
-            const Divider(), // Line separator
-            _drawerItem(
-              context,
-              icon: Icons.exit_to_app,
-              text: 'Logout',
-              onTap: () {
-                // Handle logout functionality
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-            
+              FutureBuilder<String?>(
+                future: getProfilePicture(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return _defaultAvatar();
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return _defaultAvatar();
+                  } else {
+                    return _buildProfilePicture(snapshot.data!);
+                  }
+                },
+              ),
+              SizedBox(height: 20.0),
+              FutureBuilder<String?>(
+                future: getFullName(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return _buildFullNamePlaceholder();
+                  } else {
+                    return _buildFullNameAndUsername(snapshot.data!);
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
+              _drawerItem(
+                context,
+                icon: Icons.info,
+                text: 'About',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
+                },
+              ),
+              const SizedBox(height: 5.0),
+              _drawerItem(
+                context,
+                icon: Icons.help,
+                text: 'Help',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HelpFarmerScreen()),
+                  );
+                },
+              ),
+              const SizedBox(height: 20.0),
+              const Divider(),
+              _drawerItem(
+                context,
+                icon: Icons.exit_to_app,
+                text: 'Logout',
+                onTap: () {
+                  _showLogoutDialog(context);
+                },
+              ),
             ],
+          ),
         ),
       ),
-    ),
     );
   }
-  // Helper method to create drawer items
-  Widget _drawerItem(BuildContext context, {required IconData icon, required String text, required VoidCallback onTap}) {
+
+  Widget _buildProfilePicture(String base64Image) {
+    try {
+      if (base64Image.startsWith('data:image/')) {
+        base64Image = base64Image.split(',').last;
+      }
+      int mod = base64Image.length % 4;
+      if (mod > 0) {
+        base64Image += '=' * (4 - mod);
+      }
+      Uint8List bytes = base64Decode(base64Image);
+      return CircleAvatar(
+        radius: 50.0,
+        backgroundColor: Colors.grey,
+        backgroundImage: MemoryImage(bytes),
+      );
+    } catch (e) {
+      return _defaultAvatar();
+    }
+  }
+
+  Widget _buildFullNamePlaceholder() {
+    return Text(
+      'Full Name',
+      style: TextStyle(
+        color: Color(0xFFCA771A),
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.bold,
+        fontSize: 25.0,
+      ),
+    );
+  }
+
+  Widget _buildFullNameAndUsername(String fullName) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          fullName,
+          style: TextStyle(
+            color: Color(0xFFCA771A),
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            fontSize: 25.0,
+          ),
+        ),
+        SizedBox(height: 5.0),
+        FutureBuilder<String?>(
+          future: getUsername(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return _usernameRow('@Username');
+            } else {
+              return _usernameRow('@${snapshot.data!}');
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _defaultAvatar() {
+    return CircleAvatar(
+      radius: 50.0,
+      backgroundColor: Colors.grey,
+      child: Icon(
+        Icons.person,
+        size: 100.0,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _usernameRow(String username) {
+    return Center(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            username,
+            style: TextStyle(
+              color: Color(0xFFCA771A),
+              fontFamily: 'Poppins',
+              fontSize: 18.0,
+            ),
+          ),
+          SizedBox(width: 8.0),
+          Icon(
+            Icons.check_circle,
+            color: Color(0xFFCA771A),
+            size: 18.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _drawerItem(BuildContext context,
+      {required IconData icon, required String text, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -460,4 +440,66 @@ class HalfWhiteDrawer extends StatelessWidget {
       ),
     );
   }
+
+  void _showLogoutDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          "Do you want to Logout?",
+          style: TextStyle(
+            color: Color(0xFFCA771A),
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Color(0xFFCA771A),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Dismiss the dialog
+            },
+            child: Text(
+              "Cancel",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Color(0xFFCA771A),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Dismiss the dialog
+
+              // Ensure navigation happens after the dialog is dismissed
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  Navigator.of(context).popUntil((route) => route.isFirst); // Clear back stack
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                }
+              });
+            },
+            child: Text(
+              "Confirm",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
 }
