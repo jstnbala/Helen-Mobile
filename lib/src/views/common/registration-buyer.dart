@@ -1,7 +1,11 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class BuyerRegistrationPage extends StatefulWidget {
+  const BuyerRegistrationPage({super.key});
+
   @override
   _BuyerRegistrationPageState createState() => _BuyerRegistrationPageState();
 }
@@ -28,16 +32,16 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
           backgroundColor: Colors.white,
-          contentPadding: EdgeInsets.all(20.0),
+          contentPadding: const EdgeInsets.all(20.0),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
+              const Text(
                 'Privacy Notice',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -47,8 +51,8 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 "We are committed to safeguarding your privacy and ensuring compliance with the Philippine Data Privacy Act of 2012. When you register, we collect personal information. We also gather usage data, and we use this information to create and manage your account, enhance your experience, communicate updates, and maintain app security. We may share your data with service providers to help operate our app and with legal authorities if required by law. You have the right to access, update, or request the deletion of your information and to opt out of marketing communications. We employ security measures to protect your data but cannot guarantee complete security. By registering, you consent to our data practices under the Data Privacy Act. If you have any questions, please contact us at opa_quezon@yahoo.com.",
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -57,7 +61,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 ),
                 textAlign: TextAlign.justify,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -67,13 +71,13 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFCA771A),
+                      backgroundColor: const Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12.0),
                       child: Text(
                         'I do not accept',
                         style: TextStyle(
@@ -89,13 +93,13 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFCA771A),
+                      backgroundColor: const Color(0xFFCA771A),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12.0),
                       child: Text(
                         'I accept',
                         style: TextStyle(
@@ -135,13 +139,13 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           'Buyer Registration',
           style: TextStyle(
             fontFamily: 'Poppins',
@@ -150,8 +154,8 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Color(0xFFCA771A),
-        shape: RoundedRectangleBorder(
+        backgroundColor: const Color(0xFFCA771A),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(30),
           ),
@@ -181,9 +185,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -195,7 +199,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Full Name field
                 TextFormField(
@@ -205,9 +209,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -219,7 +223,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Address field
                 TextFormField(
@@ -229,9 +233,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -243,7 +247,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Contact field
                 TextFormField(
@@ -253,9 +257,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
@@ -268,7 +272,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Business Permit field
                 TextFormField(
@@ -278,9 +282,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.upload_file,
                         color: Color(0xFFCA771A),
                       ),
@@ -288,9 +292,9 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     ),
                   ),
                   readOnly: true,
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Account Type field
                 DropdownButtonFormField<String>(
@@ -299,14 +303,14 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   value: _selectedAccountType,
                   items: ['Direct Buyer', 'Institutional Buyer']
                       .map((type) => DropdownMenuItem<String>(
                             value: type,
-                            child: Text(type, style: TextStyle(color: Colors.black)),
+                            child: Text(type, style: const TextStyle(color: Colors.black)),
                           ))
                       .toList(),
                   onChanged: (value) {
@@ -321,7 +325,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Password field
                 TextFormField(
@@ -332,11 +336,11 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
                       icon: _isPasswordVisible
-                          ? Icon(Icons.visibility)
-                          : Icon(Icons.visibility_off),
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off),
                       onPressed: () {
                         setState(() {
                           _isPasswordVisible = !_isPasswordVisible;
@@ -345,7 +349,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     ),
                   ),
                   obscureText: !_isPasswordVisible,
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -369,7 +373,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Confirm Password field
                 TextFormField(
@@ -379,11 +383,11 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
                       icon: _isConfirmPasswordVisible
-                          ? Icon(Icons.visibility)
-                          : Icon(Icons.visibility_off),
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off),
                       onPressed: () {
                         setState(() {
                           _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
@@ -392,7 +396,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     ),
                   ),
                   obscureText: !_isConfirmPasswordVisible,
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -404,14 +408,14 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Register Button
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Registration Successful'),
                           backgroundColor: Colors.green,
                         ),
@@ -420,13 +424,13 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFCA771A),
+                    backgroundColor: const Color(0xFFCA771A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
                       'Register',
                       style: TextStyle(

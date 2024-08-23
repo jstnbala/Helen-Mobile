@@ -1,20 +1,28 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names, use_build_context_synchronously, avoid_print
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
+import 'package:helen_app/src/views/common/login.dart';
 
 class FarmerRegistrationPage extends StatefulWidget {
+  const FarmerRegistrationPage({super.key});
+
   @override
   _FarmerRegistrationPageState createState() => _FarmerRegistrationPageState();
 }
 
 class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
+
+  bool _isLoading = false;
+
+  List<String> _organizations = []; // Initially empty, will be populated via API
+  String? _selectedOrganization; // This will hold the selected value
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _organizationController = TextEditingController();
-  final TextEditingController _contactNoController = TextEditingController();
+  final TextEditingController _contactNoController = TextEditingController(text: '+63');
   final TextEditingController _rsbsaNoController = TextEditingController();
   
   bool _isPasswordVisible = false;
@@ -23,10 +31,23 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
   @override
   void initState() {
     super.initState();
+    _fetchOrganizations(); // Call the fetch method
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showPrivacyNotice();
     });
   }
+
+  Future<void> _fetchOrganizations() async {
+  try {
+    final organizations = await fetchOrganizations(); // Ensure this matches the correct method
+    print('Organizations fetched: $organizations'); // Debug line
+    setState(() {
+      _organizations = organizations;
+    });
+  } catch (e) {
+    print('Failed to fetch organizations: $e');
+  }
+}
 
   void _showPrivacyNotice() {
     showDialog(
@@ -244,23 +265,36 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                 ),
                 SizedBox(height: 10),
 
-                // Organization field (optional)
-                TextFormField(
-                  controller: _organizationController,
-                  decoration: InputDecoration(
-                    labelText: 'Organization',
-                    hintText: 'Enter your organization (optional)',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
-                  ),
-                  style: TextStyle(fontFamily: 'Poppins'),
-                  textInputAction: TextInputAction.next,
+                // Organization Dropdown
+              DropdownButtonFormField<String>(
+              value: _selectedOrganization,
+              decoration: InputDecoration(
+                labelText: 'Organization',
+                hintText: 'Select your organization',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
+                labelStyle: TextStyle(fontFamily: 'Poppins'),
+              ),
+              items: _organizations.map((organization) {
+                return DropdownMenuItem<String>(
+                  value: organization,
+                  child: Text(organization),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedOrganization = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please select an organization';
+                }
+                return null;
+              },
+            ),
                 SizedBox(height: 10),
-
-                // Contact field with regex validation
                 TextFormField(
                   controller: _contactNoController,
                   decoration: InputDecoration(
@@ -269,21 +303,33 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    // Remove the +63 prefix before validating the remaining digits
+                    String contactNumber = value?.replaceFirst('+63', '') ?? '';
+                    if (contactNumber.isEmpty) {
                       return 'Contact number is required';
                     }
-                    if (!RegExp(r'^[0-9]{11}$').hasMatch(value)) {
-                      return 'Enter a valid 11-digit contact number';
+                    if (!RegExp(r'^[0-9]{10}$').hasMatch(contactNumber)) {
+                      return 'Enter a valid 10-digit contact number';
                     }
                     return null;
                   },
+                  // Prevents user from removing the +63 prefix
+                  onChanged: (value) {
+                    if (!value.startsWith('+63')) {
+                      _contactNoController.text = '+63';
+                      _contactNoController.selection = TextSelection.fromPosition(
+                        TextPosition(offset: _contactNoController.text.length),
+                      );
+                    }
+                  },
                 ),
+
                 SizedBox(height: 10),
 
                 // RSBSA No. field
@@ -397,25 +443,37 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // Register Button
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: _isLoading ? null : () async {
                     if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        _isLoading = true;
+                      });
+
                       final success = await registerFarmer(
                         username: _usernameController.text,
                         fullName: _fullNameController.text,
                         address: _addressController.text,
-                        organization: _organizationController.text,
+                        organization: _selectedOrganization ?? '',
                         contactNo: _contactNoController.text,
                         rsbsaNo: _rsbsaNoController.text,
                         password: _passwordController.text,
                       );
 
+                      setState(() {
+                        _isLoading = false;
+                      });
+
                       if (success) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Registration Successful'),
-                            backgroundColor: Colors.green,
+                            backgroundColor: Colors.green, 
                           ),
                         );
+                        Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()), // Replace with your actual LoginPage class
+                      );
                         // Navigate to another page or perform another action
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -453,4 +511,17 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _usernameController.dispose();
+    _fullNameController.dispose();
+    _addressController.dispose();
+    _contactNoController.dispose();
+    _rsbsaNoController.dispose();
+    super.dispose();
+
+  }
 }
+

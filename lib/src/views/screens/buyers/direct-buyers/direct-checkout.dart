@@ -1,7 +1,11 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
 class CheckoutPage extends StatefulWidget {
+  const CheckoutPage({super.key});
+
   @override
   _CheckoutPageState createState() => _CheckoutPageState();
 }
@@ -17,14 +21,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFCA771A),
-        shape: RoundedRectangleBorder(
+        backgroundColor: const Color(0xFFCA771A),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.0),
             bottomRight: Radius.circular(20.0),
           ),
         ),
-        title: Center(
+        title: const Center(
           child: Text(
             'Checkout',
             style: TextStyle(
@@ -35,12 +39,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white, size: 24.0),
+          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24.0),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        actions: [SizedBox(width: 56)],
+        actions: const [SizedBox(width: 56)],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -49,7 +53,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Image.asset(
@@ -59,8 +63,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 20),
-              Row(
+              const SizedBox(height: 20),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
@@ -99,11 +103,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Quantity",
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -119,14 +123,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           color: Colors.grey[300],
                         ),
                         child: IconButton(
-                          icon: Icon(Icons.remove, color: Colors.black),
+                          icon: const Icon(Icons.remove, color: Colors.black),
                           onPressed: () {
                             // Decrease quantity
                           },
                         ),
                       ),
-                      SizedBox(width: 8),
-                      Text(
+                      const SizedBox(width: 8),
+                      const Text(
                         "1",
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -134,14 +138,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey[300],
                         ),
                         child: IconButton(
-                          icon: Icon(Icons.add, color: Colors.black),
+                          icon: const Icon(Icons.add, color: Colors.black),
                           onPressed: () {
                             // Increase quantity
                           },
@@ -151,8 +155,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              Align(
+              const SizedBox(height: 20),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Pickup Address:",
@@ -164,7 +168,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
               ),
-              Align(
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "123 Lucban Trading Post, Brgy 23, Quezon Province",
@@ -175,8 +179,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-              Align(
+              const SizedBox(height: 10),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Pickup Date & Time:",
@@ -188,7 +192,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
@@ -203,14 +207,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             labelText: selectedDate != null
                                 ? DateFormat.yMd().format(selectedDate!)
                                 : 'Select Date',
-                            border: OutlineInputBorder(),
-                            suffixIcon: Icon(Icons.calendar_today, color: Color(0xFFCA771A)),
+                            border: const OutlineInputBorder(),
+                            suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFCA771A)),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
@@ -223,8 +227,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             labelText: selectedTime != null
                                 ? selectedTime!.format(context)
                                 : 'Select Time',
-                            border: OutlineInputBorder(),
-                            suffixIcon: Icon(Icons.access_time, color: Color(0xFFCA771A)),
+                            border: const OutlineInputBorder(),
+                            suffixIcon: const Icon(Icons.access_time, color: Color(0xFFCA771A)),
                           ),
                         ),
                       ),
@@ -232,8 +236,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              Align(
+              const SizedBox(height: 20),
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Payment Options",
@@ -245,14 +249,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isCashSelected ? Color(0xFFCA771A) : Colors.white,
-                        side: BorderSide(color: Color(0xFFCA771A)),
+                        backgroundColor: isCashSelected ? const Color(0xFFCA771A) : Colors.white,
+                        side: const BorderSide(color: Color(0xFFCA771A)),
                       ),
                       onPressed: () {
                         setState(() {
@@ -267,17 +271,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: isCashSelected ? Colors.white : Color(0xFFCA771A),
+                          color: isCashSelected ? Colors.white : const Color(0xFFCA771A),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isGcashSelected ? Color(0xFFCA771A) : Colors.white,
-                        side: BorderSide(color: Color(0xFFCA771A)),
+                        backgroundColor: isGcashSelected ? const Color(0xFFCA771A) : Colors.white,
+                        side: const BorderSide(color: Color(0xFFCA771A)),
                       ),
                       onPressed: () {
                         setState(() {
@@ -292,17 +296,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: isGcashSelected ? Colors.white : Color(0xFFCA771A),
+                          color: isGcashSelected ? Colors.white : const Color(0xFFCA771A),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isBankTransferSelected ? Color(0xFFCA771A) : Colors.white,
-                        side: BorderSide(color: Color(0xFFCA771A)),
+                        backgroundColor: isBankTransferSelected ? const Color(0xFFCA771A) : Colors.white,
+                        side: const BorderSide(color: Color(0xFFCA771A)),
                       ),
                       onPressed: () {
                         setState(() {
@@ -319,8 +323,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                            color: isBankTransferSelected ? Colors.white : Color(0xFFCA771A),
+                            fontSize: 12,
+                            color: isBankTransferSelected ? Colors.white : const Color(0xFFCA771A),
                           ),
                         ),
                       ),
@@ -365,11 +369,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget buildCashSection() {
     return Column(
       children: [
-        SizedBox(height: 20),
-        buildSummaryRow("Price:", "25.00", isTotal: false, color: Color(0xFFCA771A)),
-        buildSummaryRow("Quantity:", "10 kilos", isTotal: false, color: Color(0xFFCA771A)),
-        buildSummaryRow("Total:", "250.00", isTotal: true, color: Color(0xFFCA771A)),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
+        buildSummaryRow("Price:", "25.00", isTotal: false, color: const Color(0xFFCA771A)),
+        buildSummaryRow("Quantity:", "10 kilos", isTotal: false, color: const Color(0xFFCA771A)),
+        buildSummaryRow("Total:", "250.00", isTotal: true, color: const Color(0xFFCA771A)),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -411,7 +415,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
-        side: BorderSide(color: Color(0xFFCA771A)),
+        side: const BorderSide(color: Color(0xFFCA771A)),
       ),
       onPressed: () {
         setState(() {
@@ -420,7 +424,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       },
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.bold,
           fontSize: 16,

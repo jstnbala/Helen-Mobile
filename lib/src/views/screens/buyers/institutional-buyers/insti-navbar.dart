@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/common/help-buyer.dart';
 import 'package:helen_app/src/views/common/about.dart';
@@ -124,7 +126,7 @@ class _InstiNavbarState extends State<InstiNavbar> {
           Expanded(
             child: IndexedStack(
               index: _selectedIndex,
-              children: [
+              children: const [
                 HomepageInsti(),
                 MessagesInsti(),
                 OrderListsInsti(),
@@ -188,17 +190,17 @@ class HalfWhiteDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center, // Centering content
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.account_circle,
                       size: 80.0, // Size of the profile icon
                       color: Colors.grey, // Gray color for the icon
                     ),
-                    SizedBox(height: 16.0), // Space between icon and text
-                    Text(
+                    const SizedBox(height: 16.0), // Space between icon and text
+                    const Text(
                       "Jollibee",
                       style: TextStyle(
                         color: Color(0xFFCA771A),
@@ -207,11 +209,11 @@ class HalfWhiteDrawer extends StatelessWidget {
                         fontSize: 30.0,
                       ),
                     ),
-                    SizedBox(height: 8.0), // Space between name and username
+                    const SizedBox(height: 8.0), // Space between name and username
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "@jollibee_candelaria",
                           style: TextStyle(
                             color: Color(0xFFCA771A),
@@ -219,15 +221,15 @@ class HalfWhiteDrawer extends StatelessWidget {
                             fontSize: 16.0,
                           ),
                         ),
-                        SizedBox(width: 4.0), // Space between username and checkmark
+                        const SizedBox(width: 4.0), // Space between username and checkmark
                         Container(
                           width: 16.0,
                           height: 16.0,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xFFCA771A),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.check,
                             color: Colors.white,
                             size: 10.0,
@@ -235,7 +237,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     _drawerItem(
                       context,
                       icon: Icons.info,
@@ -247,7 +249,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(height: 5.0),
+                    const SizedBox(height: 5.0),
                     _drawerItem(
                       context,
                       icon: Icons.help,
@@ -255,11 +257,11 @@ class HalfWhiteDrawer extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HelpBuyerScreen()),
+                          MaterialPageRoute(builder: (context) => const HelpBuyerScreen()),
                         );
                       },
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     const Divider(), // Line separator
                     _drawerItem(
                       context,
@@ -269,7 +271,7 @@ class HalfWhiteDrawer extends StatelessWidget {
                         // Handle logout functionality
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
                         );
                       },
                     ),

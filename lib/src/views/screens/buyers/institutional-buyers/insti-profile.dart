@@ -1,17 +1,21 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class ProfileInsti extends StatelessWidget {
+  const ProfileInsti({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 50.0,
                 backgroundColor: Colors.grey,
                 child: Icon(
@@ -20,8 +24,8 @@ class ProfileInsti extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 10.0),
-              Text(
+              const SizedBox(height: 10.0),
+              const Text(
                 'Jollibee',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -31,8 +35,8 @@ class ProfileInsti extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 5.0),
-              Row(
+              const SizedBox(height: 5.0),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -51,17 +55,17 @@ class ProfileInsti extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Stack(
                 children: [
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Color(0xFFCA771A),
+                      color: const Color(0xFFCA771A),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    padding: EdgeInsets.all(20.0),
-                    child: Column(
+                    padding: const EdgeInsets.all(20.0),
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -130,7 +134,7 @@ class ProfileInsti extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     top: 10.0,
                     right: 10.0,
                     child: Icon(
@@ -141,7 +145,7 @@ class ProfileInsti extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
             ],
           ),
         ),

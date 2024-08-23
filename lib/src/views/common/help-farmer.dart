@@ -1,7 +1,9 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
 
 class HelpFarmerScreen extends StatelessWidget {
+  const HelpFarmerScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +54,7 @@ class HelpFarmerScreen extends StatelessWidget {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text(
                           'Frequently Asked Questions',
                           style: TextStyle(
