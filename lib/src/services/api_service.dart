@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert'; // For jsonEncode
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+// Farmer Side
+
 Future<bool> registerFarmer({
   required String username,
   required String fullName,
@@ -75,65 +77,6 @@ Future<List<String>> fetchOrganizations() async {
   } catch (e) {
     print('Failed to fetch organizations: $e');
     return [];
-  }
-}
-
-Future<bool> loginFarmer({
-  required String username,
-  required String password,
-}) async {
-  const url = 'https://helen-project.onrender.com/api/auth/user-login';
-
-  print('username: $username');
-  print('password: $password');
-
-  final payload = {
-    'Username': username,
-    'Password': password,
-  };
-
-print('payload: $payload');
-  final storage = const FlutterSecureStorage();
-
-  try {
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(payload),
-    );
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-
-      // Assuming the response is a JSON object with a `success` key
-      if (responseData['success'] == true) {
-        print('Login successful');
-
-        await storage.write(key: 'ProfilePicture', value: responseData['ProfilePicture']);
-        await storage.write(key: 'Username', value: responseData["Username"]);
-        await storage.write(key: 'Password', value: responseData["Password"]);
-        await storage.write(key: 'FullName', value: responseData["FullName"]);
-        await storage.write(key: 'RSBSA_No', value: responseData["RSBSA_No"]);
-        await storage.write(key: 'Contact', value: responseData["Contact"]);
-        await storage.write(key: 'Address', value: responseData["Address"]);
-        await storage.write(key: 'Organization', value: responseData["Organization"]);
-        await storage.write(key: 'DateRegistered', value: responseData["DateRegistered"]);
-        await storage.write(key: 'status', value: responseData["status"]);
-
-        return true;
-      } else {
-        print('Login failed: ${responseData['message'] ?? 'Unknown error'}');
-        return false;
-      }
-    } else {
-      print('Failed to authenticate: ${response.statusCode}');
-      return false;
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-    return false;
   }
 }
 
@@ -281,6 +224,125 @@ Future<bool> addProduct({
   }
 }
 
+// Buyer Side
+
+Future<bool> registerBuyer({
+  required String username,
+  required String fullName,
+  required String address,
+  required String contactNo,
+  required String accountType,
+  required String password,
+}) async {
+  const url = 'https://helen-project.onrender.com/api/buyers';
+
+  final payload = {
+    'Username': username,
+    'FullName': fullName,
+    'Address': address,
+    'Contact': contactNo,
+    'AccountType': accountType,
+    'Password': password,
+    'status': 'Registered',
+  };
+
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(payload),
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) { // Updated to check for 200 OK
+      print('Buyer registration successful');
+      return true;
+    } else if (response.statusCode == 409) {
+      print('Buyer registration failed: Username already exists');
+      return false;
+    } else {
+      print('Buyer registration failed: ${response.statusCode}, ${response.body}');
+      return false;
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+    return false;
+  }
+}
+
+// Login Farmer and Buyer 
+
+Future<bool> login({
+  required String username,
+  required String password,
+}) async {
+  const url = 'https://helen-project.onrender.com/api/auth/user-login';
+
+  final payload = {
+    'Username': username,
+    'Password': password,
+  }; 
+
+  final storage = const FlutterSecureStorage();
+
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(payload),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+
+      // Assuming the response is a JSON object with a `success` key
+      if (responseData['success'] == true) {
+        print('Login successful');
+
+        await storage.write(key: 'UserType', value: responseData["UserType"]);
+
+        if(responseData['UserType'] == 'farmer') {
+
+        await storage.write(key: 'ProfilePicture', value: responseData['ProfilePicture']);
+        await storage.write(key: 'Username', value: responseData["Username"]);
+        await storage.write(key: 'Password', value: responseData["Password"]);
+        await storage.write(key: 'FullName', value: responseData["FullName"]);
+        await storage.write(key: 'RSBSA_No', value: responseData["RSBSA_No"]);
+        await storage.write(key: 'Contact', value: responseData["Contact"]);
+        await storage.write(key: 'Address', value: responseData["Address"]);
+        await storage.write(key: 'Organization', value: responseData["Organization"]);
+        await storage.write(key: 'status', value: responseData["status"]);
+
+        } else if (responseData['UserType'] == 'buyer') {
 
 
-
+        await storage.write(key: 'ProfilePicture', value: responseData['ProfilePicture']);
+        await storage.write(key: 'Username', value: responseData["Username"]);
+        await storage.write(key: 'Password', value: responseData["Password"]);
+        await storage.write(key: 'FullName', value: responseData["FullName"]);
+        await storage.write(key: 'Contact', value: responseData["Contact"]);
+        await storage.write(key: 'Address', value: responseData["Address"]);
+        await storage.write(key: 'AccountType', value: responseData["AccountType"]);
+        await storage.write(key: 'status', value: responseData["status"]);
+        }
+        
+        return true;
+      } else {
+        print('Login failed: ${responseData['message'] ?? 'Unknown error'}');
+        return false;
+      }
+    } else {
+      print('Failed to authenticate: ${response.statusCode}');
+      return false;
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+    return false;
+  }
+}

@@ -1,7 +1,9 @@
-// ignore_for_file: file_names, library_private_types_in_public_api
+// ignore_for_file: file_names, library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:helen_app/src/services/api_service.dart';
+import 'package:helen_app/src/views/common/login.dart';
 
 class BuyerRegistrationPage extends StatefulWidget {
   const BuyerRegistrationPage({super.key});
@@ -11,10 +13,19 @@ class BuyerRegistrationPage extends StatefulWidget {
 }
 
 class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
+  
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _contactnoController = TextEditingController(text: '+63');
+
+  bool _isLoading = false;
+
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+
   String? _selectedAccountType;
   String? _businessPermitFileName;
 
@@ -133,6 +144,17 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
     }
   }
 
+  String get _accountTypeMessage {
+    switch (_selectedAccountType) {
+      case 'Direct Buyer':
+        return 'Suitable for smaller order quantities that can be fulfilled by individual farmers.';
+      case 'Institutional Buyer':
+        return 'Designed for larger orders requiring special requests and coordination.';
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,12 +201,17 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
               children: [
                 // Username field
                 TextFormField(
+                  controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
                     hintText: 'Enter your username',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: const TextStyle(fontFamily: 'Poppins'),
@@ -193,8 +220,11 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Username is required';
                     }
-                    if (!RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(value)) {
-                      return 'Enter a valid username';
+                    if (value.length < 3) {
+                      return 'Username must be at least 3 characters long';
+                    }
+                    if (value.length > 15) {
+                      return 'Username should not exceed 15 characters';
                     }
                     return null;
                   },
@@ -203,12 +233,17 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
 
                 // Full Name field
                 TextFormField(
+                  controller: _fullNameController,
                   decoration: InputDecoration(
                     labelText: 'Full Name / Business Name',
                     hintText: 'Enter your full name / business name',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: const TextStyle(fontFamily: 'Poppins'),
@@ -227,12 +262,17 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
 
                 // Address field
                 TextFormField(
+                  controller: _addressController,
                   decoration: InputDecoration(
                     labelText: 'Address / Business Address',
                     hintText: 'Enter your address / business address',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: const TextStyle(fontFamily: 'Poppins'),
@@ -250,26 +290,42 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 const SizedBox(height: 10),
 
                 // Contact field
-                TextFormField(
+                 TextFormField(
+                  controller: _contactnoController,
                   decoration: InputDecoration(
                     labelText: 'Contact No.',
                     hintText: 'Enter your contact number',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: const TextStyle(fontFamily: 'Poppins'),
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    // Remove the +63 prefix before validating the remaining digits
+                    String contactNumber = value?.replaceFirst('+63', '') ?? '';
+                    if (contactNumber.isEmpty) {
                       return 'Contact number is required';
                     }
-                    if (!RegExp(r'^[0-9]{11}$').hasMatch(value)) {
-                      return 'Enter a valid 11-digit contact number';
+                    if (!RegExp(r'^[0-9]{10}$').hasMatch(contactNumber)) {
+                      return 'Enter a valid 10-digit contact number';
                     }
                     return null;
+                  },
+                  // Prevents user from removing the +63 prefix
+                  onChanged: (value) {
+                    if (!value.startsWith('+63')) {
+                      _contactnoController.text = '+63';
+                      _contactnoController.selection = TextSelection.fromPosition(
+                        TextPosition(offset: _contactnoController.text.length),
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 10),
@@ -282,6 +338,10 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
                       icon: const Icon(
@@ -297,33 +357,47 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 const SizedBox(height: 10),
 
                 // Account Type field
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Account Type',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: 'Account Type',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                        ),
+                        labelStyle: const TextStyle(fontFamily: 'Poppins'),
+                      ),
+                      style: const TextStyle(fontFamily: 'Poppins'),
+                      value: _selectedAccountType,
+                      items: ['Direct Buyer', 'Institutional Buyer']
+                          .map((type) => DropdownMenuItem<String>(
+                                value: type,
+                                child: Text(type, style: const TextStyle(color: Colors.black)),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedAccountType = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select an account type';
+                        }
+                        return null;
+                      },
                     ),
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
-                  ),
-                  style: const TextStyle(fontFamily: 'Poppins'),
-                  value: _selectedAccountType,
-                  items: ['Direct Buyer', 'Institutional Buyer']
-                      .map((type) => DropdownMenuItem<String>(
-                            value: type,
-                            child: Text(type, style: const TextStyle(color: Colors.black)),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedAccountType = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select an account type';
-                    }
-                    return null;
-                  },
+                    const SizedBox(height: 8.0), // Add spacing between dropdown and message
+                    Text(
+                      _accountTypeMessage,
+                      style: const TextStyle(color: Color(0xFFCA771A), fontSize: 13.0),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
 
@@ -336,6 +410,10 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
                       icon: _isPasswordVisible
@@ -383,6 +461,10 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
                       icon: _isConfirmPasswordVisible
@@ -412,17 +494,52 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
 
                 // Register Button
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: _isLoading ? null : () async {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Registration Successful'),
-                          backgroundColor: Colors.green,
-                        ),
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      final success = await registerBuyer(
+                        username: _usernameController.text,
+                        fullName: _fullNameController.text,
+                        address: _addressController.text,
+                        contactNo: _contactnoController.text,
+                        accountType: _selectedAccountType ?? '',
+                        password: _passwordController.text,
                       );
-                      // Perform registration logic here
-                    }
-                  },
+
+                      setState(() {
+                        _isLoading = false;
+                      });
+
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Registration Successful'),
+                            backgroundColor: Colors.green, 
+                          ),
+                        );
+                        Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()), // Replace with your actual LoginPage class
+                      );
+                        // Navigate to another page or perform another action
+                     } else {
+                              // If registration fails, show an error message
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Registration failed. Please try again.'),
+                                  backgroundColor: Colors.red, 
+                                ),
+                              );
+                            }
+
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          }
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFCA771A),
                     shape: RoundedRectangleBorder(
@@ -449,4 +566,16 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _usernameController.dispose();
+    _fullNameController.dispose();
+    _addressController.dispose();
+    _contactnoController.dispose();
+    super.dispose();
+
+  }
 }
+
