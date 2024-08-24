@@ -383,6 +383,10 @@ class _AddProductPageState extends State<AddProductPage> {
                       ),
                       items: const [
                         DropdownMenuItem(
+                          value: 'grams',
+                          child: Text('Grams'),
+                        ),
+                        DropdownMenuItem(
                           value: 'kilos',
                           child: Text('Kilos'),
                         ),
