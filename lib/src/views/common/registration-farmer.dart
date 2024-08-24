@@ -196,6 +196,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: TextStyle(fontFamily: 'Poppins'),
@@ -224,6 +228,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: TextStyle(fontFamily: 'Poppins'),
@@ -249,6 +257,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: TextStyle(fontFamily: 'Poppins'),
@@ -274,6 +286,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
+                focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                 labelStyle: TextStyle(fontFamily: 'Poppins'),
               ),
               items: _organizations.map((organization) {
@@ -303,6 +319,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: const TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: const TextStyle(fontFamily: 'Poppins'),
@@ -341,6 +361,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                   ),
                   style: TextStyle(fontFamily: 'Poppins'),
@@ -367,6 +391,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
                       icon: _isPasswordVisible
@@ -414,6 +442,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                     suffixIcon: IconButton(
                       icon: _isConfirmPasswordVisible

@@ -1,10 +1,13 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
+import 'package:helen_app/src/views/screens/buyers/direct-buyers/direct-navbar.dart';
+import 'package:helen_app/src/views/screens/buyers/institutional-buyers/insti-navbar.dart';
 import 'package:helen_app/src/views/screens/farmers/farmer-navbar.dart';
 import 'package:helen_app/src/views/common/forgotpass.dart'; // Import ForgotPassPage class
 import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,10 +17,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
   bool _obscurePassword = true;
   bool _isLoading = false; // Loading state
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  
+  Future<String?> getUserType() async {
+    final userType = await storage.read(key: 'UserType');
+ 
+    return userType;
+  }
+
+    Future<String?> getAccountType() async {
+    final accountType = await storage.read(key: 'AccountType');
+ 
+    return accountType;
+  }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -221,20 +241,41 @@ class _LoginPageState extends State<LoginPage> {
                               _isLoading = true;
                             });
 
-                            final success = await loginFarmer(
+                           
+                            final success = await login(
                               username: _usernameController.text,
                               password: _passwordController.text,
                             );
+
+                            String? userType = await getUserType();
+                            String? accountType = await getAccountType();
 
                             setState(() {
                               _isLoading = false;
                             });
 
                             if (success) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const FarmerNavbar()),
-                              );
+                           if (userType == 'farmer') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const FarmerNavbar()),
+                                  );
+                                } else if (userType == 'buyer') {
+                                    if(accountType == 'Direct Buyer') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const DirectNavbar()), // Replace with your buyer navbar page
+                                    );
+                                  } else if (accountType == 'Institutional Buyer'){
+                                      Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const InstiNavbar()), // Replace with your buyer navbar page
+                                    );
+                                  }
+                                } else {
+                                  // Handle unknown or null user types
+                                  print('Unknown or missing user type');
+                                }
                             } else {
                               // Show error if credentials do not match
                               showDialog(
