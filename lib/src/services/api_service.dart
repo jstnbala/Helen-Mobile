@@ -18,7 +18,7 @@ Future<bool> registerFarmer({
 }) async {
   // Construct the URL with the organization variable
   final encodedOrganization = Uri.encodeComponent(organization);
-  final url = 'https://helen-project.onrender.com/api/organizations/$encodedOrganization/farmers';
+  final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$encodedOrganization/farmers';
 
 
   final dateRegistered = DateTime.now().toIso8601String();
@@ -63,7 +63,7 @@ Future<bool> registerFarmer({
 
 Future<List<String>> fetchOrganizations() async {
   try {
-    final response = await http.get(Uri.parse('https://helen-project.onrender.com/api/organizations'));
+    final response = await http.get(Uri.parse('https://helen-server-lmp4.onrender.com/api/organizations'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
@@ -132,7 +132,7 @@ Future<List<Event>> fetchUpcomingEvents() async {
     return [];
   }
 
-  final url = 'https://helen-project.onrender.com/api/organizations/$OrgName/events';
+  final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$OrgName/events';
 
   try {
     final response = await http.get(Uri.parse(url), headers: {
@@ -175,7 +175,7 @@ Future<bool> addProduct({
   }
 
   // Construct the URL
-  final url =  Uri.parse('https://helen-project.onrender.com/api/organizations/$orgname/products');
+  final url =  Uri.parse('https://helen-server-lmp4.onrender.com/api/organizations/$orgname/products');
 
   final dateAdded = DateTime.now().toString();
   int? number = int.tryParse(inventory);
@@ -225,7 +225,7 @@ Future<bool> registerBuyer({
   required String accountType,
   required String password,
 }) async {
-  const url = 'https://helen-project.onrender.com/api/buyers';
+  const url = 'https://helen-server-lmp4.onrender.com/api/buyers';
 
   final payload = {
     'Username': username,
@@ -271,7 +271,7 @@ Future<bool> login({
   required String username,
   required String password,
 }) async {
-  const url = 'https://helen-project.onrender.com/api/auth/user-login';
+  const url = 'https://helen-server-lmp4.onrender.com/api/auth/user-login';
 
   final payload = {
     'Username': username,

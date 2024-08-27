@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/common/registration-buyer.dart';
-import 'package:helen_app/src/views/common/registration-farmer.dart';
+import 'package:helen_app/src/views/screens/farmers/registration_module/registration-farmer.dart';
 
 class AccountTypeScreen extends StatelessWidget {
   const AccountTypeScreen({super.key});

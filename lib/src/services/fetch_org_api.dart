@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class FetchOrgApi {
   static Future<List<String>> fetchAllOrganizations() async {
-    const url = 'https://helen-project.onrender.com/api/organizations';
+    const url = 'https://helen-server-lmp4.onrender.com/api/organizations';
 
     try {
       final response = await http.get(Uri.parse(url), headers: {

@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-checkout.dart';
 
 class ProductDetailsClass extends StatelessWidget {
@@ -39,8 +38,8 @@ class ProductDetailsClass extends StatelessWidget {
             expandedHeight: 300.0,
             flexibleSpace: FlexibleSpaceBar(
               background: productPic.isNotEmpty
-                  ? Image.memory(
-                      base64Decode(productPic),
+                  ? Image.network(
+                      productPic,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
