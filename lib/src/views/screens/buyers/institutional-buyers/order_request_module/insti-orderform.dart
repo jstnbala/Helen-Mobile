@@ -1,40 +1,41 @@
 // ignore_for_file: file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-
+ 
 class OrderForm extends StatefulWidget {
   const OrderForm({super.key});
 
   @override
   _OrderFormState createState() => _OrderFormState();
 }
-
+ 
 class _OrderFormState extends State<OrderForm> {
   final _formKey = GlobalKey<FormState>();
-
+ 
+  String? _selectedLocation;
   String? _selectedProduct;
   String? _selectedWeight;
+ 
   final TextEditingController _quantityController = TextEditingController();
-  String? _selectedPaymentMethod;
-
+ 
+  final List<String> _locations =['Lucban Trading Center', 'Sairaya Agricultural Trading Center' ];
   final List<String> _products = ['Carrots', 'Corn', 'Lemons', 'Tomatoes'];
-  final List<String> _weights = ['Kg', 'Lbs'];
-  final List<String> _paymentMethods = ['Cash', 'GCASH', 'Bank'];
-
+  final List<String> _weights = ['Kg', 'Tonne'];
+ 
   final Map<String, double> _productPricesKg = {
     'Carrots': 50.0,
     'Corn': 30.0,
     'Lemons': 40.0,
     'Tomatoes': 60.0,
   };
-
+ 
   final Map<String, double> _productPricesLbs = {
     'Carrots': 22.7,
     'Corn': 13.6,
     'Lemons': 18.1,
     'Tomatoes': 27.2,
   };
-
+ 
   double _calculateTotalPrice() {
     final productPrice = (_selectedWeight == 'Kg'
         ? _productPricesKg[_selectedProduct]
@@ -42,7 +43,7 @@ class _OrderFormState extends State<OrderForm> {
     final quantity = double.tryParse(_quantityController.text) ?? 0.0;
     return productPrice * quantity;
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,20 +71,77 @@ class _OrderFormState extends State<OrderForm> {
           ),
         ),
       ),
-       resizeToAvoidBottomInset: true, // Ensures the view adjusts when the keyboard appears
-        body: SingleChildScrollView( // Allows the content to be scrollable
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
           key: _formKey,
           child: Column(
             children: [
               _buildInputContainer(
                 child: Column(
                   children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                      child: Text(
+                        'Order Details:',
+                        style: TextStyle(
+                          color: Color(0xFFCA771A),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ),
+ 
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'Location',
+                      hintText: 'Select a Location',
+                      labelStyle: const TextStyle(color: Color(0xFFCA771A)),
+                        border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                      ),                      
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A)),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    ),
+                    value: _selectedLocation,
+                    items: _locations.map((location) {
+                      return DropdownMenuItem<String>(
+                        value: location,
+                        child: Text(location),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedLocation = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select a location';
+                      }
+                      return null;
+                    },
+                  ),
+                   
+                    const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
                       decoration: InputDecoration(
-                        labelText: 'Select Product',
+                        labelText: 'Products',
+                        hintText: 'Select Products',
                         labelStyle: const TextStyle(color: Color(0xFFCA771A)),
+                        border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                      ),                              
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(color: Color(0xFFCA771A)),
@@ -113,6 +171,7 @@ class _OrderFormState extends State<OrderForm> {
                         return null;
                       },
                     ),
+ 
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -122,7 +181,12 @@ class _OrderFormState extends State<OrderForm> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               labelText: 'Quantity',
+                              hintText: 'Numbers Only',
                               labelStyle: const TextStyle(color: Color(0xFFCA771A)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                              ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(color: Color(0xFFCA771A)),
@@ -145,8 +209,13 @@ class _OrderFormState extends State<OrderForm> {
                         Expanded(
                           child: DropdownButtonFormField<String>(
                             decoration: InputDecoration(
-                              labelText: 'Weight Unit',
+                              labelText: 'Unit',
+                              hintText: 'Select Weight',
                               labelStyle: const TextStyle(color: Color(0xFFCA771A)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                              ),                              
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(color: Color(0xFFCA771A)),
@@ -199,133 +268,8 @@ class _OrderFormState extends State<OrderForm> {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Payment Options',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFCA771A),
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: _paymentMethods.map((method) {
-                        final bool isSelected = _selectedPaymentMethod == method;
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedPaymentMethod = method;
-                              });
-                              if (method == 'GCASH' || method == 'Bank') {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      backgroundColor: Colors.white,  // Set background color to white
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Text(
-                                            'Please scan the QR Code',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Color(0xFFCA771A),  // Set text color to CA771A
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Image.asset('images/buyers/QR.png'),  // Display the QR code
-                                        ],
-                                      ),
-                                       actions: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Colors.white,
-                                                  side: const BorderSide(color: Color(0xFFCA771A)),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(8),
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'Cancel',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Poppins',
-                                                    color: Color(0xFFCA771A),
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: const Color(0xFFCA771A),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(8),
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'Done',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Poppins',
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
-                              decoration: BoxDecoration(
-                                color: isSelected ? const Color(0xFFCA771A) : Colors.white,
-                                border: Border.all(
-                                  color: const Color(0xFFCA771A),
-                                  width: 1.5,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  method,
-                                  style: TextStyle(
-                                    color: isSelected ? Colors.white : const Color(0xFFCA771A),
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 15),
                     const Text(
                       'Pricing Breakdown:',
                       style: TextStyle(
@@ -455,13 +399,14 @@ class _OrderFormState extends State<OrderForm> {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                    Text(
-                                      '$_selectedProduct (${_quantityController.text} $_selectedWeight) requested.',
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFFCA771A),
-                                      ),
+                                   Text(
+                                    '${_selectedProduct ?? 'Product'} (${_quantityController.text} ${_selectedWeight ?? 'Unit'}) requested from ${_selectedLocation ?? 'Location'}. Total Price: ₱${_calculateTotalPrice().toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xFFCA771A),
                                     ),
+                                  ),
+ 
                                     const SizedBox(height: 10),
                                     const Text(
                                       'Please wait for the confirmation of your order. Thank you!',
@@ -472,7 +417,7 @@ class _OrderFormState extends State<OrderForm> {
                                     ),
                                   ],
                                 ),
-
+ 
                          actions: [
                                 Center(  // Center the button
                                   child: SizedBox(
@@ -529,7 +474,7 @@ class _OrderFormState extends State<OrderForm> {
       ),
     );
   }
-
+ 
   Container _buildInputContainer({required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(10.0),

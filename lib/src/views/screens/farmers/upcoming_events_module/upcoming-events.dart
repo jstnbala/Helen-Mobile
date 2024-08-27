@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart'; // Import your service where `fetchUpcomingEvents` is defined
 import 'dart:convert'; // For base64 decoding
-import 'package:helen_app/src/views/screens/farmers/specific-event.dart'; // Import the SpecificEvent widget
+import 'package:helen_app/src/views/screens/farmers/upcoming_events_module/specific-event.dart'; // Import the SpecificEvent widget
 
 class UpcomingEvents extends StatefulWidget {
   const UpcomingEvents({super.key});

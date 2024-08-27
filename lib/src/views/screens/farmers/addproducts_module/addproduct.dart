@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/views/screens/farmers/listofproducts_module/product-list.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/services/api_service.dart'; // Ensure to replace with the actual file where addProduct is located
@@ -83,18 +84,14 @@ class _AddProductPageState extends State<AddProductPage> {
         unit: selectedInventory ?? '',
         inventory: _inventoryController.text,
         productPic: _image!, // You might need to encode the image as a base64 string
+        productDetails: _productDetailsController.text,
       );
 
 
-      // Show a success or failure message based on the result
+     // Show a success or failure message based on the result
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Your product is being verified by the Admin!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pop(context); // Return to the previous screen
+        // Show the custom success dialog
+        _showSuccessDialog(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -106,6 +103,67 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.shopping_bag, // Product-related icon
+              size: 60.0,
+              color: Color(0xFFCA771A),
+            ),
+              const SizedBox(height: 20.0),
+              const Text(
+                "Your product has been successfully added. It is currently pending and will be verified by the Admin shortly. Please wait for notification once the verification is complete. Thank you!",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  color: Color(0xFFCA771A),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFCA771A), // Button color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProductListFarmer()),
+                  );
+                },
+                child: const Text(
+                  "Okay",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    color: Colors.white, // Text color
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

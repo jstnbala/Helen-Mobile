@@ -1,17 +1,16 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file:, library_private_types_in_public_api,
 import 'package:flutter/material.dart';
-
+import 'package:helen_app/src/views/common/otp-page.dart';
+ 
 class ForgotPassPage extends StatefulWidget {
   const ForgotPassPage({super.key});
-
+ 
   @override
+  // ignore: library_private_types_in_public_api
   _ForgotPassPageState createState() => _ForgotPassPageState();
 }
-
+ 
 class _ForgotPassPageState extends State<ForgotPassPage> {
-  bool _showNewPassword = false;
-  bool _showConfirmPassword = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +20,8 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
           children: [
             // Header
             Container(
-              padding: EdgeInsets.only(top: 40, left: 10, right: 10),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.only(top: 40, left: 10, right: 10),
+              decoration: const BoxDecoration(
                 color: Color(0xFFCA771A),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
@@ -32,15 +31,15 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-                  Expanded(
+                  const Expanded(
                     child: Center(
                       child: Text(
-                        'Create New Password',
+                        'Forgot Password',
                         style: TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
@@ -50,25 +49,25 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 48), // Placeholder to balance the center text
+                  const SizedBox(width: 48), // Placeholder to balance the center text
                 ],
               ),
             ),
-            SizedBox(height: 40),
-
+            const SizedBox(height: 40),
+ 
             // Forgot Password Icon
-            Icon(
-              Icons.lock_outline,
+            const Icon(
+              Icons.person_outline,
               size: 100,
               color: Color(0xFFCA771A),
             ),
-            SizedBox(height: 20),
-
+            const SizedBox(height: 20),
+ 
             // Info Text
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: Text(
-                'Your new password must be different from previously used passwords.',
+                'Please enter your username and contact number to change your password.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -77,20 +76,15 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 ),
               ),
             ),
-            SizedBox(height: 30),
-
-            // New Password Field
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            const SizedBox(height: 30),
+ 
+            // Username Field
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: TextField(
-                obscureText: !_showNewPassword,
                 decoration: InputDecoration(
-                  labelText: 'New Password',
-                  hintText: 'Enter your new password',
-                  labelStyle: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Colors.black,
-                  ),
+                  labelText: 'Username',
+                  hintText: 'Enter your username',
                   hintStyle: TextStyle(
                     fontFamily: 'Poppins',
                     color: Colors.grey,
@@ -100,35 +94,24 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                       color: Colors.black,
                       width: 2.0,
                     ),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _showNewPassword ? Icons.visibility : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _showNewPassword = !_showNewPassword;
-                      });
-                    },
-                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                 ),
               ),
             ),
-            SizedBox(height: 20),
-
-            // Confirm Password Field
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            const SizedBox(height: 20),
+ 
+            // Contact Number Field
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: TextField(
-                obscureText: !_showConfirmPassword,
                 decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  hintText: 'Re-enter your new password',
-                  labelStyle: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Colors.black,
-                  ),
+                  labelText: 'Contact No',
+                  hintText: 'Enter your contact number',
                   hintStyle: TextStyle(
                     fontFamily: 'Poppins',
                     color: Colors.grey,
@@ -138,40 +121,37 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                       color: Colors.black,
                       width: 2.0,
                     ),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _showConfirmPassword ? Icons.visibility : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _showConfirmPassword = !_showConfirmPassword;
-                      });
-                    },
-                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                   ),
                 ),
               ),
             ),
-            SizedBox(height: 30),
-
-            // Reset Password Button
+            const SizedBox(height: 30),
+ 
+            // Change Password Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFCA771A),
+                  backgroundColor: const Color(0xFFCA771A),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
-                  // Handle reset password logic here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const OtpPage()),
+                  );
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
-                    'Reset Password',
+                    'Change Password',
                     style: TextStyle(
                       fontSize: 18,
                       fontFamily: 'Poppins',
@@ -182,10 +162,12 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20), // Added bottom spacing
+            const SizedBox(height: 20), // Added bottom spacing
           ],
         ),
       ),
     );
   }
 }
+ 
+ 
