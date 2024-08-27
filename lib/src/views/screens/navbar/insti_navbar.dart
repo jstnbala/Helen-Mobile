@@ -1,40 +1,39 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
-import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/common/about.dart';
-import 'package:helen_app/src/views/common/help-farmer.dart';
-import 'package:helen_app/src/views/common/login.dart';
-import 'package:helen_app/src/views/screens/farmers/farmer-notif.dart';
-import 'homepage-farmer.dart';
-import 'messagespage.dart';
-import 'orderspage.dart';
-import 'profilepage.dart';
-import 'package:helen_app/src/views/screens/farmers/addproduct.dart'; // Import the AddProductPage
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:helen_app/src/views/common/help-buyer.dart';
+import 'package:helen_app/src/views/common/about.dart';
+import 'package:helen_app/src/views/common/login.dart';
+import 'package:helen_app/src/views/screens/buyers/institutional-buyers/profile_module/insti_profile.dart';
+import '../buyers/institutional-buyers/order_request_module/insti-homepage.dart';
+import '../buyers/institutional-buyers/messages_module/insti-messages.dart';
+import '../buyers/institutional-buyers/orders_module/insti-orderlists.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
-class FarmerNavbar extends StatefulWidget {
-  final int initialIndex; 
+class InstiNavbar extends StatefulWidget {
+  final int initialIndex;
 
-  const FarmerNavbar({Key? key, this.initialIndex = 0}) : super(key: key); // Modify constructor
+  const InstiNavbar({Key? key, this.initialIndex = 0}) : super(key: key);
 
   @override
-  _FarmerNavbarState createState() => _FarmerNavbarState();
+  _InstiNavbarState createState() => _InstiNavbarState();
 }
 
-class _FarmerNavbarState extends State<FarmerNavbar> {
-  int _selectedIndex = 0;
-  
-
-  static const Color selectedColor = Color(0xFFCA771A);
-  static const Color unselectedColor = Color(0xFF606060);
+class _InstiNavbarState extends State<InstiNavbar> {
+  late int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.initialIndex; // Initialize _selectedIndex with widget.initialIndex
+    _selectedIndex = widget.initialIndex;
   }
+
+  // Selected Color for Bottom Nav Bar
+  static const Color selectedColor = Color(0xFFCA771A);
+  static const Color unselectedColor = Color(0xFF606060);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -45,18 +44,18 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: HalfWhiteDrawer(), // Adding the drawer
+      drawer: const HalfWhiteDrawer(), // Adding the drawer
       body: Column(
         children: [
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
                 child: Container(
-                  color: Color(0xFFCA771A),
+                  color: const Color(0xFFCA771A),
                   width: double.infinity,
                   height: 150,
                 ),
@@ -75,10 +74,9 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
                 left: 10,
                 child: Builder(
                   builder: (context) => IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.menu,
                       color: Colors.white,
-                      size: 30, // Adjust icon size if needed
                     ),
                     onPressed: () {
                       Scaffold.of(context).openDrawer(); // Open the drawer
@@ -92,7 +90,7 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
                 child: IconButton(
                   icon: Stack(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.notifications,
                         color: Colors.white,
                         size: 30,
@@ -100,16 +98,16 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
                       Positioned(
                         right: 0,
                         child: Container(
-                          padding: EdgeInsets.all(1),
+                          padding: const EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             minWidth: 12,
                             minHeight: 12,
                           ),
-                          child: Text(
+                          child: const Text(
                             '0',
                             style: TextStyle(
                               color: Colors.white,
@@ -122,10 +120,7 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
                     ],
                   ),
                   onPressed: () {
-                    Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FarmerNotifPage()),
-                    );
+                    // Handle notification tap
                   },
                 ),
               ),
@@ -135,82 +130,53 @@ class _FarmerNavbarState extends State<FarmerNavbar> {
             child: IndexedStack(
               index: _selectedIndex,
               children: const [
-                HomePageFarmer(),
-                MessagesPage(),
-                OrdersPage(),
-                ProfilePage(),
+                HomepageInsti(),
+                MessagesInsti(),
+                OrderListsInsti(),
+                InstiProfilePage(),
               ],
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Stack(
-        children: [
-          BottomAppBar(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.home),
-                  color: _selectedIndex == 0 ? selectedColor : unselectedColor,
-                  iconSize: 30, // Increased icon size
-                  onPressed: () => _onItemTapped(0),
-                ),
-                IconButton(
-                  icon: Icon(Icons.message),
-                  color: _selectedIndex == 1 ? selectedColor : unselectedColor,
-                  iconSize: 30, // Increased icon size
-                  onPressed: () => _onItemTapped(1),
-                ),
-                SizedBox(width: 50), // Space for the floating button
-                IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  color: _selectedIndex == 2 ? selectedColor : unselectedColor,
-                  iconSize: 30, // Increased icon size
-                  onPressed: () => _onItemTapped(2),
-                ),
-                IconButton(
-                  icon: Icon(Icons.person),
-                  color: _selectedIndex == 3 ? selectedColor : unselectedColor,
-                  iconSize: 30, // Increased icon size
-                  onPressed: () => _onItemTapped(3),
-                ),
-              ],
-            ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-          
-          Positioned(
-            bottom: 0,
-            left: MediaQuery.of(context).size.width / 2 - 30,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddProductPage()),
-                );
-              },
-              child: Container(
-                width: 60,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Color(0xFFCA771A),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-            ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: 'Messages',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: selectedColor,
+        unselectedItemColor: unselectedColor,
+        onTap: _onItemTapped,
+        selectedLabelStyle: const TextStyle(
+          color: selectedColor,
+          fontFamily: 'Poppins',
+        ),
+        unselectedLabelStyle: const TextStyle(
+          color: unselectedColor,
+          fontFamily: 'Poppins',
+        ),
+        type: BottomNavigationBarType.fixed,
+        iconSize: 30, // Adjust the size of the navigation icons
       ),
     );
   }
 }
+
 
 class HalfWhiteDrawer extends StatefulWidget {
   const HalfWhiteDrawer({super.key});
@@ -220,7 +186,7 @@ class HalfWhiteDrawer extends StatefulWidget {
 }
 
 class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
-  final FlutterSecureStorage storage = FlutterSecureStorage();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<String?> getProfilePicture() async {
     return await storage.read(key: 'ProfilePicture');
@@ -249,7 +215,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
                 future: getProfilePicture(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return _defaultAvatar();
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -259,12 +225,12 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
                   }
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               FutureBuilder<String?>(
                 future: getFullName(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -294,7 +260,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HelpFarmerScreen()),
+                    MaterialPageRoute(builder: (context) => const HelpBuyerScreen()),
                   );
                 },
               ),
@@ -336,7 +302,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
   }
 
   Widget _buildFullNamePlaceholder() {
-    return Text(
+    return const Text(
       'Full Name',
       style: TextStyle(
         color: Color(0xFFCA771A),
@@ -353,19 +319,19 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
       children: [
         Text(
           fullName,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFFCA771A),
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
             fontSize: 25.0,
           ),
         ),
-        SizedBox(height: 5.0),
+        const SizedBox(height: 5.0),
         FutureBuilder<String?>(
           future: getUsername(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -380,7 +346,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
   }
 
   Widget _defaultAvatar() {
-    return CircleAvatar(
+    return const CircleAvatar(
       radius: 50.0,
       backgroundColor: Colors.grey,
       child: Icon(
@@ -399,14 +365,14 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
         children: [
           Text(
             username,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xFFCA771A),
               fontFamily: 'Poppins',
               fontSize: 18.0,
             ),
           ),
-          SizedBox(width: 8.0),
-          Icon(
+          const SizedBox(width: 8.0),
+          const Icon(
             Icons.check_circle,
             color: Color(0xFFCA771A),
             size: 18.0,
@@ -446,7 +412,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(
+        title: const Text(
           "Do you want to Logout?",
           style: TextStyle(
             color: Color(0xFFCA771A),
@@ -457,12 +423,12 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
         actions: [
           TextButton(
             style: TextButton.styleFrom(
-              backgroundColor: Color(0xFFCA771A),
+              backgroundColor: const Color(0xFFCA771A),
             ),
             onPressed: () {
               Navigator.of(context).pop(); // Dismiss the dialog
             },
-            child: Text(
+            child: const Text(
               "Cancel",
               style: TextStyle(
                 color: Colors.white,
@@ -473,7 +439,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
           ),
           TextButton(
             style: TextButton.styleFrom(
-              backgroundColor: Color(0xFFCA771A),
+              backgroundColor: const Color(0xFFCA771A),
             ),
             onPressed: () {
               Navigator.of(context).pop(); // Dismiss the dialog
@@ -483,12 +449,12 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
                 if (mounted) {
                   Navigator.of(context).popUntil((route) => route.isFirst); // Clear back stack
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 }
               });
             },
-            child: Text(
+            child: const Text(
               "Confirm",
               style: TextStyle(
                 color: Colors.white,

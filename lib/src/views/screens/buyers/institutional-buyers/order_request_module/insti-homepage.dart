@@ -1,8 +1,8 @@
 // ignore_for_file: file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/screens/buyers/institutional-buyers/insti-navbar.dart';
-import 'package:helen_app/src/views/screens/buyers/institutional-buyers/insti-orderform.dart';
+import 'package:helen_app/src/views/screens/navbar/insti_navbar.dart';
+import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/insti-orderform.dart';
 
 class HomepageInsti extends StatefulWidget {
   const HomepageInsti({Key? key}) : super(key: key);

@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
-import 'package:helen_app/src/views/screens/buyers/direct-buyers/direct-navbar.dart';
-import 'package:helen_app/src/views/screens/buyers/institutional-buyers/insti-navbar.dart';
-import 'package:helen_app/src/views/screens/farmers/farmer-navbar.dart';
-import 'package:helen_app/src/views/common/forgotpass.dart'; // Import ForgotPassPage class
+import 'package:helen_app/src/views/common/forgotpass.dart';
+import 'package:helen_app/src/views/screens/navbar/direct-navbar.dart';
+import 'package:helen_app/src/views/screens/navbar/insti_navbar.dart';
+import 'package:helen_app/src/views/screens/navbar/farmer-navbar.dart'; 
 import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(
                                 height: 140,
                                 child: Image.asset('images/farmers/logo-opa.png'),
-                              ),
+                              ), 
                             ],
                           ),
                         ),
