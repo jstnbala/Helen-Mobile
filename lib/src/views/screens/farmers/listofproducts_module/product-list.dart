@@ -19,7 +19,7 @@ class ProductListFarmer extends StatelessWidget {
       return [];
     }
 
-    final url = 'https://helen-project.onrender.com/api/organizations/$orgname/products';
+    final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$orgname/products';
 
     try {
       final response = await http.get(Uri.parse(url), headers: {
@@ -125,7 +125,7 @@ class ProductListFarmer extends StatelessWidget {
                     }
 
                     // Safely handle productPic
-                    final productPic = product['ProductPic'] ?? '';
+                    final productPic = product['ProductPic'];
 
                     return ProductCard(
                       productName: product['ProductName'] ?? 'Unnamed Product',  // Handle potential null productName
@@ -176,8 +176,8 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             productPic.isNotEmpty
-                ? Image.memory(
-                    base64Decode(productPic),
+                ? Image.network(
+                    productPic,
                     width: 120,
                     height: 120,
                     fit: BoxFit.cover,
@@ -187,20 +187,20 @@ class ProductCard extends StatelessWidget {
                     size: 120,
                     color: Colors.grey,
                   ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    productName,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Color(0xFFCA771A),
-                    ),
-                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          productName,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Color(0xFFCA771A),
+                          ),
+                        ),
                   const SizedBox(height: 8),
                   Text(
                     'Quantity: $quantity',

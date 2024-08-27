@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final encodedOrganization = Uri.encodeComponent(await getOrganization() ?? '');
     final _id = await storage.read(key: 'id');
 
-    final url = 'https://helen-project.onrender.com/api/organizations/$encodedOrganization/farmers/$_id';
+    final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$encodedOrganization/farmers/$_id';
 
     try {
       Uint8List imageBytes = await XFile(imagePath).readAsBytes();
@@ -205,30 +205,30 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                   ),
                   Positioned(
-      bottom: 0,
-      right: 0,
-      child: GestureDetector(
-        onTap: _showImagePickerDialog,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            width: 30.0,  // Increased touch area width
-            height: 30.0, // Increased touch area height
-            decoration: const BoxDecoration(
-              color: Color(0xFFCA771A),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.add,
-              size: 16.0,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    ),
-  ],
-),
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: _showImagePickerDialog,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 30.0,  // Increased touch area width
+                          height: 30.0, // Increased touch area height
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFCA771A),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            size: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 10.0),
               FutureBuilder<String?>(
                 future: getFullName(),

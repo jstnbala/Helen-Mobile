@@ -55,15 +55,12 @@ class _HomePageBuyerState extends State<HomePageBuyer> {
     });
   }
 
-
-
-
   Future<List<dynamic>> fetchVerifiedProducts() async {
     List <String> organizations = await FetchOrgApi.fetchAllOrganizations();
     List<dynamic> allVerifiedProducts = [];
 
     for (String OrgName in organizations) {
-      final url = 'https://helen-project.onrender.com/api/organizations/$OrgName/products';
+      final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$OrgName/products';
 
 
     try {
@@ -156,7 +153,7 @@ class _HomePageBuyerState extends State<HomePageBuyer> {
                       itemCount: _filteredProducts.length,
                       itemBuilder: (context, index) {
                         final product = _filteredProducts[index];
-                        final productPic = product['ProductPic'] ?? '';
+                        final productPic = product['ProductPic'];
                         final productName = product['ProductName'] ?? 'Unnamed Product';
                         final quantity = '${product['Inventory'] ?? 0} ${product['Unit'] ?? ''}';
                         final price = extractDecimalValue(product['Price']);
@@ -196,8 +193,8 @@ class _HomePageBuyerState extends State<HomePageBuyer> {
                                   productPic.isNotEmpty
                                       ? ClipRRect(
                                           borderRadius: BorderRadius.circular(8.0),
-                                          child: Image.memory(
-                                            base64Decode(productPic),
+                                          child: Image.network(
+                                            productPic,
                                             width: double.infinity,
                                             height: 120, // Height for the image
                                             fit: BoxFit.cover,
