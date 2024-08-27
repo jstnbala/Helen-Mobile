@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, avoid_print, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/screens/farmers/addproduct.dart';
+import 'package:helen_app/src/views/screens/farmers/addproducts_module/addproduct.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -137,7 +137,7 @@ class ProductListFarmer extends StatelessWidget {
                   },
                 ),
               ),
-                ],
+              ],
               );
             }
           },

@@ -1,14 +1,23 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers
 
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
-class ProfilePage extends StatelessWidget {
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
-
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+  final ImagePicker _picker = ImagePicker();
 
   Future<String?> getProfilePicture() async {
     final profilePicture = await storage.read(key: 'ProfilePicture');
@@ -50,6 +59,77 @@ class ProfilePage extends StatelessWidget {
     final organization = await storage.read(key: 'Organization');
     print("Organization: $organization");
     return organization;
+  }
+
+  Future<void> updateProfilePicture(String imagePath) async {
+    final encodedOrganization = Uri.encodeComponent(await getOrganization() ?? '');
+    final _id = await storage.read(key: 'id');
+
+    final url = 'https://helen-project.onrender.com/api/organizations/$encodedOrganization/farmers/$_id';
+
+    try {
+      Uint8List imageBytes = await XFile(imagePath).readAsBytes();
+      String base64Image = base64Encode(imageBytes);
+
+      final payload = {
+        'ProfilePicture': base64Image,
+      };
+
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(payload),
+      );
+
+      if (response.statusCode == 200) {
+        print('Profile picture updated successfully');
+        await storage.write(key: 'ProfilePicture', value: base64Image);
+        setState(() {}); // Refresh UI
+      } else {
+        print('Failed to update profile picture: ${response.body}');
+      }
+    } catch (e) {
+      print('An error occurred while updating profile picture: $e');
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(source: source);
+    if (image != null) {
+      await updateProfilePicture(image.path);
+    }
+  }
+
+  void _showImagePickerDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Choose an option'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text('Take a photo'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Upload from gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -125,24 +205,30 @@ class ProfilePage extends StatelessWidget {
                     },
                   ),
                   Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 24.0,
-                      height: 24.0,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFCA771A),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        size: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+      bottom: 0,
+      right: 0,
+      child: GestureDetector(
+        onTap: _showImagePickerDialog,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: 30.0,  // Increased touch area width
+            height: 30.0, // Increased touch area height
+            decoration: const BoxDecoration(
+              color: Color(0xFFCA771A),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.add,
+              size: 16.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    ),
+  ],
+),
               const SizedBox(height: 10.0),
               FutureBuilder<String?>(
                 future: getFullName(),

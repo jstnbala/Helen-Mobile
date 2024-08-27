@@ -59,6 +59,8 @@ Future<bool> registerFarmer({
   }
 }
 
+// Dropdown Registration Farmer Organization
+
 Future<List<String>> fetchOrganizations() async {
   try {
     final response = await http.get(Uri.parse('https://helen-project.onrender.com/api/organizations'));
@@ -79,6 +81,8 @@ Future<List<String>> fetchOrganizations() async {
     return [];
   }
 }
+
+// Upcoming Events
 
 class Event {
   final String startDate;
@@ -158,6 +162,7 @@ Future<bool> addProduct({
   required String unit,
   required String inventory,
   required File productPic,
+  required String productDetails,
 
 }) async {
   final storage = const FlutterSecureStorage();
@@ -170,52 +175,38 @@ Future<bool> addProduct({
   }
 
   // Construct the URL
-  final url = 'https://helen-project.onrender.com/api/organizations/$orgname/products';
+  final url =  Uri.parse('https://helen-project.onrender.com/api/organizations/$orgname/products');
 
   final dateAdded = DateTime.now().toString();
-
   int? number = int.tryParse(inventory);
   double? convertedPrice = double.tryParse(price);
 
-// Read and encode the image file to Base64
-  String productPicBase64;
-  try {
-    final imageBytes = await productPic.readAsBytes();
-    productPicBase64 = base64Encode(imageBytes);
-  } catch (e) {
-    print('Failed to read or encode the image file: $e');
-    return false;
-  }
+  // Create a MultipartRequest
+  var request = http.MultipartRequest('POST', url);
+ 
+  // Add text fields
+  request.fields['DateAdded'] = dateAdded;
+  request.fields['ProductName'] = productName;
+  request.fields['FarmerName'] = farmerName;
+  request.fields['Price'] = convertedPrice.toString();
+  request.fields['Unit'] = unit;
+  request.fields['status'] = 'Pending';
+  request.fields['Inventory'] = number.toString();
+  request.fields['ProductDetails'] = productDetails;
 
-  // Create the payload
-  final payload = {
-    'DateAdded': dateAdded,
-    'ProductName': productName, 
-    'FarmerName': farmerName,
-    'Price': convertedPrice,
-    'Unit': unit,
-    'status': 'Pending',
-    'Inventory': number,
-    'ProductPic': productPicBase64,
-  };
+  // Add the image file
+  request.files.add(await http.MultipartFile.fromPath('ProductPic', productPic.path));
 
+  // Send the request
   try {
-    // Make the POST request
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(payload),
-    );
+    var response = await request.send();
 
     // Check the response status
     if (response.statusCode == 201) { // Assuming 201 Created is the success status
       print('Product added successfully');
       return true;
     } else {
-      print('Failed to add product: ${response.body}');
-      print(payload);
+      print('Failed to add product: ${response.statusCode}');
       return false;
     }
   } catch (e) {
@@ -306,6 +297,7 @@ Future<bool> login({
         print('Login successful');
 
         await storage.write(key: 'UserType', value: responseData["UserType"]);
+        await storage.write(key: 'id', value: responseData['_id']);
 
         if(responseData['UserType'] == 'farmer') {
 
@@ -321,10 +313,9 @@ Future<bool> login({
 
         } else if (responseData['UserType'] == 'buyer') {
 
-
         await storage.write(key: 'ProfilePicture', value: responseData['ProfilePicture']);
         await storage.write(key: 'Username', value: responseData["Username"]);
-        await storage.write(key: 'Password', value: responseData["Password"]);
+        await storage.write(key: 'Password', value: responseData["Password"]); 
         await storage.write(key: 'FullName', value: responseData["FullName"]);
         await storage.write(key: 'Contact', value: responseData["Contact"]);
         await storage.write(key: 'Address', value: responseData["Address"]);

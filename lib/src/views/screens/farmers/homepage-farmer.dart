@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/screens/farmers/agrikachat.dart';
-import 'package:helen_app/src/views/screens/farmers/farmer-navbar.dart';
-import 'package:helen_app/src/views/screens/farmers/product-list.dart';
-import 'package:helen_app/src/views/screens/farmers/upcoming-events.dart';  
+import 'package:helen_app/src/views/screens/farmers/agrikachat_module/agrikachat.dart';
+import 'package:helen_app/src/views/screens/navbar/farmer-navbar.dart';
+import 'package:helen_app/src/views/screens/farmers/listofproducts_module/product-list.dart';
+import 'package:helen_app/src/views/screens/farmers/upcoming_events_module/upcoming-events.dart';  
 
 class HomePageFarmer extends StatelessWidget {
   const HomePageFarmer({super.key});
