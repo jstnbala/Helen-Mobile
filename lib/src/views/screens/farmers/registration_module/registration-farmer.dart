@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names, use_build_context_synchronously, avoid_print
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
-import 'package:helen_app/src/views/common/login.dart';
+import 'package:helen_app/src/views/screens/farmers/registration_module/mode_of_services.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class FarmerRegistrationPage extends StatefulWidget {
   const FarmerRegistrationPage({super.key});
@@ -12,7 +13,7 @@ class FarmerRegistrationPage extends StatefulWidget {
 
 class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   List<String> _organizations = []; // Initially empty, will be populated via API
   String? _selectedOrganization; // This will hold the selected value
@@ -22,9 +23,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _contactNoController = TextEditingController(text: '+63');
   final TextEditingController _rsbsaNoController = TextEditingController();
   
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'PH');
+
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
@@ -192,7 +194,11 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
-                    hintText: 'Enter your username',
+                    hintText: 'e.g: nestor_matimatico12',
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -224,7 +230,11 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   controller: _fullNameController,
                   decoration: InputDecoration(
                     labelText: 'Full Name',
-                    hintText: 'Enter your full name',
+                    hintText: 'e.g: Nestor Matimatico',
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -253,7 +263,11 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   controller: _addressController,
                   decoration: InputDecoration(
                     labelText: 'Address',
-                    hintText: 'Enter your address',
+                    hintText: 'e.g: Capitol Compound Lucena',
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -282,7 +296,11 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
               value: _selectedOrganization,
               decoration: InputDecoration(
                 labelText: 'Organization',
-                hintText: 'Select your organization',
+                hintText: 'Select your farmer organization',
+                hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -311,44 +329,34 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
               },
             ),
                 SizedBox(height: 10),
-                TextFormField(
-                  controller: _contactNoController,
-                  decoration: InputDecoration(
-                    labelText: 'Contact No.',
-                    hintText: 'Enter your contact number',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                InternationalPhoneNumberInput(
+                onInputChanged: (PhoneNumber phone) {
+                  print('Phone number changed: ${phone.phoneNumber}');
+                },
+                onSaved: (PhoneNumber phone) {
+                  _phoneNumber = phone;
+                  print('Phone number saved: ${_phoneNumber.phoneNumber}');
+                },
+                initialValue: _phoneNumber,
+                inputDecoration: InputDecoration(
+                  labelText: 'Contact No.',
+                  hintText: 'e.g: 936 655 6033',
+                  hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                   ),
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  style: const TextStyle(fontFamily: 'Poppins'),
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    // Remove the +63 prefix before validating the remaining digits
-                    String contactNumber = value?.replaceFirst('+63', '') ?? '';
-                    if (contactNumber.isEmpty) {
-                      return 'Contact number is required';
-                    }
-                    if (!RegExp(r'^[0-9]{10}$').hasMatch(contactNumber)) {
-                      return 'Enter a valid 10-digit contact number';
-                    }
-                    return null;
-                  },
-                  // Prevents user from removing the +63 prefix
-                  onChanged: (value) {
-                    if (!value.startsWith('+63')) {
-                      _contactNoController.text = '+63';
-                      _contactNoController.selection = TextSelection.fromPosition(
-                        TextPosition(offset: _contactNoController.text.length),
-                      );
-                    }
-                  },
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                  ),
+                  labelStyle: const TextStyle(fontFamily: 'Poppins'),
                 ),
+                countries: const ['PH'],
+              ),
+
 
                 SizedBox(height: 10),
 
@@ -358,6 +366,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   decoration: InputDecoration(
                     labelText: 'RSBSA No.',
                     hintText: 'Enter your RSBSA No.',
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -388,6 +400,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter your password',
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -439,6 +455,10 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     hintText: 'Confirm your password',
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -475,46 +495,30 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // Register Button
                 ElevatedButton(
-                  onPressed: _isLoading ? null : () async {
+                  onPressed: _isLoading ? null : () {
                     if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        _isLoading = true;
-                      });
+                      _formKey.currentState!.save();
 
-                      final success = await registerFarmer(
-                        username: _usernameController.text,
-                        fullName: _fullNameController.text,
-                        address: _addressController.text,
-                        organization: _selectedOrganization ?? '',
-                        contactNo: _contactNoController.text,
-                        rsbsaNo: _rsbsaNoController.text,
-                        password: _passwordController.text,
-                      );
+                      // Create a map to pass the collected data to the next screen
+                      final registrationData = {
+                        'username': _usernameController.text,
+                        'fullName': _fullNameController.text,
+                        'address': _addressController.text,
+                        'organization': _selectedOrganization ?? '',
+                        'contactNo': _phoneNumber.phoneNumber ?? '',
+                        'rsbsaNo': _rsbsaNoController.text,
+                        'password': _passwordController.text,
+                      };
 
-                      setState(() {
-                        _isLoading = false;
-                      });
-
-                      if (success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Registration Successful'),
-                            backgroundColor: Colors.green, 
-                          ),
-                        );
-                        Navigator.pushReplacement(
+                      // Navigate to ServicesModeScreen and pass the registration data
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()), // Replace with your actual LoginPage class
-                      );
-                        // Navigate to another page or perform another action
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Registration Failed'),
-                            backgroundColor: Colors.red,
+                        MaterialPageRoute(
+                          builder: (context) => ServicesMode(
+                            registrationData: registrationData,
                           ),
-                        );
-                      }
+                        ),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -526,7 +530,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
-                      'Register',
+                      'Next',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
@@ -550,7 +554,6 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
     _usernameController.dispose();
     _fullNameController.dispose();
     _addressController.dispose();
-    _contactNoController.dispose();
     _rsbsaNoController.dispose();
     super.dispose();
 

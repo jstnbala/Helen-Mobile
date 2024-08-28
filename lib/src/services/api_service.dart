@@ -6,7 +6,6 @@ import 'dart:convert'; // For jsonEncode
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // Farmer Side
-
 Future<bool> registerFarmer({
   required String username,
   required String fullName,
@@ -15,42 +14,44 @@ Future<bool> registerFarmer({
   required String contactNo,
   required String rsbsaNo,
   required String password,
+  required String serviceInfo,
+  required File imageFile,
 }) async {
-  // Construct the URL with the organization variable
   final encodedOrganization = Uri.encodeComponent(organization);
   final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$encodedOrganization/farmers';
 
-
   final dateRegistered = DateTime.now().toIso8601String();
-  // Create the payload
-  final payload = {
-    'DateRegistered': dateRegistered,
-    'Username': username,
-    'FullName': fullName,
-    'Address': address,
-    'Organization': organization,  
-    'Contact': contactNo,
-    'RSBSA_No': rsbsaNo,
-    'Password': password,
-    'status': 'Registered',
-  };
 
-  // Make the POST request
+  // Create a multipart request
+  final request = http.MultipartRequest('POST', Uri.parse(url));
+
+  // Add the image file
+  request.files.add(await http.MultipartFile.fromPath('ProfilePicture', imageFile.path));
+
+  // Add the other fields
+  request.fields['DateRegistered'] = dateRegistered;
+  request.fields['Username'] = username;
+  request.fields['FullName'] = fullName;
+  request.fields['Address'] = address;
+  request.fields['Organization'] = organization;
+  request.fields['Contact'] = contactNo;
+  request.fields['RSBSA_No'] = rsbsaNo;
+  request.fields['Password'] = password;
+   request.fields['serviceInfo'] = serviceInfo;
+  request.fields['status'] = 'Registered';
+
   try {
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(payload),
-    );
+    // Send the request
+    
+    final response = await request.send();
 
     // Check the response status
-    if (response.statusCode == 201) { // Assuming 201 Created is the success status
+    if (response.statusCode == 201) {
       print('Registration successful');
       return true;
     } else {
-      print('Registration failed: ${response.body}');
+      final responseBody = await response.stream.bytesToString();
+      print('Registration failed: $responseBody');
       return false;
     }
   } catch (e) {
@@ -58,6 +59,65 @@ Future<bool> registerFarmer({
     return false;
   }
 }
+
+Future<String?> sendModeOfServiceData({
+  required Map<String, dynamic> modeOfServiceData,
+  File? gcashQrFile,
+  File? bankTransferQrFile,
+}) async {
+  final url = 'https://helen-server-lmp4.onrender.com/api/mode-of-service';
+
+  try {
+    final request = http.MultipartRequest('POST', Uri.parse(url))
+      ..headers['Content-Type'] = 'multipart/form-data';
+
+    // Add the GCash QR file to the request if it exists
+    if (gcashQrFile != null) {
+      request.files.add(
+        http.MultipartFile(
+          'gcashQrFile', // Key for the GCash QR file in the form-data
+          gcashQrFile.readAsBytes().asStream(),
+          await gcashQrFile.length(),
+          filename: gcashQrFile.path.split('/').last,
+        ),
+      );
+    }
+
+    // Add the Bank Transfer QR file to the request if it exists
+    if (bankTransferQrFile != null) {
+      request.files.add(
+        http.MultipartFile(
+          'bankTransferQrFile', // Key for the Bank Transfer QR file in the form-data
+          bankTransferQrFile.readAsBytes().asStream(),
+          await bankTransferQrFile.length(),
+          filename: bankTransferQrFile.path.split('/').last,
+        ),
+      );
+    }
+    // Add other fields to the request
+    modeOfServiceData.forEach((key, value) {
+      request.fields[key] = value;
+    });
+
+    final response = await request.send();
+
+    if (response.statusCode == 201) {
+      final responseBody = await response.stream.bytesToString();
+      final responseJson = jsonDecode(responseBody);
+      final modeOfServiceId = responseJson['id']; // Assuming the object ID is returned with the key 'id'
+      print('Mode of service data sent successfully, ID: $modeOfServiceId');
+      return modeOfServiceId;
+    } else {
+      final responseBody = await response.stream.bytesToString();
+      print('Failed to send mode of service data: $responseBody');
+      return null;
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+    return null;
+  }
+}
+
 
 // Dropdown Registration Farmer Organization
 
@@ -165,6 +225,7 @@ Future<bool> addProduct({
   required String productDetails,
 
 }) async {
+  
   final storage = const FlutterSecureStorage();
   final orgname = await storage.read(key: 'Organization');
   print("price: $price");
