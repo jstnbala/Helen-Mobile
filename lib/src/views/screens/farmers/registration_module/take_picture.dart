@@ -3,9 +3,21 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:helen_app/src/services/api_service.dart';
 
 class CapturePictureScreen extends StatefulWidget {
-  const CapturePictureScreen({super.key});
+  final Map<String, String> registrationData;
+  final Map<String, dynamic> modeOfServiceData;
+  final File? gcashQrFile;
+  final File? bankTransferQrFile;
+
+  const CapturePictureScreen({
+    super.key,
+    required this.registrationData,
+    required this.modeOfServiceData,
+    this.gcashQrFile,
+    this.bankTransferQrFile,
+  });
 
   @override
   _CapturePictureScreenState createState() => _CapturePictureScreenState();
@@ -15,6 +27,8 @@ class _CapturePictureScreenState extends State<CapturePictureScreen> {
   bool _isCaptured = false;
   ImageProvider? _capturedImage;
   final ImagePicker _picker = ImagePicker();
+  File? _capturedImageFile;
+ 
 
   Future<void> _pickImage() async {
     // Request image from camera
@@ -23,9 +37,18 @@ class _CapturePictureScreenState extends State<CapturePictureScreen> {
     if (image != null) {
       setState(() {
         _isCaptured = true;
-        _capturedImage = FileImage(File(image .path));
+        _capturedImageFile = File(image.path); 
+        _capturedImage = FileImage(_capturedImageFile!);
       });
     }
+  }
+
+  void _cancelImage() {
+    // Reset the state to initial values
+    setState(() {
+      _isCaptured = false;
+      _capturedImage = null;
+    });
   }
 
   @override
@@ -75,13 +98,13 @@ class _CapturePictureScreenState extends State<CapturePictureScreen> {
             const SizedBox(height: 32.0),
             Center(
               child: CircleAvatar(
-                radius: 150,  // Increased radius to make the circle bigger
+                radius: 120,  // Increased radius to make the circle bigger
                 backgroundColor: Colors.transparent,
                 child: Stack(
                   children: [
                     // Outer border CircleAvatar
                     CircleAvatar(
-                      radius: 145,  // Slightly smaller inner circle for the border
+                      radius: 200,  // Slightly smaller inner circle for the border
                       backgroundColor: Colors.transparent,  // Transparent to show the border
                       child: Container(
                         decoration: BoxDecoration(
@@ -125,30 +148,118 @@ class _CapturePictureScreenState extends State<CapturePictureScreen> {
               ),
             ),
             const SizedBox(height: 32.0),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFCA771A),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onPressed: _pickImage,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  'Take a Photo',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.white,
+            if (!_isCaptured)
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFCA771A),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
+                onPressed: _pickImage,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(
+                    'Take a Photo',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+            else
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFCA771A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: _cancelImage,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16.0),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFCA771A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () async {
+
+                        final sendServiceResult = await sendModeOfServiceData(
+                          modeOfServiceData: widget.modeOfServiceData,
+                          gcashQrFile: widget.gcashQrFile,
+                          bankTransferQrFile: widget.bankTransferQrFile,
+                        );
+
+                        // Check if sendServiceResult is not null and was successful
+                        if (sendServiceResult != null) {
+                          final isSuccess = await registerFarmer( 
+                            username: widget.registrationData['Username'] ?? '',
+                            fullName: widget.registrationData['FullName'] ?? '',
+                            address: widget.registrationData['Address'] ?? '',
+                            organization: widget.registrationData['Organization'] ?? '',
+                            contactNo: widget.registrationData['Contact'] ?? '',
+                            rsbsaNo: widget.registrationData['RSBSA_No'] ?? '',
+                            password: widget.registrationData['Password'] ?? '',
+                            serviceInfo: sendServiceResult,
+                            imageFile: _capturedImageFile!,
+
+                          );
+
+                          if (isSuccess) {
+                            // Handle success, e.g., navigate to another screen
+                            print('Farmer registered successfully.');
+                            // Navigate to another screen or show success message
+                          } else {
+                            // Handle failure, e.g., show an error message
+                            print('Failed to register farmer.');
+                            // Show an error message to the user
+                          }
+                        } else {
+                          // Handle failure to send mode of service data
+                          print('Failed to send mode of service data or response was null.');
+                          // Show an error message to the user or handle accordingly
+}
+                      },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
           ],
         ),
       ),
     );
   }
 }
+
