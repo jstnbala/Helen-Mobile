@@ -211,16 +211,20 @@ class _CapturePictureScreenState extends State<CapturePictureScreen> {
                           bankTransferQrFile: widget.bankTransferQrFile,
                         );
 
+                        print('result $sendServiceResult');
                         // Check if sendServiceResult is not null and was successful
                         if (sendServiceResult != null) {
+
+                          print(widget.registrationData['organization']);
+
                           final isSuccess = await registerFarmer( 
-                            username: widget.registrationData['Username'] ?? '',
-                            fullName: widget.registrationData['FullName'] ?? '',
-                            address: widget.registrationData['Address'] ?? '',
-                            organization: widget.registrationData['Organization'] ?? '',
-                            contactNo: widget.registrationData['Contact'] ?? '',
-                            rsbsaNo: widget.registrationData['RSBSA_No'] ?? '',
-                            password: widget.registrationData['Password'] ?? '',
+                            username: widget.registrationData['username'] ?? '',
+                            fullName: widget.registrationData['fullName'] ?? '',
+                            address: widget.registrationData['address'] ?? '',
+                            organization: widget.registrationData['organization'] ?? '',
+                            contactNo: widget.registrationData['contactNo'] ?? '',
+                            rsbsaNo: widget.registrationData['rsbsaNo'] ?? '',
+                            password: widget.registrationData['password'] ?? '',
                             serviceInfo: sendServiceResult,
                             imageFile: _capturedImageFile!,
 

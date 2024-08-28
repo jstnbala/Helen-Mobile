@@ -17,6 +17,9 @@ Future<bool> registerFarmer({
   required String serviceInfo,
   required File imageFile,
 }) async {
+
+  print('registering Farmer...');
+
   final encodedOrganization = Uri.encodeComponent(organization);
   final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$encodedOrganization/farmers';
 
@@ -68,14 +71,13 @@ Future<String?> sendModeOfServiceData({
   final url = 'https://helen-server-lmp4.onrender.com/api/mode-of-service';
 
   try {
-    final request = http.MultipartRequest('POST', Uri.parse(url))
-      ..headers['Content-Type'] = 'multipart/form-data';
+    final request = http.MultipartRequest('POST', Uri.parse(url));
 
     // Add the GCash QR file to the request if it exists
     if (gcashQrFile != null) {
       request.files.add(
         http.MultipartFile(
-          'gcashQrFile', // Key for the GCash QR file in the form-data
+          'gcashQrFile',
           gcashQrFile.readAsBytes().asStream(),
           await gcashQrFile.length(),
           filename: gcashQrFile.path.split('/').last,
@@ -87,21 +89,24 @@ Future<String?> sendModeOfServiceData({
     if (bankTransferQrFile != null) {
       request.files.add(
         http.MultipartFile(
-          'bankTransferQrFile', // Key for the Bank Transfer QR file in the form-data
+          'bankTransferQrFile',
           bankTransferQrFile.readAsBytes().asStream(),
           await bankTransferQrFile.length(),
           filename: bankTransferQrFile.path.split('/').last,
         ),
       );
     }
+
     // Add other fields to the request
     modeOfServiceData.forEach((key, value) {
-      request.fields[key] = value;
+      request.fields[key] = value.toString();
     });
 
+    print('Sending request...');
     final response = await request.send();
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
+      print('Success!');
       final responseBody = await response.stream.bytesToString();
       final responseJson = jsonDecode(responseBody);
       final modeOfServiceId = responseJson['id']; // Assuming the object ID is returned with the key 'id'
