@@ -1,9 +1,10 @@
-// ignore_for_file: file_names, library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: file_names, library_private_types_in_public_api, use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:helen_app/src/services/api_service.dart';
 import 'package:helen_app/src/views/common/login.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class BuyerRegistrationPage extends StatefulWidget {
   const BuyerRegistrationPage({super.key});
@@ -19,9 +20,10 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _contactnoController = TextEditingController(text: '+63');
-
+  
   bool _isLoading = false;
+
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'PH');
 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
@@ -204,7 +206,11 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
-                    hintText: 'Enter your username',
+                    hintText: 'e.g: aliah_trader / chowking12',
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -236,7 +242,11 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   controller: _fullNameController,
                   decoration: InputDecoration(
                     labelText: 'Full Name / Business Name',
-                    hintText: 'Enter your full name / business name',
+                    hintText: 'e.g: Aliah Trader / Chowking Quezon',
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -265,7 +275,11 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   controller: _addressController,
                   decoration: InputDecoration(
                     labelText: 'Address / Business Address',
-                    hintText: 'Enter your address / business address',
+                    hintText: 'e.g: Sairaya Highway Quezon',
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -290,44 +304,33 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 const SizedBox(height: 10),
 
                 // Contact field
-                 TextFormField(
-                  controller: _contactnoController,
-                  decoration: InputDecoration(
-                    labelText: 'Contact No.',
-                    hintText: 'Enter your contact number',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                InternationalPhoneNumberInput(
+                onInputChanged: (PhoneNumber phone) {
+                  print('Phone number changed: ${phone.phoneNumber}');
+                },
+                onSaved: (PhoneNumber phone) {
+                  _phoneNumber = phone;
+                  print('Phone number saved: ${_phoneNumber.phoneNumber}');
+                },
+                initialValue: _phoneNumber,
+                inputDecoration: InputDecoration(
+                  labelText: 'Contact No.',
+                  hintText: 'e.g: 936 655 6033',
+                  hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                   ),
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  style: const TextStyle(fontFamily: 'Poppins'),
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    // Remove the +63 prefix before validating the remaining digits
-                    String contactNumber = value?.replaceFirst('+63', '') ?? '';
-                    if (contactNumber.isEmpty) {
-                      return 'Contact number is required';
-                    }
-                    if (!RegExp(r'^[0-9]{10}$').hasMatch(contactNumber)) {
-                      return 'Enter a valid 10-digit contact number';
-                    }
-                    return null;
-                  },
-                  // Prevents user from removing the +63 prefix
-                  onChanged: (value) {
-                    if (!value.startsWith('+63')) {
-                      _contactnoController.text = '+63';
-                      _contactnoController.selection = TextSelection.fromPosition(
-                        TextPosition(offset: _contactnoController.text.length),
-                      );
-                    }
-                  },
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                  ),
+                  labelStyle: const TextStyle(fontFamily: 'Poppins'),
                 ),
+                countries: const ['PH'],
+              ),
                 const SizedBox(height: 10),
 
                 // Business Permit field
@@ -335,6 +338,10 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   decoration: InputDecoration(
                     labelText: 'Business Permit',
                     hintText: _businessPermitFileName ?? 'Upload your business permit',
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -407,6 +414,10 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter your password',
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -458,6 +469,10 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     hintText: 'Confirm your password',
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                      fontFamily: 'Poppins',
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -496,6 +511,8 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 ElevatedButton(
                   onPressed: _isLoading ? null : () async {
                     if (_formKey.currentState!.validate()) {
+                       _formKey.currentState!.save(); 
+                       
                       setState(() {
                         _isLoading = true;
                       });
@@ -504,7 +521,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                         username: _usernameController.text,
                         fullName: _fullNameController.text,
                         address: _addressController.text,
-                        contactNo: _contactnoController.text,
+                        contactNo: _phoneNumber.phoneNumber ?? '',
                         accountType: _selectedAccountType ?? '',
                         password: _passwordController.text,
                       );
@@ -573,7 +590,6 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
     _usernameController.dispose();
     _fullNameController.dispose();
     _addressController.dispose();
-    _contactnoController.dispose();
     super.dispose();
 
   }

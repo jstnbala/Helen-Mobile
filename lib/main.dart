@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/account_type.dart';
+import 'package:helen_app/splash_screen.dart';
 import 'package:helen_app/src/views/common/login.dart';
 
 void main() {
@@ -16,11 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF4A5299),
       ),
-      home: const LoginPage(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
         '/account-type': (context) => const AccountTypeScreen(), // Define the route
-        '/login': (context) => const LoginPage(), // Assuming you have a LoginScreen defined
+        ' /login': (context) => const LoginPage(), // Assuming you have a LoginScreen defined
       },
     );
   }
