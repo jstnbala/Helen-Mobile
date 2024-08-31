@@ -510,6 +510,8 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                         'password': _passwordController.text,
                       };
 
+                      print(registrationData);
+
                       // Navigate to ServicesModeScreen and pass the registration data
                       Navigator.push(
                         context,
