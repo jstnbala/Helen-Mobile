@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, library_private_types_in_public_api, use_build_context_synchronously, avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:helen_app/src/services/api_service.dart';
@@ -30,6 +32,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
 
   String? _selectedAccountType;
   String? _businessPermitFileName;
+  File? _businessPermitFile;
 
   @override
   void initState() {
@@ -133,18 +136,19 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
   }
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'jpg', 'png'],
-    );
+  final result = await FilePicker.platform.pickFiles(
+    allowMultiple: false,
+    type: FileType.custom,
+    allowedExtensions: ['pdf', 'doc', 'docx'],
+  );
 
-    if (result != null && result.files.isNotEmpty) {
-      setState(() {
-        _businessPermitFileName = result.files.single.name;
-      });
-    }
+  if (result != null && result.files.isNotEmpty) {
+    setState(() {
+      _businessPermitFile = File(result.files.single.path!);
+      _businessPermitFileName = result.files.single.name;
+    });
   }
+}
 
   String get _accountTypeMessage {
     switch (_selectedAccountType) {
@@ -524,6 +528,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                         contactNo: _phoneNumber.phoneNumber ?? '',
                         accountType: _selectedAccountType ?? '',
                         password: _passwordController.text,
+                        businessPermit: _businessPermitFile,
                       );
 
                       setState(() {
@@ -590,6 +595,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
     _usernameController.dispose();
     _fullNameController.dispose();
     _addressController.dispose();
+    
     super.dispose();
 
   }
