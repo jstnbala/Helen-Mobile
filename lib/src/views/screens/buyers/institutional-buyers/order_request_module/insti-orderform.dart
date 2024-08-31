@@ -1,49 +1,56 @@
-// ignore_for_file: file_names, library_private_types_in_public_api
+// ignore_for_file: file_names, library_private_types_in_public_api, use_key_in_widget_constructors
 
+// order_form.dart
 import 'package:flutter/material.dart';
- 
-class OrderForm extends StatefulWidget {
-  const OrderForm({super.key});
+import 'package:flutter/services.dart';
+import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/price_breakdown.dart';
 
+class OrderForm extends StatefulWidget {
   @override
   _OrderFormState createState() => _OrderFormState();
 }
- 
+
 class _OrderFormState extends State<OrderForm> {
-  final _formKey = GlobalKey<FormState>();
- 
   String? _selectedLocation;
-  String? _selectedProduct;
-  String? _selectedWeight;
- 
-  final TextEditingController _quantityController = TextEditingController();
- 
-  final List<String> _locations =['Lucban Trading Center', 'Sairaya Agricultural Trading Center' ];
-  final List<String> _products = ['Carrots', 'Corn', 'Lemons', 'Tomatoes'];
-  final List<String> _weights = ['Kg', 'Tonne'];
- 
-  final Map<String, double> _productPricesKg = {
-    'Carrots': 50.0,
-    'Corn': 30.0,
-    'Lemons': 40.0,
-    'Tomatoes': 60.0,
+  final List<Map<String, dynamic>> _products = [
+    {'product': null, 'quantity': '', 'price': 0.0},
+  ];
+
+  final Map<String, double> _productPrices = {
+    'Carrots': 40.0,
+    'Tomatoes': 30.0,
+    'Coconut': 40.0,
+    'Cabbage': 60.0,
+    'Pechay': 50.0,
+    'Sitaw': 30.0,
   };
- 
-  final Map<String, double> _productPricesLbs = {
-    'Carrots': 22.7,
-    'Corn': 13.6,
-    'Lemons': 18.1,
-    'Tomatoes': 27.2,
-  };
- 
-  double _calculateTotalPrice() {
-    final productPrice = (_selectedWeight == 'Kg'
-        ? _productPricesKg[_selectedProduct]
-        : _productPricesLbs[_selectedProduct]) ?? 0.0;
-    final quantity = double.tryParse(_quantityController.text) ?? 0.0;
-    return productPrice * quantity;
+
+  void _addProduct() {
+    if (_products.length < 10) {
+      setState(() {
+        _products.add({'product': null, 'quantity': '', 'price': 0.0});
+      });
+    }
   }
- 
+
+  void _removeProduct(int index) {
+    if (_products.length > 1) {
+      setState(() {
+        _products.removeAt(index);
+      });
+    }
+  }
+
+  bool _validateFields() {
+    if (_selectedLocation == null) return false;
+    for (var product in _products) {
+      if (product['product'] == null || product['quantity'] == '') return false;
+      final quantity = int.tryParse(product['quantity']);
+      if (quantity == null || quantity <= 0) return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,427 +78,320 @@ class _OrderFormState extends State<OrderForm> {
           ),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              _buildInputContainer(
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-                      child: Text(
-                        'Order Details:',
-                        style: TextStyle(
-                          color: Color(0xFFCA771A),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                    ),
- 
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Location',
-                      hintText: 'Select a Location',
-                      labelStyle: const TextStyle(color: Color(0xFFCA771A)),
-                        border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                      ),                      
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    ),
-                    value: _selectedLocation,
-                    items: _locations.map((location) {
-                      return DropdownMenuItem<String>(
-                        value: location,
-                        child: Text(location),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedLocation = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select a location';
-                      }
-                      return null;
-                    },
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
                   ),
-                   
-                    const SizedBox(height: 10),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Products',
-                        hintText: 'Select Products',
-                        labelStyle: const TextStyle(color: Color(0xFFCA771A)),
-                        border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                      ),                              
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      ),
-                      value: _selectedProduct,
-                      items: _products.map((product) {
-                        return DropdownMenuItem<String>(
-                          value: product,
-                          child: Text(product),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedProduct = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please select a product';
-                        }
-                        return null;
-                      },
-                    ),
- 
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _quantityController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              labelText: 'Quantity',
-                              hintText: 'Numbers Only',
-                              labelStyle: const TextStyle(color: Color(0xFFCA771A)),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a quantity';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              labelText: 'Unit',
-                              hintText: 'Select Weight',
-                              labelStyle: const TextStyle(color: Color(0xFFCA771A)),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                              ),                              
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(color: Color(0xFFCA771A)),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            ),
-                            value: _selectedWeight,
-                            items: _weights.map((weight) {
-                              return DropdownMenuItem<String>(
-                                value: weight,
-                                child: Text(weight),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedWeight = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Please select a weight unit';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                ],
+                borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Pricing Breakdown:',
+                      'Location',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         color: Color(0xFFCA771A),
-                        fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Product Price:',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Color(0xFFCA771A),
-                            fontSize: 16,
-                          ),
+                    const SizedBox(height: 8.0),
+                    DropdownButtonFormField<String>(
+                      hint: const Text(
+                        'Select a Location',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.grey,
                         ),
-                        Text(
-                          '₱${_productPricesKg[_selectedProduct] != null ? _productPricesKg[_selectedProduct]!.toStringAsFixed(2) : '0.00'}',
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Color(0xFFCA771A),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                      ),
+                      value: _selectedLocation,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'Lucban Trading Center',
+                          child: Text('Lucban Trading Center'),
                         ),
-                    ],
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Quantity:',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Color(0xFFCA771A),
-                            fontSize: 16,
-                          ),
-                        ),
-                        Text(
-                          '${_quantityController.text} ${_selectedWeight ?? ''}',
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Color(0xFFCA771A),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                        DropdownMenuItem(
+                          value: 'Sairaya Agricultural Trading Center',
+                          child: Text('Sairaya Agricultural Trading Center'),
                         ),
                       ],
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedLocation = value;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? 'Location is required' : null,
+                      decoration: InputDecoration(
+                        labelStyle: const TextStyle(color: Color(0xFFCA771A)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFCA771A),
+                            width: 2.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFCA771A)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFCA771A)),
+                        ),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12.0),
+                      ),
                     ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Total Price:',
+                    const SizedBox(height: 16.0),
+                    ..._products.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Text(
+                                'Product ${index + 1} Request',
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFCA771A),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: DropdownButtonFormField<String>(
+                                    hint: const Text(
+                                      'Select a Product',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    value: _products[index]['product'],
+                                    items: _productPrices.keys
+                                        .map((product) =>
+                                            DropdownMenuItem(
+                                              value: product,
+                                              child: Text(product),
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _products[index]['product'] = value;
+                                        _products[index]['price'] =
+                                            _productPrices[value] ?? 0.0;
+                                        _products[index]['quantity'] = '';
+                                      });
+                                    },
+                                    validator: (value) =>
+                                        value == null ? 'Product is required' : null,
+                                    decoration: InputDecoration(
+                                      labelText: 'Product',
+                                      labelStyle: const TextStyle(
+                                          color: Color(0xFFCA771A),
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFCA771A),
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        borderSide: const BorderSide(
+                                            color: Color(0xFFCA771A)),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        borderSide: const BorderSide(
+                                            color: Color(0xFFCA771A)),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 12.0),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  flex: 1,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Quantity',
+                                      labelStyle: const TextStyle(
+                                          color: Color(0xFFCA771A),
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14),
+                                      suffixText: 'kg',
+                                      suffixStyle: const TextStyle(
+                                        color: Color(0xFFCA771A),
+                                        fontFamily: 'Poppins',
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFCA771A),
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        borderSide: const BorderSide(
+                                            color: Color(0xFFCA771A)),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        borderSide: const BorderSide(
+                                            color: Color(0xFFCA771A)),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 12.0),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _products[index]['quantity'] = value;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Quantity is required';
+                                      }
+                                      final quantity = int.tryParse(value);
+                                      if (quantity == null || quantity <= 0) {
+                                        return 'Invalid quantity';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                if (index > 0)
+                                  IconButton(
+                                    icon: const Icon(Icons.close,
+                                        color: Color(0xFFCA771A)),
+                                    onPressed: () {
+                                      _removeProduct(index);
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    ElevatedButton(
+                      onPressed: _addProduct,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFCA771A),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 15.0, horizontal: 70.0),
+                        child: Text(
+                          'Add More Products',
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            color: Color(0xFFCA771A),
-                            fontSize: 16,
-                          ),
-                        ),
-                        Text(
-                          '₱${_calculateTotalPrice().toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Color(0xFFCA771A),
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            color: Colors.white,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: const BorderSide(color: Color(0xFFCA771A)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Color(0xFFCA771A),
-                          fontWeight: FontWeight.bold,
-                        ),
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                if (_validateFields()) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PriceBreakdownScreen(
+                        location: _selectedLocation!,
+                        products: _products,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() == true) {
-                          // Show success dialog
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                               content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Order Successfully Requested!',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFFCA771A),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                   Text(
-                                    '${_selectedProduct ?? 'Product'} (${_quantityController.text} ${_selectedWeight ?? 'Unit'}) requested from ${_selectedLocation ?? 'Location'}. Total Price: ₱${_calculateTotalPrice().toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFFCA771A),
-                                    ),
-                                  ),
- 
-                                    const SizedBox(height: 10),
-                                    const Text(
-                                      'Please wait for the confirmation of your order. Thank you!',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFFCA771A),
-                                      ),
-                                    ),
-                                  ],
-                                ),
- 
-                         actions: [
-                                Center(  // Center the button
-                                  child: SizedBox(
-                                    width: 150,  // Make the button wider
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();  // Navigate back to homepage
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFFCA771A),  // Same color as Order Request button
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'OK',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Missing Fields'),
+                      content: const Text(
+                          'Please fill out all required fields before proceeding.'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
-                        );
-                      }
-                    },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFCA771A),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                      child: const Text(
-                        'Order Request',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFCA771A),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-            ],
-          ),
+              child: const Padding(
+                padding:
+                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 60.0),
+                child: Text(
+                  'Proceed to Next',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-    );
-  }
- 
-  Container _buildInputContainer({required Widget child}) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: child,
     );
   }
 }

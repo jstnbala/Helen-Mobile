@@ -109,35 +109,35 @@ class ProductListFarmer extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Expanded(
-                  child: ListView.builder(
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    final price = product['Price'];
-                    final status = product['status'];  // Assuming status has a value
+                    child: ListView.builder(
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final product = products[index];
+                        final price = product['Price'];
+                        final status = product['status'] ?? 'Unknown';  // Handle potential null status
 
-                    // Handle price formatting
-                    String formattedPrice;
-                    if (price is Map) {
-                      formattedPrice = price.values.isNotEmpty ? price.values.first.toString() : '0.00';
-                    } else {
-                      formattedPrice = price != null ? price.toString() : '0.00';
-                    }
+                        // Handle price formatting
+                        String formattedPrice;
+                        if (price is Map) {
+                          formattedPrice = price.values.isNotEmpty ? price.values.first.toString() : '0.00';
+                        } else {
+                          formattedPrice = price?.toString() ?? '0.00';
+                        }
 
-                    // Safely handle productPic
-                    final productPic = product['ProductPic'];
+                        // Safely handle productPic
+                        final productPic = product['ProductPic'] ?? '';  // Handle potential null ProductPic
 
-                    return ProductCard(
-                      productName: product['ProductName'] ?? 'Unnamed Product',  // Handle potential null productName
-                      quantity: '${product['Inventory'] ?? 0} ${product['Unit'] ?? ''}',  // Handle potential null Inventory or Unit
-                      price: formattedPrice,
-                      status: status,
-                      productPic: productPic,
-                    );
-                  },
-                ),
-              ),
-              ],
+                        return ProductCard(
+                          productName: product['ProductName'] ?? 'Unnamed Product',  // Handle potential null productName
+                          quantity: '${product['Inventory'] ?? 0} ${product['Unit'] ?? ''}',  // Handle potential null Inventory or Unit
+                          price: formattedPrice,
+                          status: status,
+                          productPic: productPic,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }
           },
@@ -187,20 +187,20 @@ class ProductCard extends StatelessWidget {
                     size: 120,
                     color: Colors.grey,
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          productName,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Color(0xFFCA771A),
-                          ),
-                        ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    productName,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Color(0xFFCA771A),
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     'Quantity: $quantity',
@@ -240,7 +240,7 @@ class ProductCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          '$status',
+                          status,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,

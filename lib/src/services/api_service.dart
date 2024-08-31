@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // For jsonEncode
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path/path.dart'; 
 
 // Farmer Side
 Future<bool> registerFarmer({
@@ -25,11 +26,15 @@ Future<bool> registerFarmer({
 
   final dateRegistered = DateTime.now().toIso8601String();
 
+  print('Image File Path: ${imageFile.path}');
+  print('Image File Size: ${await imageFile.length()} bytes');
+
   // Create a multipart request
   final request = http.MultipartRequest('POST', Uri.parse(url));
 
   // Add the image file
   request.files.add(await http.MultipartFile.fromPath('ProfilePicture', imageFile.path));
+  
 
   // Add the other fields
   request.fields['DateRegistered'] = dateRegistered;
@@ -40,7 +45,7 @@ Future<bool> registerFarmer({
   request.fields['Contact'] = contactNo;
   request.fields['RSBSA_No'] = rsbsaNo;
   request.fields['Password'] = password;
-   request.fields['serviceInfo'] = serviceInfo;
+  request.fields['serviceInfo'] = serviceInfo;
   request.fields['status'] = 'Registered';
 
   try {
@@ -290,39 +295,47 @@ Future<bool> registerBuyer({
   required String contactNo,
   required String accountType,
   required String password,
+  required File? businessPermit,
 }) async {
   const url = 'https://helen-server-lmp4.onrender.com/api/buyers';
 
-  final payload = {
-    'Username': username,
-    'FullName': fullName,
-    'Address': address,
-    'Contact': contactNo,
-    'AccountType': accountType,
-    'Password': password,
-    'status': 'Registered',
-  };
+  final request = http.MultipartRequest('POST', Uri.parse(url));
+
+  request.fields['Username'] = username;
+  request.fields['FullName'] = fullName;
+  request.fields['Address'] = address;
+  request.fields['Contact'] = contactNo;
+  request.fields['AccountType'] = accountType;
+  request.fields['Password'] = password;
+  request.fields['status'] = 'Registered';
+
+  // Add the business permit file
+  if (businessPermit != null) {
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'BusinessPermit',
+        businessPermit.path,
+        filename: basename(businessPermit.path),
+      ),
+    );
+  }
 
   try {
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(payload),
-    );
+    final response = await request.send();
 
+    final responseBody = await response.stream.bytesToString();
     print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    print('Response body: $responseBody');
 
-    if (response.statusCode == 200) { // Updated to check for 200 OK
+    if (response.statusCode == 200) {
       print('Buyer registration successful');
       return true;
     } else if (response.statusCode == 409) {
       print('Buyer registration failed: Username already exists');
       return false;
     } else {
-      print('Buyer registration failed: ${response.statusCode}, ${response.body}');
+      print('Buyer registration failed: ${response.statusCode}');
+      print('Server response: $responseBody');
       return false;
     }
   } catch (e) {
@@ -330,6 +343,7 @@ Future<bool> registerBuyer({
     return false;
   }
 }
+
 
 // Login Farmer and Buyer 
 
@@ -384,6 +398,7 @@ Future<bool> login({
         await storage.write(key: 'Password', value: responseData["Password"]); 
         await storage.write(key: 'FullName', value: responseData["FullName"]);
         await storage.write(key: 'Contact', value: responseData["Contact"]);
+        await storage.write(key: 'BusinessPermit', value: responseData["BusinessPermit"]);
         await storage.write(key: 'Address', value: responseData["Address"]);
         await storage.write(key: 'AccountType', value: responseData["AccountType"]);
         await storage.write(key: 'status', value: responseData["status"]);

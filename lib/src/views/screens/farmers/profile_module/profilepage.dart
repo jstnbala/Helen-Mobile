@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers
 
-import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
@@ -62,38 +62,38 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> updateProfilePicture(String imagePath) async {
-    final encodedOrganization = Uri.encodeComponent(await getOrganization() ?? '');
-    final _id = await storage.read(key: 'id');
+  final encodedOrganization = Uri.encodeComponent(await getOrganization() ?? '');
+  final _id = await storage.read(key: 'id');
 
-    final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$encodedOrganization/farmers/$_id';
+  final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$encodedOrganization/farmers/$_id';
 
-    try {
-      Uint8List imageBytes = await XFile(imagePath).readAsBytes();
-      String base64Image = base64Encode(imageBytes);
+  try {
+    final request = http.MultipartRequest('PUT', Uri.parse(url));
 
-      final payload = {
-        'ProfilePicture': base64Image,
-      };
+    // Attach the image file directly without base64 encoding
+    request.files.add(await http.MultipartFile.fromPath(
+      'ProfilePicture',  // This is the field name for the file in the server-side form
+      imagePath,
+      contentType: MediaType('image', 'jpeg'), // Adjust if your images are in different formats
+    ));
 
-      final response = await http.put(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(payload),
-      );
+    // Send the request
+    final response = await request.send();
 
-      if (response.statusCode == 200) {
-        print('Profile picture updated successfully');
-        await storage.write(key: 'ProfilePicture', value: base64Image);
-        setState(() {}); // Refresh UI
-      } else {
-        print('Failed to update profile picture: ${response.body}');
-      }
-    } catch (e) {
-      print('An error occurred while updating profile picture: $e');
+    if (response.statusCode == 200) {
+      print('Profile picture updated successfully');
+      // Optionally, update the locally stored profile picture
+      await storage.write(key: 'ProfilePicture', value: imagePath);
+      setState(() {}); // Refresh UI
+    } else {
+      print('Failed to update profile picture: ${response.reasonPhrase}');
     }
+  } catch (e) {
+    print('An error occurred while updating profile picture: $e');
   }
+}
+
+
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source);
@@ -146,64 +146,43 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.center,
                 children: [
                   FutureBuilder<String?>(
-                    future: getProfilePicture(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        print('Error: ${snapshot.error}');
-                        return const CircleAvatar(
-                          radius: 50.0,
-                          backgroundColor: Colors.grey,
-                          child: Icon(
-                            Icons.person,
-                            size: 100.0,
-                            color: Colors.white,
-                          ),
-                        );
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        print('Profile picture data is empty or null');
-                        return const CircleAvatar(
-                          radius: 50.0,
-                          backgroundColor: Colors.grey,
-                          child: Icon(
-                            Icons.person,
-                            size: 100.0,
-                            color: Colors.white,
-                          ),
-                        );
-                      } else {
-                        String base64Image = snapshot.data!;
-                        try {
-                          if (base64Image.startsWith('data:image/')) {
-                            base64Image = base64Image.split(',').last;
-                          }
-                          int mod = base64Image.length % 4;
-                          if (mod > 0) {
-                            base64Image += '=' * (4 - mod);
-                          }
-                          Uint8List bytes = base64Decode(base64Image);
-                          print('Decoded image bytes length: ${bytes.length}');
-                          return CircleAvatar(
-                            radius: 50.0,
-                            backgroundColor: Colors.grey,
-                            backgroundImage: MemoryImage(bytes),
-                          );
-                        } catch (e) {
-                          print('Failed to decode base64 image: $e');
-                          return const CircleAvatar(
-                            radius: 50.0,
-                            backgroundColor: Colors.grey,
-                            child: Icon(
-                              Icons.person,
-                              size: 100.0,
-                              color: Colors.white,
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
+  future: getProfilePicture(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const CircularProgressIndicator();
+    } else if (snapshot.hasError) {
+      print('Error: ${snapshot.error}');
+      return const CircleAvatar(
+        radius: 50.0,
+        backgroundColor: Colors.grey,
+        child: Icon(
+          Icons.person,
+          size: 100.0,
+          color: Colors.white,
+        ),
+      );
+    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      print('Profile picture data is empty or null');
+      return const CircleAvatar(
+        radius: 50.0,
+        backgroundColor: Colors.grey,
+        child: Icon(
+          Icons.person,
+          size: 100.0,
+          color: Colors.white,
+        ),
+      );
+    } else {
+      final imagePath = snapshot.data!;
+      return CircleAvatar(
+        radius: 50.0,
+        backgroundColor: Colors.grey,
+        backgroundImage: FileImage(File(imagePath)),
+      );
+    }
+  },
+),
+
                   Positioned(
                     bottom: 0,
                     right: 0,
