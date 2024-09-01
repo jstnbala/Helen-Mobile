@@ -10,9 +10,6 @@ import '../farmers/orders_module/orderspage.dart';
 import '../farmers/profile_module/profilepage.dart';
 import 'package:helen_app/src/views/screens/farmers/addproducts_module/addproduct.dart'; // Import the AddProductPage
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert';
-import 'dart:typed_data';
-
 
 class FarmerNavbar extends StatefulWidget {
   final int initialIndex; 
@@ -315,20 +312,13 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
     );
   }
 
-  Widget _buildProfilePicture(String base64Image) {
+  Widget _buildProfilePicture(String imageUrl) {
     try {
-      if (base64Image.startsWith('data:image/')) {
-        base64Image = base64Image.split(',').last;
-      }
-      int mod = base64Image.length % 4;
-      if (mod > 0) {
-        base64Image += '=' * (4 - mod);
-      }
-      Uint8List bytes = base64Decode(base64Image);
+  
       return CircleAvatar(
         radius: 50.0,
         backgroundColor: Colors.grey,
-        backgroundImage: MemoryImage(bytes),
+        backgroundImage: NetworkImage(imageUrl),
       );
     } catch (e) {
       return _defaultAvatar();

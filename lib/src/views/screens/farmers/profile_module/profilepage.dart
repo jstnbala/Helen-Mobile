@@ -1,9 +1,7 @@
 // ignore_for_file: avoid_print, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,16 +69,13 @@ class _ProfilePageState extends State<ProfilePage> {
     final request = http.MultipartRequest('PUT', Uri.parse(url));
 
     // Attach the image file directly without base64 encoding
-    request.files.add(await http.MultipartFile.fromPath(
-      'ProfilePicture',  // This is the field name for the file in the server-side form
-      imagePath,
-      contentType: MediaType('image', 'jpeg'), // Adjust if your images are in different formats
-    ));
+    request.files.add(await http.MultipartFile.fromPath('ProfilePicture', imagePath));
 
     // Send the request
     final response = await request.send();
 
     if (response.statusCode == 200) {
+      print('image path from update prfile: $imagePath');
       print('Profile picture updated successfully');
       // Optionally, update the locally stored profile picture
       await storage.write(key: 'ProfilePicture', value: imagePath);
@@ -146,42 +141,42 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.center,
                 children: [
                   FutureBuilder<String?>(
-  future: getProfilePicture(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const CircularProgressIndicator();
-    } else if (snapshot.hasError) {
-      print('Error: ${snapshot.error}');
-      return const CircleAvatar(
-        radius: 50.0,
-        backgroundColor: Colors.grey,
-        child: Icon(
-          Icons.person,
-          size: 100.0,
-          color: Colors.white,
-        ),
-      );
-    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-      print('Profile picture data is empty or null');
-      return const CircleAvatar(
-        radius: 50.0,
-        backgroundColor: Colors.grey,
-        child: Icon(
-          Icons.person,
-          size: 100.0,
-          color: Colors.white,
-        ),
-      );
-    } else {
-      final imagePath = snapshot.data!;
-      return CircleAvatar(
-        radius: 50.0,
-        backgroundColor: Colors.grey,
-        backgroundImage: FileImage(File(imagePath)),
-      );
-    }
-  },
-),
+                  future: getProfilePicture(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      print('Error: ${snapshot.error}');
+                      return const CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.person,
+                          size: 100.0,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      print('Profile picture data is empty or null');
+                      return const CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.person,
+                          size: 100.0,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                    final imageUrl = snapshot.data!;
+                      return CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage(imageUrl),
+                      );
+                    }
+                  },
+                ),
 
                   Positioned(
                     bottom: 0,

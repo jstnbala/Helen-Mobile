@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 
-class SpecificMessageBuyer extends StatefulWidget {
-  const SpecificMessageBuyer({super.key});
+class SpecificMessageFarmer extends StatefulWidget {
+  const SpecificMessageFarmer({super.key});
 
   @override
-  _SpecificMessageBuyerState createState() => _SpecificMessageBuyerState();
+  _SpecificMessageFarmerState createState() => _SpecificMessageFarmerState();
 }
 
-class _SpecificMessageBuyerState extends State<SpecificMessageBuyer> {
+class _SpecificMessageFarmerState extends State<SpecificMessageFarmer> {
   final TextEditingController _messageController = TextEditingController();
   final List<String> _messages = [];
   final ScrollController _scrollController = ScrollController();
@@ -72,7 +72,7 @@ class _SpecificMessageBuyerState extends State<SpecificMessageBuyer> {
             ),
             const SizedBox(width: 10),
             const Text(
-              'Aliah Trader',
+              'Sharlene Chaingan',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,

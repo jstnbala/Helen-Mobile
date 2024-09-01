@@ -270,7 +270,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
     );
   }
 
-  Widget _buildProfilePicture(String base64Image) {
+  Widget _buildProfilePicture(String base64Image) {   
     try {
       if (base64Image.startsWith('data:image/')) {
         base64Image = base64Image.split(',').last;
