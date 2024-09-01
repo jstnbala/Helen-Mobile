@@ -1,9 +1,7 @@
 // ignore_for_file: avoid_print, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
@@ -65,9 +63,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final encodedOrganization = Uri.encodeComponent(await getOrganization() ?? '');
   final _id = await storage.read(key: 'id');
 
-
-
-  
   final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$encodedOrganization/farmers/$_id';
 
   try {
@@ -146,42 +141,42 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.center,
                 children: [
                   FutureBuilder<String?>(
-  future: getProfilePicture(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const CircularProgressIndicator();
-    } else if (snapshot.hasError) {
-      print('Error: ${snapshot.error}');
-      return const CircleAvatar(
-        radius: 50.0,
-        backgroundColor: Colors.grey,
-        child: Icon(
-          Icons.person,
-          size: 100.0,
-          color: Colors.white,
-        ),
-      );
-    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-      print('Profile picture data is empty or null');
-      return const CircleAvatar(
-        radius: 50.0,
-        backgroundColor: Colors.grey,
-        child: Icon(
-          Icons.person,
-          size: 100.0,
-          color: Colors.white,
-        ),
-      );
-    } else {
-     final imageUrl = snapshot.data!;
-      return CircleAvatar(
-        radius: 50.0,
-        backgroundColor: Colors.grey,
-        backgroundImage: NetworkImage(imageUrl),
-      );
-    }
-  },
-),
+                  future: getProfilePicture(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      print('Error: ${snapshot.error}');
+                      return const CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.person,
+                          size: 100.0,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      print('Profile picture data is empty or null');
+                      return const CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.person,
+                          size: 100.0,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                    final imageUrl = snapshot.data!;
+                      return CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage(imageUrl),
+                      );
+                    }
+                  },
+                ),
 
                   Positioned(
                     bottom: 0,

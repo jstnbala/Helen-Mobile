@@ -10,9 +10,6 @@ import '../farmers/orders_module/orderspage.dart';
 import '../farmers/profile_module/profilepage.dart';
 import 'package:helen_app/src/views/screens/farmers/addproducts_module/addproduct.dart'; // Import the AddProductPage
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert';
-import 'dart:typed_data';
-
 
 class FarmerNavbar extends StatefulWidget {
   final int initialIndex; 
