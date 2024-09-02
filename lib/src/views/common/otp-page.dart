@@ -1,6 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/common/forgotpass.dart';
+import 'package:helen_app/src/views/common/Forgot%20Password/create_new_password.dart';
  
 class OtpPage extends StatefulWidget {
   const OtpPage({super.key});
@@ -155,7 +155,7 @@ class _OtpPageState extends State<OtpPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ForgotPassPage()),
+                    MaterialPageRoute(builder: (context) => const ResetPasswordPage()),
                   );
                 },
                 child: const Center(
