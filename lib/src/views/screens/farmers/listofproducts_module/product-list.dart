@@ -10,37 +10,42 @@ import 'package:cached_network_image/cached_network_image.dart';
 class ProductListFarmer extends StatelessWidget {
   const ProductListFarmer({super.key});
 
-  Future<List<dynamic>> fetchProducts() async {
-    const storage = FlutterSecureStorage();
-    final orgname = await storage.read(key: 'Organization');
-    final fullName = await storage.read(key: 'FullName');
-    
+Future<List<dynamic>> fetchProducts() async {
+  const storage = FlutterSecureStorage();
+  final orgname = await storage.read(key: 'Organization');
+  final fullName = await storage.read(key: 'FullName');
 
-    if (orgname == null || fullName == null) {
-      print('Organization name or Full Name is missing');
-      return [];
-    }
-
-    final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$orgname/products?farmerName=$fullName';
-
-    try {
-      final response = await http.get(Uri.parse(url), headers: {
-        'Content-Type': 'application/json',
-      });
-
-      if (response.statusCode == 200) {
-        
-        final List<dynamic> responseData = jsonDecode(response.body);
-        return responseData;
-      } else {
-        throw Exception('Failed to load products');
-      }
-    } catch (e) {
-      print('An error occurred: $e');
-      return [];
-    }
+  if (orgname == null || fullName == null) {
+    print('Organization name or Full Name is missing');
+    return [];
   }
 
+  print('Full Name: $fullName');
+  final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$orgname/products';
+
+  try {
+    final response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+
+      // Filter products based on the fullName
+      final filteredProducts = responseData.where((product) {
+        final productFarmerName = product['FarmerName'];
+        return productFarmerName != null && productFarmerName.toString().trim().toLowerCase() == fullName.toLowerCase();
+      }).toList();
+
+      return filteredProducts;
+    } else {
+      throw Exception('Failed to load products');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+    return [];
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -52,18 +52,21 @@ class _ServicesModeState extends State<ServicesMode> {
   String? bankTransferQrFileName;
 
   // Function to handle file picking
- Future<void> _pickFile({required bool isGcash}) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        if (isGcash) {
-          gcashQrFile = File(result.files.single.path!);
-        } else {
-          bankTransferQrFile = File(result.files.single.path!);
-        }
-      });
-    }
- }
+Future<void> _pickFile({required bool isGcash}) async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  if (result != null && result.files.single.path != null) {
+    setState(() {
+      if (isGcash) {
+        gcashQrFile = File(result.files.single.path!);
+        gcashQrFileName = result.files.single.name; // Set the filename
+      } else {
+        bankTransferQrFile = File(result.files.single.path!);
+        bankTransferQrFileName = result.files.single.name; // Set the filename
+      }
+    });
+  }
+}
+
 
   bool get isDeliveryModeSelected {
     return isPickUpChecked || isDeliveryToBuyerChecked || isOtherModeChecked;
@@ -146,7 +149,7 @@ class _ServicesModeState extends State<ServicesMode> {
               ),
               const SizedBox(height: 10),
               const Text(
-                "Hi, Farmer! What delivery options do you offer? Please review and confirm the available methods",
+                "Hi, Farmer! What delivery options do you offer? Please review and confirm the available methods by checking the list below",
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -165,7 +168,7 @@ class _ServicesModeState extends State<ServicesMode> {
                   children: [
                     CheckboxListTile(
                       title: const Text(
-                        'Preferred Pick Up',
+                        '1. Choose a Preferred Pick-Up',
                         style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                       ),
                       value: isPickUpChecked,
@@ -178,7 +181,7 @@ class _ServicesModeState extends State<ServicesMode> {
                     if (isPickUpChecked) ...[
                       CheckboxListTile(
                         title: const Text(
-                          'Pick up at your farm',
+                          '    ➡️ Pick up at your farm',
                           style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                         ),
                         value: isPickUpAtFarmChecked,
@@ -190,7 +193,7 @@ class _ServicesModeState extends State<ServicesMode> {
                       ),
                       CheckboxListTile(
                         title: const Text(
-                          'Designated pick-up area',
+                          '    ➡️ Designated pick-up area',
                           style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                         ),
                         value: isDesignatedPickUpAreaChecked,
@@ -241,7 +244,7 @@ class _ServicesModeState extends State<ServicesMode> {
                   children: [
                     CheckboxListTile(
                       title: const Text(
-                        'Deliver to Buyer',
+                        '2. Deliver to Buyer',
                         style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                       ),
                       value: isDeliveryToBuyerChecked,
@@ -254,7 +257,7 @@ class _ServicesModeState extends State<ServicesMode> {
                     if (isDeliveryToBuyerChecked) ...[
                       CheckboxListTile(
                         title: const Text(
-                          'At any area/location identified by the buyer',
+                          '➡️ At any area/location identified by the buyer',
                           style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                         ),
                         value: isAnyAreaChecked,
@@ -266,7 +269,7 @@ class _ServicesModeState extends State<ServicesMode> {
                       ),
                       CheckboxListTile(
                         title: const Text(
-                          'Within specific area/location only',
+                          '➡️ Within specific area/location only',
                           style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                         ),
                         value: isSpecificAreaChecked,
@@ -314,7 +317,7 @@ class _ServicesModeState extends State<ServicesMode> {
                   children: [
                     CheckboxListTile(
                       title: const Text(
-                        'Other Mode',
+                        '3. Other Mode',
                         style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                       ),
                       value: isOtherModeChecked,
@@ -385,7 +388,7 @@ class _ServicesModeState extends State<ServicesMode> {
               ),
               child: CheckboxListTile(
                 title: const Text(
-                  'Cash on Delivery',
+                  '1. Cash on Delivery',
                   style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
                 ),
                 value: isCashChecked,
@@ -400,86 +403,88 @@ class _ServicesModeState extends State<ServicesMode> {
 
               // GCash Payment Section
               Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFFCA771A)),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    CheckboxListTile(
-                      title: const Text(
-                        'GCash',
-                        style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
-                      ),
-                      value: isGcashChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isGcashChecked = value ?? false;
-                        });
-                      },
-                    ),
-                    if (isGcashChecked)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.upload),
-                            onPressed: () => _pickFile(isGcash: true),
-                          ),
-                          Expanded(
-                            child: Text(
-                              style: const TextStyle(fontFamily: 'Poppins', color: Colors.black),
-                              gcashQrFileName ?? 'Upload GCash QR Code',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFFCA771A)),
+                borderRadius: BorderRadius.circular(10),
               ),
+              child: Column(
+                children: [
+                  CheckboxListTile(
+                    title: const Text(
+                      '2. GCash',
+                      style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
+                    ),
+                    value: isGcashChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isGcashChecked = value ?? false;
+                      });
+                    },
+                  ),
+                  if (isGcashChecked)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.upload),
+                          onPressed: () => _pickFile(isGcash: true),
+                        ),
+                        Expanded(
+                          child: Text(
+                            gcashQrFileName ?? 'Upload GCash QR Code',
+                            style: const TextStyle(fontFamily: 'Poppins', color: Colors.black),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+
               const SizedBox(height: 20),
 
               // Bank Transfer Payment Section
               Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFFCA771A)),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    CheckboxListTile(
-                      title: const Text(
-                        'Bank Transfer',
-                        style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
-                      ),
-                      value: isBankTransferChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isBankTransferChecked = value ?? false;
-                        });
-                      },
-                    ),
-                    if (isBankTransferChecked)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.upload),
-                            onPressed: () => _pickFile(isGcash: false),
-                          ),
-                          Expanded(
-                            child: Text(
-                              style: const TextStyle(fontFamily: 'Poppins', color: Colors.black),
-                              bankTransferQrFileName ?? 'Upload Bank Transfer QR Code',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFFCA771A)),
+                borderRadius: BorderRadius.circular(10),
               ),
+              child: Column(
+                children: [
+                  CheckboxListTile(
+                    title: const Text(
+                      '3. Bank Transfer',
+                      style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
+                    ),
+                    value: isBankTransferChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isBankTransferChecked = value ?? false;
+                      });
+                    },
+                  ),
+                  if (isBankTransferChecked)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.upload),
+                          onPressed: () => _pickFile(isGcash: false),
+                        ),
+                        Expanded(
+                          child: Text(
+                            bankTransferQrFileName ?? 'Upload Bank Transfer QR Code',
+                            style: const TextStyle(fontFamily: 'Poppins', color: Colors.black),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+
               const SizedBox(height: 30),
 
               // Submit Button

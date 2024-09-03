@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/common/login.dart';
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

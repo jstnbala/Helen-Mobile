@@ -3,9 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
 import 'package:helen_app/src/views/common/forgotpass.dart';
-import 'package:helen_app/src/views/screens/navbar/direct-navbar.dart';
-import 'package:helen_app/src/views/screens/navbar/insti_navbar.dart';
-import 'package:helen_app/src/views/screens/navbar/farmer-navbar.dart'; 
+import 'package:helen_app/src/views/common/navbar.dart'; 
 import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -23,21 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false; // Loading state
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  
-  Future<String?> getUserType() async {
-    final userType = await storage.read(key: 'UserType');
- 
-    return userType;
-  }
-
-    Future<String?> getAccountType() async {
-    final accountType = await storage.read(key: 'AccountType');
- 
-    return accountType;
-  }
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -247,35 +230,15 @@ class _LoginPageState extends State<LoginPage> {
                               password: _passwordController.text,
                             );
 
-                            String? userType = await getUserType();
-                            String? accountType = await getAccountType();
-
                             setState(() {
                               _isLoading = false;
                             });
 
                             if (success) {
-                           if (userType == 'farmer') {
-                                  Navigator.push(
+                               Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const FarmerNavbar()),
-                                  );
-                                } else if (userType == 'buyer') {
-                                    if(accountType == 'Direct Buyer') {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const DirectNavbar()), // Replace with your buyer navbar page
-                                    );
-                                  } else if (accountType == 'Institutional Buyer'){
-                                      Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const InstiNavbar()), // Replace with your buyer navbar page
-                                    );
-                                  }
-                                } else {
-                                  // Handle unknown or null user types
-                                  print('Unknown or missing user type');
-                                }
+                                    MaterialPageRoute(builder: (context) => const NavBar())
+                               );
                             } else {
                               // Show error if credentials do not match
                               showDialog(

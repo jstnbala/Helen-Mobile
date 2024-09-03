@@ -144,10 +144,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const OtpPage()),
-                  );
+                 
                 },
                 child: const Center(
                   child: Text(

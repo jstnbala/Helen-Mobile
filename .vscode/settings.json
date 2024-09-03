@@ -18,5 +18,8 @@
         "titleBar.inactiveBackground": "#42b88399",
         "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "#42b883"
+    "peacock.color": "#42b883",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cmake.sourceDirectory": "C:/Users/aikhe/Documents/Programming/Capstone 2024/Helen-Mobile/Helen-Mobile/linux",
+    "java.compile.nullAnalysis.mode": "automatic"
 }

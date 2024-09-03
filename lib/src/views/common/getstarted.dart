@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 import 'package:flutter/material.dart';
+import 'package:helen_app/account_type.dart';
 
 class GetStartedPage extends StatelessWidget {
   const GetStartedPage({super.key});
@@ -63,7 +64,11 @@ class GetStartedPage extends StatelessWidget {
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/account-type'); // Navigate to account type page
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AccountTypeScreen()), // Navigate to account type page
+                          ); // Navigate to account type page
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFCA771A),

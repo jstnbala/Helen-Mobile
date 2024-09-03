@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/farmers/agrikachat_module/agrikachat.dart';
-import 'package:helen_app/src/views/screens/navbar/farmer-navbar.dart';
+import 'package:helen_app/src/views/common/navbar.dart';
 import 'package:helen_app/src/views/screens/farmers/listofproducts_module/product-list.dart';
 import 'package:helen_app/src/views/screens/farmers/upcoming_events_module/upcoming-events.dart';  
 
@@ -23,7 +23,7 @@ class HomePageFarmer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FarmerNavbar(initialIndex: 2)
+                    MaterialPageRoute(builder: (context) => NavBar(initialIndex: 2)
                     ), 
                   );
                 },
