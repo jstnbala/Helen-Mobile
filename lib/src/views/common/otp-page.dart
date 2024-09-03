@@ -1,20 +1,136 @@
-// ignore_for_file: library_private_types_in_public_api, file_names
+// ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/common/forgotpass.dart';
- 
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:helen_app/src/views/common/login.dart';
+import 'dart:io';
+
+import 'package:helen_app/src/services/api_service.dart';
+
 class OtpPage extends StatefulWidget {
-  const OtpPage({super.key});
+  final Map<String, String> registrationData;
+  final Map<String, dynamic> modeOfServiceData;
+  final File imageFile;  // For image uploading
+  final File? gcashQrFile;
+  final File? bankTransferQrFile;
+
+
+  const OtpPage({
+    super.key,
+    required this.registrationData,
+    required this.modeOfServiceData,
+    required this.imageFile,
+    this.gcashQrFile,
+    this.bankTransferQrFile,
+  
+  });
+
+  
  
   @override
   _OtpPageState createState() => _OtpPageState();
 }
+ 
+
+
+
+
  
 class _OtpPageState extends State<OtpPage> {
   final TextEditingController _otpController1 = TextEditingController();
   final TextEditingController _otpController2 = TextEditingController();
   final TextEditingController _otpController3 = TextEditingController();
   final TextEditingController _otpController4 = TextEditingController();
- 
+  final TextEditingController _otpController5 = TextEditingController();
+  final TextEditingController _otpController6 = TextEditingController();
+
+  String _verificationId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // Automatically send OTP when the page is loaded
+    _sendOtp();
+  }
+  
+  void _sendOtp() {
+      final phoneNumber = widget.registrationData['contactNo'];
+      if (phoneNumber != null && phoneNumber.isNotEmpty) {
+        sendOtp(phoneNumber);
+      } else {
+        print('Phone number is not provided.');
+      }
+  }
+
+  String _obfuscatePhoneNumber(String? phoneNumber) {
+    if (phoneNumber == null || phoneNumber.length < 7) {
+      // Handle cases where the phone number is too short or null to obfuscate
+      return phoneNumber ?? '';
+    }
+    String firstPart = phoneNumber.substring(0, 3); // First 3 digits
+    String lastPart = phoneNumber.substring(phoneNumber.length - 4); // Last 4 digits
+    String middlePart = '*' * (phoneNumber.length - 7); // Replace middle part with asterisks
+    return '$firstPart$middlePart$lastPart';
+  }
+
+  Future<void> sendOtp(String? phoneNumber) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+    
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Auto-retrieval or instant verification succeeded
+        await auth.signInWithCredential(credential);
+        // Navigate to next page if needed
+      },
+      
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle error
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        } else {
+          print('Something went wrong: ${e.message}');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        // Save the verificationId for later when verifying OTP
+        setState(() {
+          _verificationId = verificationId;
+        });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('OTP has been sent successfully!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Handle timeout
+      },
+    );
+  }
+
+
+  Future<bool> verifyOtp(String otp) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: _verificationId,
+      smsCode: otp,
+    );
+    
+    try {
+      await auth.signInWithCredential(credential);
+      // Navigate to next page after successful verification
+      return true;
+    } catch (e) {
+      // Handle error, e.g., invalid OTP
+      print('Error verifying OTP: $e');
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,18 +199,20 @@ class _OtpPageState extends State<OtpPage> {
             const SizedBox(height: 10),
  
             // Phone Number Placeholder
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Text(
-                '+63 **** *** 3744', // Placeholder, will be updated later
+                _obfuscatePhoneNumber(widget.registrationData['contactNo']), // Placeholder, will be updated later
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFCA771A),
                 ),
               ),
+
+              
             ),
             const SizedBox(height: 20),
  
@@ -111,6 +229,10 @@ class _OtpPageState extends State<OtpPage> {
                   _buildOtpField(_otpController3),
                   const SizedBox(width: 10),
                   _buildOtpField(_otpController4),
+                   const SizedBox(width: 10),
+                  _buildOtpField(_otpController5),
+                   const SizedBox(width: 10),
+                  _buildOtpField(_otpController6),
                 ],
               ),
             ),
@@ -124,7 +246,7 @@ class _OtpPageState extends State<OtpPage> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      // Handle resend OTP logic here
+                        sendOtp(widget.registrationData['contactNo']);
                     },
                     child: const Text(
                       'Resend Code',
@@ -152,12 +274,82 @@ class _OtpPageState extends State<OtpPage> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ForgotPassPage()),
-                  );
+                onPressed: () async {
+                  String otp = _otpController1.text + _otpController2.text + _otpController3.text + _otpController4.text + _otpController5.text + _otpController6.text;
+                  print('otp: $otp');
+                  bool isVerified = await verifyOtp(otp);  
+     
+                  if (isVerified && mounted) {
+                  // Show a success dialog or SnackBar
+
+                    final sendServiceResult = await sendModeOfServiceData(
+                      modeOfServiceData: widget.modeOfServiceData,
+                      gcashQrFile: widget.gcashQrFile,
+                      bankTransferQrFile: widget.bankTransferQrFile,
+                    );
+                    
+                    print('result $sendServiceResult');
+                        // Check if sendServiceResult is not null and was successful
+                    if (sendServiceResult != null) {
+
+                      final isSuccess = await registerFarmer( 
+                        username: widget.registrationData['username'] ?? '',
+                        fullName: widget.registrationData['fullName'] ?? '',
+                        address: widget.registrationData['address'] ?? '',
+                        organization: widget.registrationData['organization'] ?? '',
+                        contactNo: widget.registrationData['contactNo'] ?? '',
+                        rsbsaNo: widget.registrationData['rsbsaNo'] ?? '',
+                        password: widget.registrationData['password'] ?? '',
+                        serviceInfo: sendServiceResult,
+                        imageFile: widget.imageFile,
+
+                      );
+
+                      if (isSuccess) {
+                            // Handle success, e.g., navigate to another screen
+                        print('Farmer registered successfully.');
+                        
+                          if (mounted) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Verification Successful'),
+                                  content: const Text('Your OTP has been verified successfully!'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(); // Close the dialog
+                                        // Navigate to the next page after closing the dialog
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                                        );
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        } else if (mounted) {
+                          // Show an error message if OTP verification failed
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Invalid OTP, please try again.')),
+                          );
+                        }
+                            // Navigate to another screen or show success message
+                    } else {    
+                      print('Failed to register farmer.');       
+                    }
+                  } else {
+                          // Handle failure to send mode of service data
+                    print('Failed to send mode of service data or response was null.');
+
+                  }
                 },
+                  
                 child: const Center(
                   child: Text(
                     'Verify OTP',

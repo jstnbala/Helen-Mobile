@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/screens/navbar/insti_navbar.dart';
+import 'package:helen_app/src/views/common/navbar.dart';
 import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/insti-orderform.dart';
 
 class HomepageInsti extends StatefulWidget {
@@ -319,7 +319,7 @@ if (_isRequestedSelected)
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const InstiNavbar(initialIndex: 1), // 1 is the index for Messages tab
+                      builder: (context) => const NavBar(initialIndex: 1), // 1 is the index for Messages tab
                     ),
                   );
                 },
@@ -569,7 +569,7 @@ if (_isRequestedSelected)
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const InstiNavbar(initialIndex: 1), // 1 is the index for Messages tab
+                      builder: (context) => const NavBar(initialIndex: 1), // 1 is the index for Messages tab
                     ),
                   );
                 },

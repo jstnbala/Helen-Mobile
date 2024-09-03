@@ -2,8 +2,8 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/views/common/otp-page.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:helen_app/src/services/api_service.dart';
 
 class CapturePictureScreen extends StatefulWidget {
   final Map<String, String> registrationData;
@@ -204,47 +204,22 @@ class _CapturePictureScreenState extends State<CapturePictureScreen> {
                       ),
                     ),
                     onPressed: () async {
-
-                        final sendServiceResult = await sendModeOfServiceData(
-                          modeOfServiceData: widget.modeOfServiceData,
-                          gcashQrFile: widget.gcashQrFile,
-                          bankTransferQrFile: widget.bankTransferQrFile,
-                        );
-
-                        print('result $sendServiceResult');
-                        // Check if sendServiceResult is not null and was successful
-                        if (sendServiceResult != null) {
-
-                          print(widget.registrationData['organization']);
-
-                          final isSuccess = await registerFarmer( 
-                            username: widget.registrationData['username'] ?? '',
-                            fullName: widget.registrationData['fullName'] ?? '',
-                            address: widget.registrationData['address'] ?? '',
-                            organization: widget.registrationData['organization'] ?? '',
-                            contactNo: widget.registrationData['contactNo'] ?? '',
-                            rsbsaNo: widget.registrationData['rsbsaNo'] ?? '',
-                            password: widget.registrationData['password'] ?? '',
-                            serviceInfo: sendServiceResult,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OtpPage(
+                            registrationData: widget.registrationData,
+                            modeOfServiceData: widget.modeOfServiceData,
+                            gcashQrFile: widget.gcashQrFile, // Pass the file or null
+                            bankTransferQrFile: widget.bankTransferQrFile, 
                             imageFile: _capturedImageFile!,
 
-                          );
-
-                          if (isSuccess) {
-                            // Handle success, e.g., navigate to another screen
-                            print('Farmer registered successfully.');
-                            // Navigate to another screen or show success message
-                          } else {
-                            // Handle failure, e.g., show an error message
-                            print('Failed to register farmer.');
-                            // Show an error message to the user
-                          }
-                        } else {
-                          // Handle failure to send mode of service data
-                          print('Failed to send mode of service data or response was null.');
-                          // Show an error message to the user or handle accordingly
-}
-                      },
+                          ),
+                        ),
+                      );
+                      
+                    },
+                      
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
                       child: Text(

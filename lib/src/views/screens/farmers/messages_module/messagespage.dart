@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'specific_message_buyer.dart';
 import 'specific_message_org.dart';
 import 'specific_message_opa.dart';
@@ -136,21 +137,23 @@ class _MessagesPageState extends State<MessagesPage> {
   List<Widget> _buildCards() {
     if (_selectedButton == 'Buyer') {
       return [
-        _buildCard('Aliah Trader', 'August 21, 2024 8:00 AM', 'Hinog na po ba itong mangga?'),
+        _buildCard('Aliah Trader', 'Hinog na po ba itong mangga?'),
       ];
     } else if (_selectedButton == 'Farmer Orgs') {
       return [
-        _buildCard('Admin of Organization One', 'July 30, 2024 5:30 PM', 'Hello po pwede po bang magpatulong sa inyo?'),
+        _buildCard('Admin of Organization One', 'Hello po pwede po bang magpatulong sa inyo?'),
       ];
     } else if (_selectedButton == 'Farmer Support') {
       return [
-        _buildCard('OPA Quezon Super Admin', 'March 20, 2024 11:30 AM', 'Ano pong katanungan ninyo?'),
+        _buildCard('OPA Quezon Super Admin', 'Ano pong katanungan ninyo?'),
       ];
     }
     return [];
   }
 
-  Widget _buildCard(String name, String dateTime, String message) {
+  Widget _buildCard(String name, String message) {
+    String formattedDateTime = DateFormat('MMMM d, yyyy h:mm a').format(DateTime.now());
+
     return GestureDetector(
       onTap: () {
         if (name == 'Aliah Trader') {
@@ -202,7 +205,7 @@ class _MessagesPageState extends State<MessagesPage> {
                       ),
                     ),
                     Text(
-                      dateTime,
+                      formattedDateTime,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16.0,

@@ -381,15 +381,18 @@ Future<bool> login({
 
         if(responseData['UserType'] == 'farmer') {
 
-        await storage.write(key: 'ProfilePicture', value: responseData['ProfilePicture']);
-        await storage.write(key: 'Username', value: responseData["Username"]);
-        await storage.write(key: 'Password', value: responseData["Password"]);
-        await storage.write(key: 'FullName', value: responseData["FullName"]);
-        await storage.write(key: 'RSBSA_No', value: responseData["RSBSA_No"]);
-        await storage.write(key: 'Contact', value: responseData["Contact"]);
-        await storage.write(key: 'Address', value: responseData["Address"]);
-        await storage.write(key: 'Organization', value: responseData["Organization"]);
-        await storage.write(key: 'status', value: responseData["status"]);
+          await storage.write(key: 'ProfilePicture', value: responseData['ProfilePicture']);
+          await storage.write(key: 'Username', value: responseData["Username"]);
+          await storage.write(key: 'Password', value: responseData["Password"]);
+          await storage.write(key: 'FullName', value: responseData["FullName"]);
+          await storage.write(key: 'RSBSA_No', value: responseData["RSBSA_No"]);
+          await storage.write(key: 'Contact', value: responseData["Contact"]);
+          await storage.write(key: 'Address', value: responseData["Address"]);
+          await storage.write(key: 'Organization', value: responseData["Organization"]);
+          await storage.write(key: 'status', value: responseData["status"]);
+          // Convert serviceInfo to JSON string and save it
+          String serviceInfoJson = jsonEncode(responseData["serviceInfo"]);
+          await storage.write(key: 'serviceInfo', value: serviceInfoJson);
 
         } else if (responseData['UserType'] == 'buyer') {
 

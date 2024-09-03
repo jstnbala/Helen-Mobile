@@ -33,7 +33,7 @@ class MessagesInsti extends StatelessWidget {
               _buildMessageCard(
                 context,
                 avatarColor: Color(0xFFCA771A),
-                name: 'Lucban Farmers',
+                name: 'Organization One',
                 message: 'Meron pa bang available na',
                 time: formattedDateTime,
               ),
@@ -41,7 +41,7 @@ class MessagesInsti extends StatelessWidget {
               _buildMessageCard(
                 context,
                 avatarColor: Color(0xFFCA771A),
-                name: 'Farmers Name',
+                name: 'Organization Two',
                 message: 'Meron pa bang available na',
                 time: formattedDateTime,
               ),
@@ -49,7 +49,7 @@ class MessagesInsti extends StatelessWidget {
               _buildMessageCard(
                 context,
                 avatarColor: Color(0xFFCA771A),
-                name: 'Farmers Name',
+                name: 'Organization Three',
                 message: 'Meron pa bang available na coffee beans',
                 time: formattedDateTime,
               ),

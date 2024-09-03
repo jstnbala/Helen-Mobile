@@ -1,7 +1,39 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
-class SpecificMessageOrg extends StatelessWidget {
+class SpecificMessageOrg extends StatefulWidget {
   const SpecificMessageOrg({super.key});
+
+  @override
+  _SpecificMessageOrgState createState() => _SpecificMessageOrgState();
+}
+
+class _SpecificMessageOrgState extends State<SpecificMessageOrg> {
+  final TextEditingController _messageController = TextEditingController();
+  final List<String> _messages = [];
+  final ScrollController _scrollController = ScrollController();
+
+  void _sendMessage() {
+    final message = _messageController.text.trim();
+    if (message.isNotEmpty) {
+      setState(() {
+        _messages.insert(0, message); // Insert the new message at the top
+      });
+      _messageController.clear();
+      _scrollToTop();
+    }
+  }
+
+  void _scrollToTop() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(
+          0.0, // Scroll to the top
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +87,31 @@ class SpecificMessageOrg extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Container(
-              color: Colors.white,
+            child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16.0),
+              reverse: true, // This makes the list view start from the bottom
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFCA771A),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      _messages[index],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           Container(
@@ -66,6 +121,7 @@ class SpecificMessageOrg extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _messageController,
                     decoration: InputDecoration(
                       hintText: 'Add a message...',
                       hintStyle: const TextStyle(
@@ -83,9 +139,7 @@ class SpecificMessageOrg extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 GestureDetector(
-                  onTap: () {
-                    // Handle send button tap
-                  },
+                  onTap: _sendMessage,
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -106,4 +160,3 @@ class SpecificMessageOrg extends StatelessWidget {
     );
   }
 }
-
