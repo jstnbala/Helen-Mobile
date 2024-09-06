@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -31,7 +33,7 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
   }
 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return serviceInfo == null
         ? const CircularProgressIndicator()
         : Container(
@@ -54,30 +56,115 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                Text(
-                  'Farm Location: ${serviceInfo!['farmLocation']}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18.0,
-                    color: Colors.white,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Farm Location:',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Flexible(
+                          child: Text(
+                            serviceInfo!['farmLocation'],
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  'Mode of Delivery: ${serviceInfo!['modeOfDelivery'].join(', ')}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18.0,
-                    color: Colors.white,
-                  ),
+                const SizedBox(height: 15.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Mode of Delivery:',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.local_shipping,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Flexible(
+                          child: Text(
+                            serviceInfo!['modeOfDelivery'].join(', '),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  'Mode of Payment: ${serviceInfo!['modeOfPayment'].join(', ')}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18.0,
-                    color: Colors.white,
-                  ),
+                const SizedBox(height: 15.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Mode of Payment:',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.attach_money,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Flexible(
+                          child: Text(
+                            serviceInfo!['modeOfPayment'].join(', '),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 15.0),
                 if (serviceInfo!['gcashQrFile'] != null)
                   Text(
                     'GCash QR File: ${serviceInfo!['gcashQrFile']}',

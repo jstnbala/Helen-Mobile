@@ -296,13 +296,14 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                   style: const TextStyle(fontFamily: 'Poppins'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Address is required';
-                    }
-                    if (!RegExp(r'^[a-zA-Z0-9\s\-,]+$').hasMatch(value)) {
-                      return 'Enter a valid address';
-                    }
-                    return null;
+                  if (value == null || value.isEmpty) {
+                    return 'Address is required';
+                  }
+                  // Updated regex to include periods (.) and hyphens (-)
+                  if (!RegExp(r'^[a-zA-Z0-9\s\.\-]+$').hasMatch(value)) {
+                    return 'Enter a valid address';
+                  }
+                  return null;
                   },
                 ),
                 const SizedBox(height: 10),

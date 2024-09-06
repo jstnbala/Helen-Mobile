@@ -1,16 +1,20 @@
-// ignore_for_file:, library_private_types_in_public_api,
+// ignore_for_file:, 
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/views/common/otp-page.dart';
- 
+import 'package:helen_app/src/views/common/Forgot%20Password/create_new_password.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+
 class ForgotPassPage extends StatefulWidget {
   const ForgotPassPage({super.key});
- 
+
   @override
   // ignore: library_private_types_in_public_api
   _ForgotPassPageState createState() => _ForgotPassPageState();
 }
- 
+
 class _ForgotPassPageState extends State<ForgotPassPage> {
+  final TextEditingController controller = TextEditingController();
+  final PhoneNumber initialNumber = PhoneNumber(isoCode: 'PH'); // Default to PH format
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +43,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                   const Expanded(
                     child: Center(
                       child: Text(
-                        'Forgot Password',
+                        'Phone Number',
                         style: TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
@@ -54,7 +58,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               ),
             ),
             const SizedBox(height: 40),
- 
+
             // Forgot Password Icon
             const Icon(
               Icons.person_outline,
@@ -62,12 +66,12 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               color: Color(0xFFCA771A),
             ),
             const SizedBox(height: 20),
- 
+
             // Info Text
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: Text(
-                'Please enter your username and contact number to change your password.',
+                'Please type your registered phone number for you to continue changing your previously used password. \n \n We will send an OTP Verification to you.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -77,14 +81,29 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               ),
             ),
             const SizedBox(height: 30),
- 
-            // Username Field
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  hintText: 'Enter your username',
+
+            // Contact Number Field with PH format
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: InternationalPhoneNumberInput(
+                onInputChanged: (PhoneNumber number) {
+                  // Handle phone number input change if necessary
+                },
+                selectorConfig: const SelectorConfig(
+                  selectorType: PhoneInputSelectorType.DROPDOWN,
+                  setSelectorButtonAsPrefixIcon: true,
+                  leadingPadding: 10.0,
+                ),
+                ignoreBlank: false,
+                autoValidateMode: AutovalidateMode.disabled,
+                selectorTextStyle: const TextStyle(color: Colors.black),
+                initialValue: initialNumber,
+                textFieldController: controller,
+                formatInput: true,
+                keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: false),
+                inputDecoration: const InputDecoration(
+                  labelText: 'Phone Number',
+                  hintText: 'e.g: 908 345 5341',
                   hintStyle: TextStyle(
                     fontFamily: 'Poppins',
                     color: Colors.grey,
@@ -97,41 +116,20 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                   ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
- 
-            // Contact Number Field
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: 'Contact No',
-                  hintText: 'Enter your contact number',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Colors.grey,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 2.0,
-                    ),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                   ),
                 ),
+                onInputValidated: (bool value) {
+                  // Handle validation
+                },
+                onSaved: (PhoneNumber number) {
+                  // Handle phone number save if necessary
+                },
               ),
             ),
             const SizedBox(height: 30),
- 
+
             // Change Password Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -144,11 +142,14 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
-                 
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ResetPasswordPage()),
+                  );
                 },
                 child: const Center(
                   child: Text(
-                    'Change Password',
+                    'Send me the code',
                     style: TextStyle(
                       fontSize: 18,
                       fontFamily: 'Poppins',
@@ -166,5 +167,3 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
     );
   }
 }
- 
- 

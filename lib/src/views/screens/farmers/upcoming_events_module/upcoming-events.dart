@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart'; // Import your service where `fetchUpcomingEvents` is defined
 import 'dart:convert'; // For base64 decoding
 import 'package:helen_app/src/views/screens/farmers/upcoming_events_module/specific-event.dart'; // Import the SpecificEvent widget
+import 'package:intl/intl.dart'; // For date formatting
 
 class UpcomingEvents extends StatefulWidget {
   const UpcomingEvents({super.key});
@@ -19,6 +20,18 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
   void initState() {
     super.initState();
     _eventsFuture = fetchUpcomingEvents(); // Fetch events when the widget is initialized
+  }
+
+  // Helper method to format the date
+  String formatDate(String dateStr) {
+    final DateTime parsedDate = DateTime.parse(dateStr);
+    return DateFormat('MMMM d, yyyy').format(parsedDate);
+  }
+
+  // Helper method to format the time
+  String formatTime(String dateStr) {
+    final DateTime parsedTime = DateTime.parse(dateStr);
+    return DateFormat('h:mm a').format(parsedTime);
   }
 
   @override
@@ -120,48 +133,133 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
                                         fontFamily: 'Poppins',
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: Color(0xFFCA771A),
                                       ),
+                                      maxLines: null,  // Allow text to wrap to multiple lines
+                                      softWrap: true,  // Enable soft wrapping of text
                                     ),
                                     const SizedBox(height: 4.0),
-                                    Text(
-                                      'Start: ${event.startDate}', // Start Date
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
-                                      ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.calendar_today, color: Colors.black, size: 16.0),
+                                        const SizedBox(width: 8.0),
+                                        const Text(
+                                          'Start Date: ', // Bold "Start: "
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            formatDate(event.startDate), // Format start date
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black,
+                                            ),
+                                            maxLines: null,  // Allow text to wrap to multiple lines
+                                            softWrap: true,  // Enable soft wrapping of text
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(height: 4.0),
-                                    Text(
-                                      'End: ${event.endDate}', // End Date
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
-                                      ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.calendar_today, color: Colors.black, size: 16.0),
+                                        const SizedBox(width: 8.0),
+                                        const Text(
+                                          'End Date: ', // Bold "End: "
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            formatDate(event.endDate), // Format end date
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black,
+                                            ),
+                                            maxLines: null,  // Allow text to wrap to multiple lines
+                                            softWrap: true,  // Enable soft wrapping of text
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(height: 4.0),
-                                    Text(
-                                      event.time, // Event time
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
-                                      ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.access_time, color: Colors.black, size: 16.0),
+                                        const SizedBox(width: 8.0),
+                                        const Text(
+                                          'Time: ', // Bold "Time: "
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            formatTime(event.startDate), // Format time from start date
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black,
+                                            ),
+                                            maxLines: null,  // Allow text to wrap to multiple lines
+                                            softWrap: true,  // Enable soft wrapping of text
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(height: 4.0),
-                                    Text(
-                                      event.location, // Event location
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
-                                      ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Icon(Icons.location_on, color: Colors.black, size: 16.0),
+                                        const SizedBox(width: 8.0),
+                                        Expanded(
+                                          child: Text.rich(
+                                            TextSpan(
+                                              children: [
+                                                const TextSpan(
+                                                  text: 'Location:\n', // Bold "Location:"
+                                                  style: TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 12.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: event.location, // Location value
+                                                  style: const TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 12.0,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            maxLines: null,  // Allow text to wrap to multiple lines
+                                            softWrap: true,  // Enable soft wrapping of text
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

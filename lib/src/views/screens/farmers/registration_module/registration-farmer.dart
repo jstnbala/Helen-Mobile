@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
 import 'package:helen_app/src/views/screens/farmers/registration_module/mode_of_services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:flutter/services.dart';
 
 class FarmerRegistrationPage extends StatefulWidget {
   const FarmerRegistrationPage({super.key});
@@ -280,13 +281,14 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                   style: TextStyle(fontFamily: 'Poppins'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Address is required';
-                    }
-                    if (!RegExp(r'^[a-zA-Z0-9\s\-,]+$').hasMatch(value)) {
-                      return 'Enter a valid address';
-                    }
-                    return null;
+                  if (value == null || value.isEmpty) {
+                    return 'Address is required';
+                  }
+                  // Updated regex to include periods (.) and hyphens (-)
+                  if (!RegExp(r'^[a-zA-Z0-9\s\.\-]+$').hasMatch(value)) {
+                    return 'Enter a valid address';
+                  }
+                  return null;
                   },
                 ),
                 SizedBox(height: 10),
@@ -328,6 +330,8 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                 return null;
               },
             ),
+
+            // Phone Number
                 SizedBox(height: 10),
                 InternationalPhoneNumberInput(
                 onInputChanged: (PhoneNumber phone) {
@@ -347,7 +351,7 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                     ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                  ),
+                  ), 
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
@@ -362,36 +366,43 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
 
                 // RSBSA No. field
                 TextFormField(
-                  controller: _rsbsaNoController,
-                  decoration: InputDecoration(
-                    labelText: 'RSBSA No.',
-                    hintText: 'Enter your RSBSA No.',
-                    hintStyle: TextStyle(
-                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
-                      fontFamily: 'Poppins',
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                   ),
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                controller: _rsbsaNoController,
+                decoration: InputDecoration(
+                  labelText: 'RSBSA No.',
+                  hintText: 'Enter your RSBSA No.',
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
+                    fontFamily: 'Poppins',
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'RSBSA No. is required';
-                    }
-                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                      return 'Enter a valid RSBSA No.';
-                    }
-                    return null;
-                  },
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                  ),
+                  labelStyle: TextStyle(fontFamily: 'Poppins'),
                 ),
+                style: TextStyle(fontFamily: 'Poppins'),
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(12),  // Limiting the input to 12 digits
+                  FilteringTextInputFormatter.digitsOnly, // Allowing only digits
+                ],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'RSBSA No. is required';
+                  }
+                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                    return 'Enter a valid RSBSA No.';
+                  }
+                  if (value.length != 12) {
+                    return 'RSBSA No. must be 12 digits';
+                  }
+                  return null;
+                },
+              ),
                 SizedBox(height: 10),
 
                 // Password field
