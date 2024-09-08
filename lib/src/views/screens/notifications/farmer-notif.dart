@@ -1,9 +1,21 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/services/get_notifications_api.dart'; // Import the GetNotifications class
 
-class FarmerNotifPage extends StatelessWidget {
+class FarmerNotifPage extends StatefulWidget {
   const FarmerNotifPage({super.key});
+
+  @override
+  _FarmerNotifPageState createState() => _FarmerNotifPageState();
+}
+
+class _FarmerNotifPageState extends State<FarmerNotifPage> {
+  late Future<List<dynamic>> _notifications;
+
+  @override
+  void initState() {
+    super.initState();
+    _notifications = GetNotifications().getNotifications();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,50 +44,87 @@ class FarmerNotifPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildNotificationCard(),
-            // Add more notifications here as needed
-          ],
+        child: FutureBuilder<List<dynamic>>(
+          future: _notifications,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              final notifications = snapshot.data!;
+              if (notifications.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No new notifications.',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      color: Color(0xFF878787),
+                    ),
+                  ),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: notifications.length,
+                  itemBuilder: (context, index) {
+                    final notif = notifications[index];
+                    return _buildNotificationCard(notif);
+                  },
+                );
+              }
+            } else {
+              return const Center(
+                child: Text(
+                  'No notifications found.',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: Color(0xFF878787),
+                  ),
+                ),
+              );
+            }
+          },
         ),
       ),
     );
   }
 
-  Widget _buildNotificationCard() {
+  Widget _buildNotificationCard(Map<String, dynamic> notif) {
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Padding(
-        padding: EdgeInsets.all(16.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(
-              Icons.shopping_cart,
-              color: Color(0xFFCA771A),
+              Icons.notifications,
+              color: const Color(0xFFCA771A),
               size: 40,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "You've received a new order!",
-                    style: TextStyle(
+                    notif['title'] ?? 'No Title',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: Color(0xFFCA771A),
                     ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Text(
-                    "An order has been placed. Please review the details and prepare it for pick-up.",
-                    style: TextStyle(
+                    notif['body'] ?? 'No Body',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: Color(0xFF878787),

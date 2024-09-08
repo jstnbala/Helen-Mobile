@@ -4,9 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:helen_app/src/services/api_service.dart';
-import 'package:helen_app/src/views/common/login.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:helen_app/src/views/common/otp-page.dart';
 
 class BuyerRegistrationPage extends StatefulWidget {
   const BuyerRegistrationPage({super.key});
@@ -515,52 +514,39 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 ElevatedButton(
                   onPressed: _isLoading ? null : () async {
                     if (_formKey.currentState!.validate()) {
-                       _formKey.currentState!.save(); 
-                       
+                      _formKey.currentState!.save();
+
                       setState(() {
                         _isLoading = true;
                       });
 
-                      final success = await registerBuyer(
-                        username: _usernameController.text,
-                        fullName: _fullNameController.text,
-                        address: _addressController.text,
-                        contactNo: _phoneNumber.phoneNumber ?? '',
-                        accountType: _selectedAccountType ?? '',
-                        password: _passwordController.text,
-                        businessPermit: _businessPermitFile,
+                      // Create a Map to hold the registration data
+                      final registrationData = {
+                        'username': _usernameController.text,
+                        'fullName': _fullNameController.text,
+                        'address': _addressController.text,
+                        'contactNo': _phoneNumber.phoneNumber ?? '',
+                        'accountType': _selectedAccountType ?? '',
+                        'password': _passwordController.text,
+                      };
+
+                      // Navigate to the OTP page and pass the registration data
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OtpPage(
+                            registrationData: registrationData,
+                             modeOfServiceData: {},  // Add the appropriate service data here if needed
+                            businessPermitFile: _businessPermitFile, 
+                            type: 'buyer', // Assuming the business permit file is the imageFile
+                          ),
+                        ),
                       );
 
                       setState(() {
                         _isLoading = false;
                       });
-
-                      if (success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Registration Successful'),
-                            backgroundColor: Colors.green, 
-                          ),
-                        );
-                        Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()), // Replace with your actual LoginPage class
-                      );
-                        // Navigate to another page or perform another action
-                     } else {
-                              // If registration fails, show an error message
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Registration failed. Please try again.'),
-                                  backgroundColor: Colors.red, 
-                                ),
-                              );
-                            }
-
-                            setState(() {
-                              _isLoading = false;
-                            });
-                          }
+                    }
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFCA771A),

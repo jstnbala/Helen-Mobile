@@ -7,6 +7,8 @@ import 'package:helen_app/src/views/common/about.dart';
 import 'package:helen_app/src/views/common/help-farmer.dart';
 import 'package:helen_app/src/views/common/login.dart';
 
+import 'package:helen_app/src/context/socket_context.dart';
+import 'package:provider/provider.dart';
 class HalfWhiteDrawer extends StatefulWidget {
   const HalfWhiteDrawer({super.key});
 
@@ -111,7 +113,7 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
+ void _showLogoutDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -151,6 +153,10 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
               // Ensure navigation happens after the dialog is dismissed
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {
+                  // Disconnect the socket before navigating
+                  final socketProvider = Provider.of<SocketProvider>(context, listen: false);
+                  socketProvider.disconnectSocket();
+
                   Navigator.of(context).popUntil((route) => route.isFirst); // Clear back stack
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -172,4 +178,5 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
     },
   );
 }
+
 }

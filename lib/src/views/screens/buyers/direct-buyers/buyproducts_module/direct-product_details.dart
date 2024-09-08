@@ -1,8 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/services/get_farmer_api.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-checkout.dart';
-
+import 'package:helen_app/src/views/screens/messages_module/specific_message.dart';
 class ProductDetailsClass extends StatelessWidget {
   final String productPic;
   final String productName;
@@ -214,8 +215,28 @@ class ProductDetailsClass extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(30.0),
                                       ),
                                     ),
-                                    onPressed: () {},
-                                    child: const Text(
+                                 onPressed: () async {
+                                  // Get the farmer data by awaiting the API call
+                                  Map<String, dynamic>? farmer = await GetFarmerApi().getFarmer(farmerName);
+
+                                  // Check if a farmer was found
+                                  if (farmer != null) {
+                                    // Navigate to the SpecificMessagePage with farmer's details
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => SpecificMessage(
+                                          senderId: farmer['_id'],
+                                          senderName: farmer['FullName'],
+                                          senderProfile: farmer['ProfilePicture'],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    // Handle case when no farmer is found, e.g., show an error message
+                                    print('Farmer not found');
+                                  }
+                                },
+                                child: const Text(
                                       'Message',
                                       style: TextStyle(
                                         fontFamily: 'Poppins',

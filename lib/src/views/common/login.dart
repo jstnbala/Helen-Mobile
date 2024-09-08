@@ -1,12 +1,13 @@
 // ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
+
 import 'package:helen_app/src/services/api_service.dart';
-import 'package:helen_app/src/views/common/forgotpass.dart';
+import 'package:helen_app/src/views/common/Forgot Password/phone_number.dart';
 import 'package:helen_app/src/views/common/navbar.dart'; 
 import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:helen_app/src/context/socket_context.dart'; // Import your SocketContext
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -25,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final socketProvider = useSocketProvider(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -195,6 +197,8 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.only(right: 16.0),
                   child: TextButton(
                     onPressed: () {
+
+                 
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const ForgotPassPage()),
@@ -235,6 +239,11 @@ class _LoginPageState extends State<LoginPage> {
                             });
 
                             if (success) {
+                              // Get user ID from the response or context (e.g., from storage or API)
+                              String userId = await storage.read(key: 'id') ?? '';
+
+                              // On successful login, connect the socket with the userId
+                              socketProvider.connectSocket(userId);
                                Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => const NavBar())

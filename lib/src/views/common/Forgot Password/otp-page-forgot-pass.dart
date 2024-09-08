@@ -2,43 +2,31 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:helen_app/src/views/common/login.dart';
+import 'package:helen_app/src/views/common/Forgot%20Password/create_new_password.dart';
+
 import 'dart:io';
 
 import 'package:helen_app/src/services/api_service.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class OtpPage extends StatefulWidget {
-  final Map<String, String> registrationData;
-  final Map<String, dynamic> modeOfServiceData;
-  final File? imageFile;
-  final File? businessPermitFile;
-  final File? gcashQrFile;
-  final File? bankTransferQrFile;
+  final String phoneNumber;
+  final String userId;
   final String type;
 
   const OtpPage({
     super.key,
-    required this.registrationData,
-    required this.modeOfServiceData,
-    required this.type,
-    this.imageFile,
-    this.businessPermitFile,
-    this.gcashQrFile,
-    this.bankTransferQrFile,
-  
+    required this.phoneNumber,
+    required this.userId,
+    required this.type
   });
 
-  
  
   @override
   _OtpPageState createState() => _OtpPageState();
 }
  
 
-
-
-
- 
 class _OtpPageState extends State<OtpPage> {
   final TextEditingController _otpController1 = TextEditingController();
   final TextEditingController _otpController2 = TextEditingController();
@@ -123,9 +111,9 @@ class _OtpPageState extends State<OtpPage> {
   }
   
   void _sendOtp() {
-      final phoneNumber = '+1 234-567-8999';
-      print('phoneNumber: $phoneNumber');
-      if (phoneNumber != null && phoneNumber.isNotEmpty) {
+      final phoneNumber ='+1 234-567-8999';
+      
+      if (phoneNumber.isNotEmpty) {
         sendOtp(phoneNumber);
       } else {
         print('Phone number is not provided.');
@@ -145,6 +133,7 @@ class _OtpPageState extends State<OtpPage> {
 
   Future<void> sendOtp(String? phoneNumber) async {
     FirebaseAuth auth = FirebaseAuth.instance;
+
 
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -202,6 +191,7 @@ class _OtpPageState extends State<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -271,7 +261,7 @@ class _OtpPageState extends State<OtpPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Text(
-                _obfuscatePhoneNumber(widget.registrationData['contactNo']), // Placeholder, will be updated later
+                _obfuscatePhoneNumber(widget.phoneNumber), // Placeholder, will be updated later
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
@@ -345,65 +335,13 @@ class _OtpPageState extends State<OtpPage> {
                 ),
                 onPressed: () async {
                   String otp = _otpController1.text + _otpController2.text + _otpController3.text + _otpController4.text + _otpController5.text + _otpController6.text;
-                  bool isSuccess = false;
+      
                  
-                 print('otp: $otp');
+                  print('otp: $otp');
                   bool isVerified = await verifyOtp(otp);  
      
                   if (isVerified && mounted ) {
-                  // Show a success dialog or SnackBar
-
-                    if(widget.type == "farmer"){
-                      final sendServiceResult = await sendModeOfServiceData(
-                        modeOfServiceData: widget.modeOfServiceData,
-                        gcashQrFile: widget.gcashQrFile,
-                        bankTransferQrFile: widget.bankTransferQrFile,
-                      );
-                    
-                      print('result $sendServiceResult');
-                        // Check if sendServiceResult is not null and was successful
-                      if (sendServiceResult != null) {
-
-                        
-
-                        isSuccess = await registerFarmer( 
-                          username: widget.registrationData['username'] ?? '',
-                          fullName: widget.registrationData['fullName'] ?? '',
-                          address: widget.registrationData['address'] ?? '',
-                          organization: widget.registrationData['organization'] ?? '',
-                          contactNo: widget.registrationData['contactNo'] ?? '',
-                          rsbsaNo: widget.registrationData['rsbsaNo'] ?? '',
-                          password: widget.registrationData['password'] ?? '',
-                          serviceInfo: sendServiceResult,
-                          imageFile: widget.imageFile,
-                        );
-                      
-                      }
-                    }
-
-                    if(widget.type == "buyer"){
-                     
-     
-
-                        isSuccess = await registerBuyer( 
-                          username: widget.registrationData['username'] ?? '',
-                          fullName: widget.registrationData['fullName'] ?? '',
-                          address: widget.registrationData['address'] ?? '',      
-                          contactNo: widget.registrationData['contactNo'] ?? '',  
-                          password: widget.registrationData['password'] ?? '',
-                          accountType: widget.registrationData['accountType'] ?? '',
-                          businessPermit: widget.businessPermitFile     
-                          
-                        );
-  
-                    }
-                    
-                    
-                    if (isSuccess) {
-                            // Handle success, e.g., navigate to another screen
-                      print('User registered successfully.');
-                        
-                      if (mounted) {
+              
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -417,7 +355,7 @@ class _OtpPageState extends State<OtpPage> {
                                         // Navigate to the next page after closing the dialog
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                                      MaterialPageRoute(builder: (context) => ResetPasswordPage(userId: widget.userId, type: widget.type)),
                                     );
                                   },
                                   child: const Text('OK'),
@@ -426,17 +364,13 @@ class _OtpPageState extends State<OtpPage> {
                             );
                           },
                         );
-                      }
-                    } else if (mounted) {
+                      
+                  }  else if (mounted) {
                           // Show an error message if OTP verification failed
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Invalid OTP, please try again.')),
                       );
                     }
-                            // Navigate to another screen or show success message
-                  } else {
-                    print('Failed to verify');
-                  }
                 },
                   
                 child: const Center(
