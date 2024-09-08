@@ -213,6 +213,7 @@ class _CapturePictureScreenState extends State<CapturePictureScreen> {
                             gcashQrFile: widget.gcashQrFile, // Pass the file or null
                             bankTransferQrFile: widget.bankTransferQrFile, 
                             imageFile: _capturedImageFile!,
+                            type: 'farmer',
 
                           ),
                         ),

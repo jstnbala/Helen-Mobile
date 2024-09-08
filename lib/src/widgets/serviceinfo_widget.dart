@@ -26,14 +26,53 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
     if (jsonString != null) {
       setState(() {
         serviceInfo = jsonDecode(jsonString);
+        print('Loaded serviceInfo: $serviceInfo'); // Debugging line
       });
     }
   }
 
+  List<String> _parseListString(String listString) {
+    // Remove the surrounding brackets and split by comma
+    String cleanedString = listString
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .trim();
+
+    // Split by comma and trim whitespace
+    List<String> items = cleanedString
+        .split(',')
+        .map((item) => item.trim())
+        .where((item) => item.isNotEmpty)
+        .toList();
+
+    return items;
+  }
+
+  List<String> _processData(dynamic data) {
+    List<String> result = [];
+
+    if (data is List) {
+      for (var item in data) {
+        if (item is String) {
+          // Check if it's a string that looks like a list
+          if (item.startsWith('[') && item.endsWith(']')) {
+            result.addAll(_parseListString(item));
+          } else if (item.isNotEmpty) {
+            result.add(item);
+          }
+        }
+      }
+    } else if (data is String && data.isNotEmpty) {
+      result.add(data);
+    }
+
+    return result;
+  }
+
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return serviceInfo == null
-        ? const CircularProgressIndicator()
+        ? const Center(child: CircularProgressIndicator())
         : Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -54,31 +93,128 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                Text(
-                  'Farm Location: ${serviceInfo!['farmLocation']}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18.0,
-                    color: Colors.white,
+                if (serviceInfo != null && serviceInfo!['farmLocation'] != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Farm Location:',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Flexible(
+                            child: Text(
+                              serviceInfo!['farmLocation'],
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18.0,
+                                color: Colors.white,
+                              ),
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                Text(
-                  'Mode of Delivery: ${serviceInfo!['modeOfDelivery'].join(', ')}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18.0,
-                    color: Colors.white,
+                const SizedBox(height: 15.0),
+                if (serviceInfo != null && serviceInfo!['modeOfDelivery'] != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Mode of Delivery:',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
+                      ..._processData(serviceInfo!['modeOfDelivery'])
+                          .map((item) => Padding(
+                                padding: const EdgeInsets.only(bottom: 5.0),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.local_shipping,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    Flexible(
+                                      child: Text(
+                                        '- $item',
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 18.0,
+                                          color: Colors.white,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                    ],
                   ),
-                ),
-                Text(
-                  'Mode of Payment: ${serviceInfo!['modeOfPayment'].join(', ')}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18.0,
-                    color: Colors.white,
+                const SizedBox(height: 15.0),
+                if (serviceInfo != null && serviceInfo!['modeOfPayment'] != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Mode of Payment:',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
+                      ..._processData(serviceInfo!['modeOfPayment'])
+                          .map((item) => Padding(
+                                padding: const EdgeInsets.only(bottom: 5.0),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.attach_money,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    Flexible(
+                                      child: Text(
+                                        '- $item',
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 18.0,
+                                          color: Colors.white,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                    ],
                   ),
-                ),
-                if (serviceInfo!['gcashQrFile'] != null)
+                const SizedBox(height: 15.0),
+                if (serviceInfo != null && serviceInfo!['gcashQrFile'] != null)
                   Text(
                     'GCash QR File: ${serviceInfo!['gcashQrFile']}',
                     style: const TextStyle(
@@ -87,7 +223,7 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
                       color: Colors.white,
                     ),
                   ),
-                if (serviceInfo!['bankTransferQrFile'] != null)
+                if (serviceInfo != null && serviceInfo!['bankTransferQrFile'] != null)
                   Text(
                     'Bank Transfer QR File: ${serviceInfo!['bankTransferQrFile']}',
                     style: const TextStyle(

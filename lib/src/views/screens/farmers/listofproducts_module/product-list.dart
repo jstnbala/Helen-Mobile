@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/farmers/addproducts_module/addproduct.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:helen_app/src/views/screens/farmers/listofproducts_module/product_detail.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -141,6 +142,9 @@ Future<List<dynamic>> fetchProducts() async {
                         print('status $status');
                         print('formatted $formattedPrice');
                          print('quantity $quantity');
+
+                        final productDetails = product['ProductDetails'] ?? '';
+
                         // Create and return ProductCard 
                         return ProductCard(
                           productName: product['ProductName'] ?? 'Unnamed Product',  // Handle potential null productName
@@ -148,6 +152,8 @@ Future<List<dynamic>> fetchProducts() async {
                           price: formattedPrice,
                           status: status,
                           productPic: productPic,
+                          productDetails: productDetails,
+
                         );
                       },
                     ),
@@ -168,6 +174,7 @@ class ProductCard extends StatelessWidget {
   final String price;
   final String status;
   final String productPic;
+  final String productDetails;
 
   const ProductCard({
     super.key,
@@ -176,107 +183,132 @@ class ProductCard extends StatelessWidget {
     required this.price,
     required this.status,
     required this.productPic,
+    required this.productDetails,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            productPic.isNotEmpty ? CachedNetworkImage(
-                imageUrl: productPic,
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (context, url, error) => const Icon(
-                  Icons.photo,
-                  size: 120,
-                  color: Colors.grey,
-                ),
-              )
-            : const Icon(
-                Icons.photo,
-                size: 120,
-                color: Colors.grey,
-              ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    productName,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Color(0xFFCA771A),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Quantity: $quantity',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
-                      color: Color(0xFFCA771A),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Price: PHP $price',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: Color(0xFFCA771A),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Text(
-                        'Status: ',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: Color(0xFFCA771A),
-                        ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FarmerProductDetail(
+              productName: productName,
+              quantity: quantity,
+              price: price,
+              status: status,
+              productPic: productPic,
+              productDetails: productDetails,
+            ),
+          ),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              productPic.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: productPic,
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFCA771A),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          status,
-                          style: const TextStyle(
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.photo,
+                        size: 120,
+                        color: Colors.grey,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.photo,
+                      size: 120,
+                      color: Colors.grey,
+                    ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      productName,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Color(0xFFCA771A),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Quantity: $quantity',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        color: Color(0xFFCA771A),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Price: PHP $price',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Color(0xFFCA771A),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Text(
+                          'Status: ',
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
-                            color: Colors.white,
+                            color: Color(0xFFCA771A),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                       Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: status.toLowerCase() == 'verified'
+                              ? Colors.green  // Background color green if verified
+                              : status.toLowerCase() == 'pending'
+                                  ? const Color(0xFFCA771A)  // Background color orange if pending
+                                  : status.toLowerCase() == 'rejected'
+                                      ? Colors.red  // Background color red if rejected
+                                      : const Color(0xFF606060),  // Default background color if none of the above
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                          child: Text(
+                            status,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

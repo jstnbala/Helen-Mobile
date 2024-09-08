@@ -1,6 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:helen_app/src/services/get_notifications_api.dart'; // Import the GetNotifications class
+import 'package:helen_app/src/context/socket_context.dart';
 
 import 'package:helen_app/src/views/screens/notifications/farmer-notif.dart';
 import 'package:helen_app/src/views/screens/farmers/addproducts_module/addproduct.dart'; // Import the AddProductPage
@@ -8,21 +10,15 @@ import 'package:helen_app/src/widgets/floating_button_widget.dart';
 import 'package:helen_app/src/widgets/sidebar_widgets.dart';
 
 import '../screens/farmers/homepage-farmer.dart';
-import '../screens/farmers/messages_module/messagespage.dart';
+import '../screens/messages_module/messagespage.dart';
 import '../screens/farmers/orders_module/orderspage.dart';
 import 'profilepage.dart';
 
 import '../screens/buyers/direct-buyers/buyproducts_module/direct-homepage.dart';
-import '../screens/buyers/direct-buyers/messages_module/direct-messages.dart';
-import '../screens/buyers/direct-buyers/orders_module/direct-orderlists.dart';
-
 import '../screens/buyers/institutional-buyers/order_request_module/insti-homepage.dart';
-import '../screens/buyers/institutional-buyers/messages_module/insti-messages.dart';
-import '../screens/buyers/institutional-buyers/orders_module/insti-orderlists.dart';
-
 
 class NavBar extends StatefulWidget {
-  final int initialIndex; 
+  final int initialIndex;
 
   const NavBar({Key? key, this.initialIndex = 0}) : super(key: key); // Modify constructor
 
@@ -35,6 +31,7 @@ class _NavBarState extends State<NavBar> {
   String? _userType;
   String? _accountType;
   bool _isLoading = true;
+  int _notificationCount = 0;
 
   final storage = const FlutterSecureStorage();
 
@@ -46,6 +43,7 @@ class _NavBarState extends State<NavBar> {
     super.initState();
     _selectedIndex = widget.initialIndex;
     _loadUserAndAccountType(); // Load user and account type
+    _loadNotificationCount(); // Get notification count
   }
 
   Future<void> _loadUserAndAccountType() async {
@@ -58,6 +56,18 @@ class _NavBarState extends State<NavBar> {
       setState(() {
         _isLoading = false; // Set loading to false once data is loaded
       });
+    }
+  }
+
+  Future<void> _loadNotificationCount() async {
+    try {
+      final count = await GetNotifications().getNotificationCount();
+      setState(() {
+        _notificationCount = count;
+        print("notif count $_notificationCount");
+      });
+    } catch (e) {
+      // Handle errors if necessary
     }
   }
 
@@ -77,6 +87,7 @@ class _NavBarState extends State<NavBar> {
 
     final isFarmer = _userType == 'farmer';
     final isDirectBuyer = _accountType == 'Direct Buyer';
+    final totalNotif = useNotificationCount(context) + _notificationCount;
 
     return Scaffold(
       drawer: const HalfWhiteDrawer(),
@@ -131,28 +142,31 @@ class _NavBarState extends State<NavBar> {
                         color: Colors.white,
                         size: 30,
                       ),
-                      Positioned(
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
-                          child: const Text(
-                            '0',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
+                      if (totalNotif > 0)
+                        Positioned(
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(1),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                            textAlign: TextAlign.center,
+                            constraints: const BoxConstraints(
+                              minWidth: 12,
+                              minHeight: 12,
+                            ),
+                            child: Center(
+                              child: Text(
+                                totalNotif.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                   onPressed: () {
@@ -179,14 +193,14 @@ class _NavBarState extends State<NavBar> {
                   : isDirectBuyer
                       ? const [
                           HomePageBuyer(),
-                          MessagesPageBuyer(),
-                          OrdersListsBuyer(),
+                          MessagesPage(),
+                          OrdersPage(),
                           ProfilePage(),
                         ]
                       : const [
                           HomepageInsti(),
-                          MessagesInsti(),
-                          OrderListsInsti(),
+                          MessagesPage(),
+                          OrdersPage(),
                           ProfilePage(),
                         ],
             ),
@@ -211,8 +225,8 @@ class _NavBarState extends State<NavBar> {
                   iconSize: 30,
                   onPressed: () => _onItemTapped(1),
                 ),
-                if(isFarmer)
-                  const SizedBox(width: 50), 
+                if (isFarmer)
+                  const SizedBox(width: 50),
                 IconButton(
                   icon: const Icon(Icons.shopping_cart),
                   color: _selectedIndex == 2 ? selectedColor : unselectedColor,

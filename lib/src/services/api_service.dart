@@ -16,7 +16,7 @@ Future<bool> registerFarmer({
   required String rsbsaNo,
   required String password,
   required String serviceInfo,
-  required File imageFile,
+  required File? imageFile,
 }) async {
 
   print('registering Farmer...');
@@ -26,14 +26,15 @@ Future<bool> registerFarmer({
 
   final dateRegistered = DateTime.now().toIso8601String();
 
-  print('Image File Path: ${imageFile.path}');
-  print('Image File Size: ${await imageFile.length()} bytes');
+  print('Image File Path: ${imageFile?.path}');
+  print('Image File Size: ${await imageFile?.length()} bytes');
 
   // Create a multipart request
   final request = http.MultipartRequest('POST', Uri.parse(url));
+  final image = imageFile?.path ?? '';
 
   // Add the image file
-  request.files.add(await http.MultipartFile.fromPath('ProfilePicture', imageFile.path));
+  request.files.add(await http.MultipartFile.fromPath('ProfilePicture', image));
   
 
   // Add the other fields

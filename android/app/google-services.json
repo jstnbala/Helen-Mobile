@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "826471966392",
-    "firebase_url": "https://fewe-760b9.firebaseio.com",
-    "project_id": "fewe-760b9",
-    "storage_bucket": "fewe-760b9.appspot.com"
+    "project_number": "837524901133",
+    "project_id": "helen-application",
+    "storage_bucket": "helen-application.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:826471966392:android:627bc7e72c2191479b364d",
+        "mobilesdk_app_id": "1:837524901133:android:f69fb3ba5ff1a13e2d7444",
         "android_client_info": {
           "package_name": "com.shaur.helen"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "826471966392-a6tiphbh84vivugch6a9lkqsfe2kjool.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDZUk6ZcunR91SyE5zIuplJpPFZzu3a3yY"
+          "current_key": "AIzaSyDPElkLnYf05DYaVIeTL7RIcUX502UZ4jQ"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "826471966392-a6tiphbh84vivugch6a9lkqsfe2kjool.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
