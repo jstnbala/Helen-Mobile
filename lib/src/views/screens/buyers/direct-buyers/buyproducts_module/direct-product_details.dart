@@ -1,9 +1,10 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/get_farmer_api.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-checkout.dart';
 import 'package:helen_app/src/views/screens/messages_module/specific_message.dart';
+
 class ProductDetailsClass extends StatelessWidget {
   final String productPic;
   final String productName;
@@ -117,32 +118,6 @@ class ProductDetailsClass extends StatelessWidget {
                               ),
                             ),
                             const Divider(),
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    'Pickup Address',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFCA771A),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  'Lorem Ipsum is simply dummy text of the printing and typesetting',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14.0,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Divider(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -203,6 +178,32 @@ class ProductDetailsClass extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            const Divider(),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'Mode of Delivery',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFCA771A),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8.0),
+                                Text(
+                                  'Lorem Ipsum is simply dummy text of the printing and typesetting',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 20.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -215,28 +216,28 @@ class ProductDetailsClass extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(30.0),
                                       ),
                                     ),
-                                 onPressed: () async {
-                                  // Get the farmer data by awaiting the API call
-                                  Map<String, dynamic>? farmer = await GetFarmerApi().getFarmer(farmerName);
+                                    onPressed: () async {
+                                      // Get the farmer data by awaiting the API call
+                                      Map<String, dynamic>? farmer = await GetFarmerApi().getFarmer(farmerName);
 
-                                  // Check if a farmer was found
-                                  if (farmer != null) {
-                                    // Navigate to the SpecificMessagePage with farmer's details
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => SpecificMessage(
-                                          senderId: farmer['_id'],
-                                          senderName: farmer['FullName'],
-                                          senderProfile: farmer['ProfilePicture'],
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    // Handle case when no farmer is found, e.g., show an error message
-                                    print('Farmer not found');
-                                  }
-                                },
-                                child: const Text(
+                                      // Check if a farmer was found
+                                      if (farmer != null) {
+                                        // Navigate to the SpecificMessagePage with farmer's details
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => SpecificMessage(
+                                              senderId: farmer['_id'],
+                                              senderName: farmer['FullName'],
+                                              senderProfile: farmer['ProfilePicture'],
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        // Handle case when no farmer is found, e.g., show an error message
+                                        print('Farmer not found');
+                                      }
+                                    },
+                                    child: const Text(
                                       'Message',
                                       style: TextStyle(
                                         fontFamily: 'Poppins',

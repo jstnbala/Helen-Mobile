@@ -71,6 +71,8 @@
       - images/buyers/QR.png
       - images/farmers/photo-farmer.png
       - images/splashlogo.png
+      - images/farmers/pending_header.png
+      - images/farmers/history_header.png
 
     fonts:
       - family: Poppins

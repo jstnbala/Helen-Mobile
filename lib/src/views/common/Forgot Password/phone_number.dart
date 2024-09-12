@@ -1,4 +1,4 @@
-// ignore_for_file:, 
+// ignore_for_file:,
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/common/Forgot%20Password/otp-page-forgot-pass.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -143,27 +143,33 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () async {
-                  final phoneNumberString = '+63${controller.text}';
-                  final UpdatePasswordApi updatePasswordApi = UpdatePasswordApi();
-                  // Call getAccount method to verify the phone number
-                  final data = await updatePasswordApi.getAccount(phoneNumberString);
-               
+                // Remove spaces from the phone number
+                final phoneNumberString = '+63${controller.text.replaceAll(' ', '')}';
+                final UpdatePasswordApi updatePasswordApi = UpdatePasswordApi();
 
-                    if (data != null) {
-                      // If the account exists, navigate to the OTP page
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OtpPage(phoneNumber: phoneNumberString, userId: data['id'], type: data['type']), // Pass only the number
-                        ),
-                      );
-                    } else {
-                      // Show an error message if the account is not found
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Phone number not found in the system')),
-                      );
-                    }
-                  },
+                // Call getAccount method to verify the phone number
+                final data = await updatePasswordApi.getAccount(phoneNumberString);
+
+                if (data != null) {
+                  // If the account exists, navigate to the OTP page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OtpPage(
+                        phoneNumber: phoneNumberString,
+                        userId: data['id'],
+                        type: data['type'],
+                      ),
+                    ),
+                  );
+                } else {
+                  // Show an error message if the account is not found
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Phone number not found in the system')),
+                  );
+                }
+              },
+
                 child: const Center(
                   child: Text(
                     'Send me the code',

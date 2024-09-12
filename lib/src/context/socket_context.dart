@@ -1,3 +1,5 @@
+// ignore_for_file: library_prefixes, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -69,7 +71,7 @@ class SocketProvider with ChangeNotifier {
 class SocketContextProvider extends StatelessWidget {
   final Widget child;
 
-  SocketContextProvider({required this.child});
+  const SocketContextProvider({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

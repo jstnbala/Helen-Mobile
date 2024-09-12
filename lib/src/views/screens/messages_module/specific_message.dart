@@ -1,4 +1,6 @@
 
+// ignore_for_file: unused_local_variable, library_private_types_in_public_api, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart'; // Import CachedNetworkImage
 import 'package:helen_app/src/services/get_messages_api.dart';
@@ -220,7 +222,7 @@ class _SpecificMessageState extends State<SpecificMessage> {
                         backgroundImage: CachedNetworkImageProvider(widget.senderProfile), // Cached network image
                         radius: 20,
                       ),
-                    if (!isSentByUser) SizedBox(width: 8),
+                    if (!isSentByUser) const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: isSentByUser

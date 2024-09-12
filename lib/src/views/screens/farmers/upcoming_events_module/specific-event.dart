@@ -3,11 +3,24 @@
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
 import 'dart:convert'; // For base64 decoding
+import 'package:intl/intl.dart'; // For date formatting
 
 class SpecificEvent extends StatelessWidget {
   final Event event;
 
   const SpecificEvent({super.key, required this.event});
+
+  // Helper method to format the date
+  String formatDate(String dateStr) {
+    final DateTime parsedDate = DateTime.parse(dateStr);
+    return DateFormat('MMMM d, yyyy').format(parsedDate);
+  }
+
+  // Helper method to format the time
+  String formatTime(String dateStr) {
+    final DateTime parsedTime = DateTime.parse(dateStr);
+    return DateFormat('h:mm a').format(parsedTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,57 +88,13 @@ class SpecificEvent extends StatelessWidget {
               textAlign: TextAlign.center, // Center the text within its container
             ),
             const SizedBox(height: 10.0),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Start Date: ${event.startDate}', // Start Date
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+            buildDetailRow(Icons.calendar_today, 'Start Date:', formatDate(event.startDate)),
             const SizedBox(height: 10.0),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'End Date: ${event.endDate}', // End Date
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+            buildDetailRow(Icons.calendar_today, 'End Date:', formatDate(event.endDate)),
             const SizedBox(height: 5.0),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Time: ${event.time}', // Event Time
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+            buildDetailRow(Icons.access_time, 'Time:', formatTime(event.startDate)),
             const SizedBox(height: 5.0),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Location: ${event.location}', // Event Location
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+            buildDetailRow(Icons.location_on, 'Location:', event.location),
             const SizedBox(height: 20.0),
             Text(
               event.description, // Event Description
@@ -140,6 +109,36 @@ class SpecificEvent extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildDetailRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.black, size: 20.0),
+        const SizedBox(width: 8.0),
+        Text(
+          '$label ', // Add a space after the label
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value, // Event value
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14.0,
+              fontWeight: FontWeight.normal,
+              color: Colors.black,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -42,43 +42,44 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
   }
 
   void _showPrivacyNotice() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          ),
-          backgroundColor: Colors.white,
-          contentPadding: const EdgeInsets.all(20.0),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Privacy Notice',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFCA771A),
-                  fontSize: 18.0,
-                ),
-                textAlign: TextAlign.center,
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
+        backgroundColor: Colors.white,
+        contentPadding: const EdgeInsets.all(20.0),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Privacy Notice',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFCA771A),
+                fontSize: 18.0,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                "We are committed to safeguarding your privacy and ensuring compliance with the Philippine Data Privacy Act of 2012. When you register, we collect personal information. We also gather usage data, and we use this information to create and manage your account, enhance your experience, communicate updates, and maintain app security. We may share your data with service providers to help operate our app and with legal authorities if required by law. You have the right to access, update, or request the deletion of your information and to opt out of marketing communications. We employ security measures to protect your data but cannot guarantee complete security. By registering, you consent to our data practices under the Data Privacy Act. If you have any questions, please contact us at opa_quezon@yahoo.com.",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Color(0xFF606060),
-                  fontSize: 14.0,
-                ),
-                textAlign: TextAlign.justify,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "We prioritize your privacy and comply with the Philippine Data Privacy Act of 2012. We collect personal and usage data to manage your account, improve your experience, and maintain security. We may share data with service providers and legal authorities if required. You can access, update, or delete your information and opt out of marketing. While we use security measures, complete protection can't be guaranteed. By registering, you agree to our data practices. Contact us at opa_quezon@yahoo.com for any questions.",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: Color(0xFF606060),
+                fontSize: 14.0,
               ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              textAlign: TextAlign.justify,
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   ElevatedButton(
                     onPressed: () {
@@ -86,53 +87,53 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFCA771A),
+                      backgroundColor: Colors.white,
+                      side: const BorderSide(color: Color(0xFFCA771A), width: 2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text(
-                        'I do not accept',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    child: const Text(
+                      'No I dont',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFCA771A),
                       ),
                     ),
                   ),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFCA771A),
+                      backgroundColor: Colors.white,
+                      side: const BorderSide(color: Color(0xFFCA771A), width: 2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text(
-                        'I accept',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    child: const Text(
+                      'Yes I do',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFCA771A),
                       ),
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   Future<void> _pickFile() async {
   final result = await FilePicker.platform.pickFiles(

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/get_notifications_api.dart'; // Import the GetNotifications class
 
@@ -5,6 +7,7 @@ class FarmerNotifPage extends StatefulWidget {
   const FarmerNotifPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _FarmerNotifPageState createState() => _FarmerNotifPageState();
 }
 
