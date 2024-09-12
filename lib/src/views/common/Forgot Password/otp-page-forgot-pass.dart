@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously, unused_import, prefer_const_declarations, avoid_print
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -277,7 +277,7 @@ class _OtpPageState extends State<OtpPage> {
  
             // OTP Fields
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center, // Center OTP fields
                children: [

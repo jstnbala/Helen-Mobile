@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -30,6 +28,21 @@ class _FarmerProductDetailState extends State<FarmerProductDetail> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine status color
+    Color statusColor;
+    switch (widget.status.toLowerCase()) {
+      case 'verified':
+        statusColor = Colors.green;
+        break;
+      case 'rejected':
+        statusColor = Colors.red;
+        break;
+      case 'pending':
+      default:
+        statusColor = const Color(0xFFCA771A);
+        break;
+    }
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 231, 157, 74),
       body: SafeArea(
@@ -73,11 +86,10 @@ class _FarmerProductDetailState extends State<FarmerProductDetail> {
 
             // Display the product image with border radius
             SizedBox(
-              height: 350.0, // Fixed height for the image section
+              height: MediaQuery.of(context).size.height * 0.4, // Dynamic height
               child: Center(
                 child: Container(
-                  width: 350.0,
-                  height: 300.0,
+                  width: MediaQuery.of(context).size.width * 0.8, // Dynamic width
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0), // Adjust the radius here
                     boxShadow: const [
@@ -128,16 +140,19 @@ class _FarmerProductDetailState extends State<FarmerProductDetail> {
                       children: [
                         const Icon(Icons.label, color: Color(0xFFCA771A)),
                         const SizedBox(width: 8.0),
-                        Text(
-                          widget.productName,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFCA771A),
+                        Expanded(
+                          child: Text(
+                            widget.productName,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFCA771A),
+                            ),
+                            overflow: TextOverflow.ellipsis, // Handle overflow
                           ),
                         ),
-                        const Spacer(),
+                        const SizedBox(width: 8.0),
                         Text(
                           "PHP ${widget.price}",
                           style: const TextStyle(
@@ -215,9 +230,9 @@ class _FarmerProductDetailState extends State<FarmerProductDetail> {
                     // Status Label
                     Center(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 120.0, vertical: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 10.0), // Adjusted padding
                         decoration: BoxDecoration(
-                          color: const Color(0xFFCA771A),
+                          color: statusColor, // Dynamic color based on status
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: Text(

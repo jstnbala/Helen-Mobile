@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, library_private_types_in_public_api, unused_element
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/get_conversations_api.dart';
