@@ -33,44 +33,6 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
     }
   }
 
-  List<String> _parseListString(String listString) {
-    // Remove the surrounding brackets and split by comma
-    String cleanedString = listString
-        .replaceAll('[', '')
-        .replaceAll(']', '')
-        .trim();
-
-    // Split by comma and trim whitespace
-    List<String> items = cleanedString
-        .split(',')
-        .map((item) => item.trim())
-        .where((item) => item.isNotEmpty)
-        .toList();
-
-    return items;
-  }
-
-  List<String> _processData(dynamic data) {
-    List<String> result = [];
-
-    if (data is List) {
-      for (var item in data) {
-        if (item is String) {
-          // Check if it's a string that looks like a list
-          if (item.startsWith('[') && item.endsWith(']')) {
-            result.addAll(_parseListString(item));
-          } else if (item.isNotEmpty) {
-            result.add(item);
-          }
-        }
-      }
-    } else if (data is String && data.isNotEmpty) {
-      result.add(data);
-    }
-
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
     return serviceInfo == null
@@ -146,31 +108,35 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
                         ),
                       ),
                       const SizedBox(height: 5.0),
-                      ..._processData(serviceInfo!['modeOfDelivery'])
-                          .map((item) => Padding(
-                                padding: const EdgeInsets.only(bottom: 5.0),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.local_shipping,
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.local_shipping,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: serviceInfo!['modeOfDelivery']
+                                  .map<Widget>((item) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 5.0),
+                                  child: Text(
+                                    '$item',
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18.0,
                                       color: Colors.white,
                                     ),
-                                    const SizedBox(width: 8.0),
-                                    Flexible(
-                                      child: Text(
-                                        '- $item',
-                                        style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 18.0,
-                                          color: Colors.white,
-                                        ),
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ))
-                          .toList(),
+                                    softWrap: true,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 const SizedBox(height: 15.0),
@@ -188,31 +154,31 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
                         ),
                       ),
                       const SizedBox(height: 5.0),
-                      ..._processData(serviceInfo!['modeOfPayment'])
-                          .map((item) => Padding(
-                                padding: const EdgeInsets.only(bottom: 5.0),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.attach_money,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(width: 8.0),
-                                    Flexible(
-                                      child: Text(
-                                        '- $item',
-                                        style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 18.0,
-                                          color: Colors.white,
-                                        ),
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                  ],
+                      ...serviceInfo!['modeOfPayment'].map<Widget>((item) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.attach_money,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 8.0),
+                              Flexible(
+                                child: Text(
+                                  '$item',
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18.0,
+                                    color: Colors.white,
+                                  ),
+                                  softWrap: true,
                                 ),
-                              ))
-                          .toList(),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
                     ],
                   ),
                 const SizedBox(height: 15.0),

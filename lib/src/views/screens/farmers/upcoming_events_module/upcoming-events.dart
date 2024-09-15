@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart'; // Import your service where `fetchUpcomingEvents` is defined
-import 'dart:convert'; // For base64 decoding
 import 'package:helen_app/src/views/screens/farmers/upcoming_events_module/specific-event.dart'; // Import the SpecificEvent widget
 import 'package:intl/intl.dart'; // For date formatting
+import 'package:cached_network_image/cached_network_image.dart';
 
 class UpcomingEvents extends StatefulWidget {
   const UpcomingEvents({super.key});
@@ -81,8 +81,6 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
                 final event = events[index];
 
                 // Decode the base64 image
-                final bytes = base64Decode(event.photo.split(',')[1]);
-
                 return GestureDetector(
                   onTap: () {
                     // Navigate to the SpecificEvent page with the selected event data
@@ -116,7 +114,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
                                   color: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(10.0),
                                   image: DecorationImage(
-                                    image: MemoryImage(bytes),
+                                    image: CachedNetworkImageProvider(event.photo), 
                                     fit: BoxFit.cover,
                                   ),
                                 ),

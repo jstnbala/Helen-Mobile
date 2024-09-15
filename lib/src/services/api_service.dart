@@ -103,10 +103,26 @@ Future<String?> sendModeOfServiceData({
       );
     }
 
-    // Add other fields to the request
-    modeOfServiceData.forEach((key, value) {
-      request.fields[key] = value.toString();
-    });
+    // Add farmLocation field
+    if (modeOfServiceData.containsKey('farmLocation')) {
+      request.fields['farmLocation'] = modeOfServiceData['farmLocation'].toString();
+    }
+
+    // Add modeOfDelivery fields
+    if (modeOfServiceData.containsKey('modeOfDelivery')) {
+      final modeOfDeliveryList = modeOfServiceData['modeOfDelivery'] as List<String>;
+      for (int i = 0; i < modeOfDeliveryList.length; i++) {
+        request.fields['modeOfDelivery[$i]'] = modeOfDeliveryList[i];
+      }
+    }
+
+    // Add modeOfPayment fields
+    if (modeOfServiceData.containsKey('modeOfPayment')) {
+      final modeOfPaymentList = modeOfServiceData['modeOfPayment'] as List<String>;
+      for (int i = 0; i < modeOfPaymentList.length; i++) {
+        request.fields['modeOfPayment[$i]'] = modeOfPaymentList[i];
+      }
+    }
 
     print('Sending request...');
     final response = await request.send();
@@ -130,8 +146,6 @@ Future<String?> sendModeOfServiceData({
 }
 
 
-// Dropdown Registration Farmer Organization
-
 Future<List<String>> fetchOrganizations() async {
   try {
     final response = await http.get(Uri.parse('https://helen-server-lmp4.onrender.com/api/organizations'));
@@ -152,8 +166,6 @@ Future<List<String>> fetchOrganizations() async {
     return [];
   }
 }
-
-// Upcoming Events
 
 class Event {
   final String startDate;
@@ -203,7 +215,7 @@ Future<List<Event>> fetchUpcomingEvents() async {
     return [];
   }
 
-  final url = 'https://helen-server-lmp4.onrender.com/api/organizations/$OrgName/events';
+  final url = 'https://helen-server-lmp4.onrender.com/api/events?orgname=OPA&orgname=$OrgName';
 
   try {
     final response = await http.get(Uri.parse(url), headers: {
@@ -287,8 +299,6 @@ Future<bool> addProduct({
   }
 }
 
-// Buyer Side
-
 Future<bool> registerBuyer({
   required String username,
   required String fullName,
@@ -344,9 +354,6 @@ Future<bool> registerBuyer({
     return false;
   }
 }
-
-
-// Login Farmer and Buyer 
 
 Future<bool> login({
   required String username,

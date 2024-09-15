@@ -506,8 +506,8 @@ Future<void> _pickFile({required bool isGcash}) async {
                         return;
                       }
 
-                      List<String> modeOfDelivery = [''];
-                      List<String> modeOfPayment = [''];
+                      List<String> modeOfDelivery = [];
+                      List<String> modeOfPayment = [];
 
                       // Check if the `isPickUpChecked` is true
                     if (isPickUpChecked) {
@@ -546,6 +546,8 @@ Future<void> _pickFile({required bool isGcash}) async {
                         'modeOfPayment': modeOfPayment,    // List of payment modes''
 
                       };
+
+                      print('modeOfService ${modeOfServiceData}');
                       
                       Navigator.push(
                         context,
