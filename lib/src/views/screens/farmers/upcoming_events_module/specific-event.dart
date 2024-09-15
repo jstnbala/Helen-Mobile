@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/api_service.dart';
-import 'dart:convert'; // For base64 decoding
 import 'package:intl/intl.dart'; // For date formatting
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class SpecificEvent extends StatelessWidget {
   final Event event;
@@ -25,7 +26,7 @@ class SpecificEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Decode the base64 image
-    final bytes = base64Decode(event.photo.split(',')[1]);
+
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +71,7 @@ class SpecificEvent extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(12.0),
                   image: DecorationImage(
-                    image: MemoryImage(bytes),
+                    image: CachedNetworkImageProvider(event.photo), 
                     fit: BoxFit.cover,
                   ),
                 ),
