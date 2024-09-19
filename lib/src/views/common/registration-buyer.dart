@@ -537,7 +537,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                         MaterialPageRoute(
                           builder: (context) => OtpPage(
                             registrationData: registrationData,
-                             modeOfServiceData: {},  // Add the appropriate service data here if needed
+                             modeOfServiceData: const {},  // Add the appropriate service data here if needed
                             businessPermitFile: _businessPermitFile, 
                             type: 'buyer', // Assuming the business permit file is the imageFile
                           ),

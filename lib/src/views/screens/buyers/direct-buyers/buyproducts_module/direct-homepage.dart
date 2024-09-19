@@ -216,7 +216,7 @@ class _HomePageBuyerState extends State<HomePageBuyer> {
                                   ),
                                   const SizedBox(height: 3),
                                   Text(
-                                    'Quantity: $quantity',
+                                    'Unit: $quantity',
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color: Color(0xFFCA771A),
