@@ -49,7 +49,7 @@ class _OtpPageState extends State<OtpPage> {
     super.initState();
     // Automatically send OTP when the page is loaded
     _sendOtp();
-     _setupOtpListeners();
+    _setupOtpListeners();
   }
 
     void _setupOtpListeners() {

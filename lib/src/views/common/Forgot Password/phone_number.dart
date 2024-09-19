@@ -1,4 +1,4 @@
-// ignore_for_file:,
+// ignore_for_file:,, use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/common/Forgot%20Password/otp-page-forgot-pass.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -153,6 +153,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 if (data != null) {
                   // If the account exists, navigate to the OTP page
                   Navigator.push(
+                    // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
                       builder: (context) => OtpPage(
@@ -164,8 +165,9 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                   );
                 } else {
                   // Show an error message if the account is not found
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Phone number not found in the system')),
+                    const SnackBar(content: Text('Phone number not found in the system')),
                   );
                 }
               },

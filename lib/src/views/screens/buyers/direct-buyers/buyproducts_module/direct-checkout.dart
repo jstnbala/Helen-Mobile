@@ -1,24 +1,38 @@
 // ignore_for_file: file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-qr_page.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({super.key});
+  final String? productPic;
+  final String? productName;
+  final String? quantity;
+  final String? price;
+  final Map<String, dynamic>? serviceInfo; // Add serviceInfo parameter
+
+  const CheckoutPage({
+    super.key,
+    this.productPic,
+    this.productName,
+    this.quantity,
+    this.price,
+    this.serviceInfo, // Initialize serviceInfo
+  });
 
   @override
   _CheckoutPageState createState() => _CheckoutPageState();
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  bool isCashSelected = false;
-  bool isGcashSelected = false;
-  bool isBankTransferSelected = false;
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
 
   @override
   Widget build(BuildContext context) {
+
+     final List<String>? paymentModes = widget.serviceInfo?['modeOfPayment']?.cast<String>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFCA771A),
@@ -56,15 +70,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
               const SizedBox(height: 5),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
-                child: Image.asset(
-                  'images/buyers/tomato.png',
+                child: Image.network(
+                  widget.productPic ?? 'https://via.placeholder.com/150', // Placeholder image in case productPic is null
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.2,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(height: 20),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
@@ -72,8 +86,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Tomato",
-                          style: TextStyle(
+                          widget.productName ?? 'Unknown Product', // Default value if productName is null
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -81,8 +95,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                         ),
                         Text(
-                          "Kilos",
-                          style: TextStyle(
+                          widget.quantity ?? 'Unknown Quantity', // Default value if quantity is null
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -93,8 +107,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ),
                   Text(
-                    "P00.00",
-                    style: TextStyle(
+                    "PHP ${widget.price ?? '0.00'}", // Default value if price is null
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -104,62 +118,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Quantity",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[300],
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.remove, color: Colors.black),
-                          onPressed: () {
-                            // Decrease quantity
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        "1",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[300],
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.add, color: Colors.black),
-                          onPressed: () {
-                            // Increase quantity
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Pickup Address:",
+                  "Mode of Delivery:",
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
@@ -168,30 +130,33 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
               ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "123 Lucban Trading Post, Brgy 23, Quezon Province",
+              const SizedBox(height: 8.0),
+              if (widget.serviceInfo != null && widget.serviceInfo!['modeOfDelivery'] != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: (widget.serviceInfo!['modeOfDelivery'] as List<dynamic>)
+                      .map<Widget>((item) => Padding(
+                            padding: const EdgeInsets.only(bottom: 5.0),
+                            child: Text(
+                              '$item',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                )
+              else
+                const Text(
+                  'No delivery options available',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
-                    color: Colors.black,
+                    color: Colors.grey,
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Pickup Date & Time:",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Color(0xFFCA771A),
-                  ),
-                ),
-              ),
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -236,11 +201,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+               const SizedBox(height: 20),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Payment Options",
+                  "Available Mode of Payment:",
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
@@ -250,91 +215,71 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isCashSelected ? const Color(0xFFCA771A) : Colors.white,
-                        side: const BorderSide(color: Color(0xFFCA771A)),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isCashSelected = true;
-                          isGcashSelected = false;
-                          isBankTransferSelected = false;
-                        });
-                      },
-                      child: Text(
-                        "Cash",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: isCashSelected ? Colors.white : const Color(0xFFCA771A),
-                        ),
-                      ),
-                    ),
+              
+              // Display buttons for the available modes of payment
+              if (paymentModes != null && paymentModes.isNotEmpty)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: paymentModes.map((mode) {
+                    return _buildPaymentButton(context, mode);
+                  }).toList(),
+                )
+              else
+                const Text(
+                  'No payment options available',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: Colors.grey,
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isGcashSelected ? const Color(0xFFCA771A) : Colors.white,
-                        side: const BorderSide(color: Color(0xFFCA771A)),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isCashSelected = false;
-                          isGcashSelected = true;
-                          isBankTransferSelected = false;
-                        });
-                      },
-                      child: Text(
-                        "GCash",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: isGcashSelected ? Colors.white : const Color(0xFFCA771A),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isBankTransferSelected ? const Color(0xFFCA771A) : Colors.white,
-                        side: const BorderSide(color: Color(0xFFCA771A)),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isCashSelected = false;
-                          isGcashSelected = false;
-                          isBankTransferSelected = true;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Text(
-                          "Bank Transfer",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: isBankTransferSelected ? Colors.white : const Color(0xFFCA771A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              if (isCashSelected) buildCashSection(),
+                ),
+              const SizedBox(height: 20), // Space provided but no buttons here
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build payment buttons based on mode
+  Widget _buildPaymentButton(BuildContext context, String mode) {
+    return ElevatedButton(
+      onPressed: () {
+        if (mode == 'GCash') {
+          // Navigate to QR page with the GCash QR file
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DirectQRPage(
+                qrFilePath: widget.serviceInfo?['gcashQrFile'], // Pass the GCash QR file
+              ),
+            ),
+          );
+        } else if (mode == 'BankTransfer') {
+          // Navigate to QR page with the Bank Transfer QR file
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DirectQRPage(
+                qrFilePath: widget.serviceInfo?['bankTransferQrFile'], // Pass the Bank Transfer QR file
+              ),
+            ),
+          );
+        }
+        // Handle Cash separately, you can add other logic here if needed
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white, // White button background
+        side: const BorderSide(color: Color(0xFFCA771A)), // Border color
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      ),
+      child: Text(
+        mode,
+        style: const TextStyle(
+          color: Color(0xFFCA771A), // Text color
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
         ),
       ),
     );
@@ -364,73 +309,5 @@ class _CheckoutPageState extends State<CheckoutPage> {
         selectedTime = pickedTime;
       });
     }
-  }
-
-  Widget buildCashSection() {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        buildSummaryRow("Price:", "25.00", isTotal: false, color: const Color(0xFFCA771A)),
-        buildSummaryRow("Quantity:", "10 kilos", isTotal: false, color: const Color(0xFFCA771A)),
-        buildSummaryRow("Total:", "250.00", isTotal: true, color: const Color(0xFFCA771A)),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildActionButton("Cancel"),
-            buildActionButton("Confirm"),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget buildSummaryRow(String label, String amount, {bool isTotal = false, Color color = Colors.black}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: isTotal ? 20 : 14,
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: color,
-          ),
-        ),
-        Text(
-          amount,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: isTotal ? 20 : 14,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildActionButton(String text) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        side: const BorderSide(color: Color(0xFFCA771A)),
-      ),
-      onPressed: () {
-        setState(() {
-          // Handle button press
-        });
-      },
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: Color(0xFFCA771A),
-        ),
-      ),
-    );
   }
 }

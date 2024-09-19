@@ -1,11 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously, unnecessary_null_comparison, prefer_const_declarations, avoid_print
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:helen_app/src/views/common/login.dart';
 import 'dart:io';
-
+import 'dart:math'; // For generating OTP
 import 'package:helen_app/src/services/api_service.dart';
+
 
 class OtpPage extends StatefulWidget {
   final Map<String, String> registrationData;
@@ -35,6 +36,8 @@ class OtpPage extends StatefulWidget {
 }
  
 class _OtpPageState extends State<OtpPage> {
+
+
   final TextEditingController _otpController1 = TextEditingController();
   final TextEditingController _otpController2 = TextEditingController();
   final TextEditingController _otpController3 = TextEditingController();
@@ -56,7 +59,7 @@ class _OtpPageState extends State<OtpPage> {
     super.initState();
     // Automatically send OTP when the page is loaded
     _sendOtp();
-     _setupOtpListeners();
+    _setupOtpListeners();
   }
 
     void _setupOtpListeners() {
@@ -116,17 +119,8 @@ class _OtpPageState extends State<OtpPage> {
     _focusNode6.dispose();
     super.dispose();
   }
-  
-  void _sendOtp() {
-      final phoneNumber = '+1 234-567-8999';
-      print('phoneNumber: $phoneNumber');
-      if (phoneNumber != null && phoneNumber.isNotEmpty) {
-        sendOtp(phoneNumber);
-      } else {
-        print('Phone number is not provided.');
-      }
-  }
 
+  
   String _obfuscatePhoneNumber(String? phoneNumber) {
     if (phoneNumber == null || phoneNumber.length < 7) {
       // Handle cases where the phone number is too short or null to obfuscate
@@ -138,63 +132,73 @@ class _OtpPageState extends State<OtpPage> {
     return '$firstPart$middlePart$lastPart';
   }
 
-  Future<void> sendOtp(String? phoneNumber) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    await auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-    
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // Auto-retrieval or instant verification succeeded
-        await auth.signInWithCredential(credential);
-        // Navigate to next page if needed
-      },
-      
-      verificationFailed: (FirebaseAuthException e) {
-        // Handle error
-        if (e.code == 'invalid-phone-number') {
-          print('The provided phone number is not valid.');
-        } else {
-          print('Something went wrong: ${e.message}');
-        }
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        // Save the verificationId for later when verifying OTP
-        setState(() {
-          _verificationId = verificationId;
-        });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('OTP has been sent successfully!'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        // Handle timeout
-      },
-    );
+  
+  void _sendOtp() {
+      final phoneNumber = widget.registrationData['contactNo'];
+      print('phoneNumber: $phoneNumber');
+      if (phoneNumber != null && phoneNumber.isNotEmpty) {
+        sendOtp(phoneNumber);
+      } else {
+        print('Phone number is not provided.');
+      }
   }
 
-  Future<bool> verifyOtp(String otp) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: _verificationId,
-      smsCode: otp,
+    // Generate a random OTP
+  String generateOtp({int length = 6}) {
+    final random = Random();
+    final otp = List.generate(length, (_) => random.nextInt(10)).join();
+    return otp;
+  }
+
+  
+
+ Future<void> sendOtp(String? phoneNumber) async {
+    if (phoneNumber == null || phoneNumber.isEmpty) {
+      print('Invalid phone number');
+      return;
+    }
+
+    final otp = generateOtp(); // Generate the OTP
+    final message = "Your OTP code for Helen is: $otp"; // The SMS message with the OTP
+
+    // Save OTP for later verification (you might want to store this in a backend or in a secure place)
+    _verificationId = otp;
+
+    final response = await http.post(
+      Uri.parse('https://api.semaphore.co/api/v4/messages'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'apikey': 'b95d4ce6dca75dcd54cea894194715f1',
+        'number': phoneNumber,
+        'message': message,
+    // 'sendername': senderName, // You may omit this if you're using a default sender name
+      },
     );
-    
-    try {
-      await auth.signInWithCredential(credential);
-      // Navigate to next page after successful verification
-      return true;
-    } catch (e) {
-      // Handle error, e.g., invalid OTP
-      print('Error verifying OTP: $e');
-      return false;
+    print(response.body);
+    if (response.statusCode == 200) {
+      // OTP sent successfully
+      print('OTP has been sent successfully!');
+      // You can display a Snackbar or toast to notify the user
+    } else {
+      print('Failed to send OTP: ${response.body}');
     }
   }
 
+ bool verifyOtp(String enteredOtp) {
+    if (_verificationId == null) {
+      print('No OTP to verify');
+      return false;
+    }
+    if (enteredOtp == _verificationId) {
+      print('OTP verification successful!');
+      return true;
+    } else {
+      print('OTP verification failed!');
+      return false;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -310,7 +314,7 @@ class _OtpPageState extends State<OtpPage> {
                 children: [
                   TextButton(
                     onPressed: () {
-                        sendOtp('+1 234-567-8999');
+                        sendOtp(widget.registrationData['contactNo']);
                     },
                     child: const Text(
                       'Resend Code',

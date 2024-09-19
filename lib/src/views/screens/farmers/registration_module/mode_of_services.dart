@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, dead_code
+// ignore_for_file: library_private_types_in_public_api, dead_code, avoid_print, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -537,6 +537,17 @@ Future<void> _pickFile({required bool isGcash}) async {
                     if (isCashChecked) {
                       modeOfPayment.add("Cash");
                     }
+
+                    
+                    if (isGcashChecked) {
+                      modeOfPayment.add("GCash");
+                    }
+
+                        
+                    if (isBankTransferChecked) {
+                      modeOfPayment.add("BankTransfer");
+                    }
+
 
 
 

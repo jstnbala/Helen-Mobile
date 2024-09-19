@@ -1,11 +1,15 @@
-// ignore_for_file: file_names, use_build_context_synchronously, avoid_print
+// ignore_for_file: file_names, avoid_print, use_build_context_synchronously
+
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/services/get_farmer_api.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-checkout.dart';
 import 'package:helen_app/src/views/screens/messages_module/specific_message.dart';
+import 'package:helen_app/src/services/get_serviceInfo_api.dart';
+import 'package:logger/logger.dart'; // Import the logger package
 
-class ProductDetailsClass extends StatelessWidget {
+class ProductDetailsClass extends StatefulWidget {
   final String productPic;
   final String productName;
   final String quantity;
@@ -26,6 +30,52 @@ class ProductDetailsClass extends StatelessWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
+  _ProductDetailsClassState createState() => _ProductDetailsClassState();
+}
+
+class _ProductDetailsClassState extends State<ProductDetailsClass> {
+  // Secure storage instance
+  final storage = const FlutterSecureStorage();
+  Map<String, dynamic>? serviceInfo;
+
+  final Logger logger = Logger();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _loadServiceInfo(); // Fetch service info when the widget is initialized
+  }
+
+
+  Future<void> _loadServiceInfo() async {
+    try {
+      // Fetch the farmer's data using the API
+      final farmer = await GetFarmerApi().getFarmer(widget.farmerName);
+      
+      if (farmer != null && farmer['serviceInfo'] != null) {
+        // Fetch the service info using the serviceInfo field
+        final jsonString = await GetServiceInfoAPI().getServiceInfo(farmer['serviceInfo']);
+
+        if (jsonString != null && jsonString.isNotEmpty) {
+          setState(() {
+            serviceInfo = jsonString; // Decode JSON data
+            logger.i('Loaded serviceInfo: $serviceInfo'); // Info log
+          });
+        } else {
+          logger.w('serviceInfo is null or empty'); // Warning log
+        }
+      } else {
+        logger.w('Farmer or serviceInfo is null'); // Warning log
+      }
+    } catch (e) {
+      logger.e('Error loading service info $e'); // Error log with stack trace
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
@@ -39,9 +89,9 @@ class ProductDetailsClass extends StatelessWidget {
             ),
             expandedHeight: 300.0,
             flexibleSpace: FlexibleSpaceBar(
-              background: productPic.isNotEmpty
+              background: widget.productPic.isNotEmpty
                   ? Image.network(
-                      productPic,
+                      widget.productPic,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
@@ -87,7 +137,7 @@ class ProductDetailsClass extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        productName,
+                                        widget.productName,
                                         style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 20.0,
@@ -96,7 +146,7 @@ class ProductDetailsClass extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        quantity,
+                                        widget.quantity,
                                         style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 16.0,
@@ -106,7 +156,7 @@ class ProductDetailsClass extends StatelessWidget {
                                     ],
                                   ),
                                   Text(
-                                    'PHP $price',
+                                    'PHP ${widget.price}',
                                     style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 24.0,
@@ -118,92 +168,128 @@ class ProductDetailsClass extends StatelessWidget {
                               ),
                             ),
                             const Divider(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            // Farmer Information Section
+                            const Row(
                               children: [
-                                const Center(
-                                  child: Text(
-                                    'Farmer Information',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFCA771A),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8.0),
+                                Icon(Icons.person, color: Color(0xFFCA771A), size: 20.0),
+                                SizedBox(width: 8.0),
                                 Text(
-                                  'Name: $farmerName',
-                                  style: const TextStyle(
+                                  'Farmer Information',
+                                  style: TextStyle(
                                     fontFamily: 'Poppins',
-                                    fontSize: 14.0,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 4.0),
-                                Text(
-                                  'Organization: $organization',
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14.0,
-                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFCA771A),
                                   ),
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              'Farmer Name: ${widget.farmerName}',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              'Organization: ${widget.organization}',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
+                            ),
                             const Divider(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            // Product Details Section
+                            const Row(
                               children: [
-                                const Center(
-                                  child: Text(
-                                    'Product Details',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFCA771A),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8.0),
+                                Icon(Icons.info, color: Color(0xFFCA771A), size: 20.0),
+                                SizedBox(width: 8.0),
                                 Text(
-                                  productDetails,
-                                  style: const TextStyle(
+                                  'Product Details',
+                                  style: TextStyle(
                                     fontFamily: 'Poppins',
-                                    fontSize: 14.0,
-                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFCA771A),
                                   ),
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              widget.productDetails,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
+                            ),
                             const Divider(),
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                           // Mode of Delivery Section
+                            const Row(
                               children: [
-                                Center(
-                                  child: Text(
-                                    'Mode of Delivery',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFCA771A),
-                                    ),
+                                Icon(Icons.delivery_dining, color: Color(0xFFCA771A), size: 20.0),
+                                SizedBox(width: 8.0),
+                                Text(
+                                  'Mode of Delivery',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFCA771A),
                                   ),
                                 ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  'Lorem Ipsum is simply dummy text of the printing and typesetting',
+                              ],
+                            ),
+                            const SizedBox(height: 8.0),
+
+                            // Check if the serviceInfo is still being fetched
+                            if (serviceInfo == null)
+                              // Show a loading indicator while the serviceInfo is being loaded
+                              const Center(
+                                child: Text(
+                                  'Loading delivery options...',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14.0,
-                                    color: Colors.black,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                              ],
-                            ),
+                              )
+                            else if (serviceInfo!['modeOfDelivery'] != null)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: (serviceInfo!['modeOfDelivery'] as List<dynamic>)
+                                    .map<Widget>((item) => Padding(
+                                          padding: const EdgeInsets.only(bottom: 5.0),
+                                          child: Text(
+                                            '$item',
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 14.0,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                              )
+                            else
+                              // If no delivery options are available
+                              const Center(
+                                child: Text(
+                                  'No delivery options available',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14.0,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+
                             const SizedBox(height: 20.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,14 +297,17 @@ class ProductDetailsClass extends StatelessWidget {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFCA771A),
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: const Color(0xFFCA771A),
+                                      side: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30.0),
                                       ),
                                     ),
                                     onPressed: () async {
                                       // Get the farmer data by awaiting the API call
-                                      Map<String, dynamic>? farmer = await GetFarmerApi().getFarmer(farmerName);
+                                      Map<String, dynamic>? farmer =
+                                          await GetFarmerApi().getFarmer(widget.farmerName);
 
                                       // Check if a farmer was found
                                       if (farmer != null) {
@@ -243,7 +332,7 @@ class ProductDetailsClass extends StatelessWidget {
                                         fontFamily: 'Poppins',
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: Color(0xFFCA771A),
                                       ),
                                     ),
                                   ),
@@ -252,15 +341,26 @@ class ProductDetailsClass extends StatelessWidget {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFCA771A),
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: const Color(0xFFCA771A),
+                                      side: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30.0),
                                       ),
                                     ),
                                     onPressed: () {
+                                      // Passing product details to the checkout page
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => const CheckoutPage()),
+                                        MaterialPageRoute(
+                                          builder: (context) => CheckoutPage(
+                                            productPic: widget.productPic,
+                                            productName: widget.productName,
+                                            quantity: widget.quantity,
+                                            price: widget.price,
+                                            serviceInfo: serviceInfo,
+                                          ),
+                                        ),
                                       );
                                     },
                                     child: const Text(
@@ -269,7 +369,7 @@ class ProductDetailsClass extends StatelessWidget {
                                         fontFamily: 'Poppins',
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: Color(0xFFCA771A),
                                       ),
                                     ),
                                   ),
