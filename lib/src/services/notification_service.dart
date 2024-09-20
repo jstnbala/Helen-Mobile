@@ -11,6 +11,7 @@ class NotificationService {
       badge: true,
       sound: true,
     );
+    
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       logger.i('User granted permission');

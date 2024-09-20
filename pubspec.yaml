@@ -31,12 +31,24 @@
     firebase_analytics: ^10.8.0
     flutter_local_notifications: ^17.2.2
     skeleton_loader: ^2.0.0+4
+    skeletonizer: ^1.4.2
+    dio: ^5.7.0
+    path_provider: ^2.1.4
+    permission_handler: ^11.3.1
+    device_info_plus: ^10.1.2
+    
 
     
   dev_dependencies:
     flutter_test:
       sdk: flutter
     flutter_lints: ^2.0.0
+    flutter_launcher_icons: ^0.13.1
+
+
+  flutter_icons:
+    android: true
+    image_path: "images/app_logo.png" # Path to your icon file
 
   flutter:
     uses-material-design: true

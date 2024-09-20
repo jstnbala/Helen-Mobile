@@ -8,7 +8,7 @@ import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_mod
 import 'package:helen_app/src/views/screens/messages_module/specific_message.dart';
 import 'package:helen_app/src/services/get_serviceInfo_api.dart';
 import 'package:logger/logger.dart'; // Import the logger package
-
+import 'package:skeletonizer/skeletonizer.dart';
 class ProductDetailsClass extends StatefulWidget {
   final String productPic;
   final String productName;
@@ -40,7 +40,7 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
   Map<String, dynamic>? serviceInfo;
 
   final Logger logger = Logger();
-
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -71,7 +71,13 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
       }
     } catch (e) {
       logger.e('Error loading service info $e'); // Error log with stack trace
+    } finally {
+    if (mounted) { // Check if the widget is still mounted
+      setState(() {
+        isLoading = false; // Stop loading
+      });
     }
+  }
   }
 
 
@@ -107,7 +113,9 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                Container(
+                Skeletonizer(
+                  enabled: isLoading,
+                  child: Container(
                   decoration: const BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.only(
@@ -128,6 +136,7 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const Divider(),
+                            
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: Row(
@@ -382,6 +391,8 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
                     ),
                   ),
                 ),
+                )
+                
               ],
             ),
           ),
