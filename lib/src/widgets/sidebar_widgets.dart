@@ -113,70 +113,72 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
     );
   }
 
- void _showLogoutDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text(
-          "Do you want to Logout?",
-          style: TextStyle(
-            color: Color(0xFFCA771A),
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: const Color(0xFFCA771A),
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Do you want to Logout?",
+            style: TextStyle(
+              color: Color(0xFFCA771A),
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
             ),
-            onPressed: () {
-              Navigator.of(context).pop(); // Dismiss the dialog
-            },
-            child: const Text(
-              "Cancel",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFFCA771A),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+              child: const Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: const Color(0xFFCA771A),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop(); // Dismiss the dialog
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFFCA771A),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop(); // Dismiss the dialog
 
-              // Ensure navigation happens after the dialog is dismissed
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (mounted) {
-                  // Disconnect the socket before navigating
-                  final socketProvider = Provider.of<SocketProvider>(context, listen: false);
-                  socketProvider.disconnectSocket();
+                // Clear secure storage
+                await storage.deleteAll();
 
-                  Navigator.of(context).popUntil((route) => route.isFirst); // Clear back stack
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                }
-              });
-            },
-            child: const Text(
-              "Confirm",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
+                // Ensure navigation happens after the dialog is dismissed
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    // Disconnect the socket before navigating
+                    final socketProvider = Provider.of<SocketProvider>(context, listen: false);
+                    socketProvider.disconnectSocket();
+
+                    Navigator.of(context).popUntil((route) => route.isFirst); // Clear back stack
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                    );
+                  }
+                });
+              },
+              child: const Text(
+                "Confirm",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+          ],
+        );
+      },
+    );
+  }
 }

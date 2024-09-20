@@ -2,7 +2,10 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/views/common/login.dart';
+import 'package:helen_app/src/views/common/navbar.dart'; // Adjust the import according to your project structure
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -11,14 +14,26 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final storage = const FlutterSecureStorage(); // Initialize secure storage
+
   @override
   void initState() {
     super.initState();
-    // Navigate to LoginPage after 5 seconds
-    Timer(const Duration(seconds: 8), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+    // Navigate to the appropriate page after 5 seconds
+    Timer(const Duration(seconds: 6), () async {
+      final userId = await storage.read(key: 'id'); // Check for stored value
+      print("User ID: $userId"); 
+      if (userId != null) {
+        // If storage is not empty, navigate to NavBar
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const NavBar()),
+        );
+      } else {
+        // If storage is empty, navigate to LoginPage
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+      }
     });
   }
 

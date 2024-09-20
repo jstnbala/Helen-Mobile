@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-product_details.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:helen_app/src/services/fetch_org_api.dart';
 
 class HomePageBuyer extends StatefulWidget {
@@ -101,156 +101,176 @@ class _HomePageBuyerState extends State<HomePageBuyer> {
     return priceData.toString();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _searchController,
-              style: const TextStyle(color: Color(0xFFCA771A)),
-              decoration: InputDecoration(
-                hintText: 'Search Here...',
-                hintStyle: const TextStyle(
-                  color: Color.fromARGB(255, 135, 135, 135),
-                  fontFamily: 'Poppins',
-                ),
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFCA771A), // Outline border color
-                  ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFCA771A), // Focused border color
-                  ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          TextField(
+            controller: _searchController,
+            style: const TextStyle(color: Color(0xFFCA771A)),
+            decoration: InputDecoration(
+              hintText: 'Search Here...',
+              hintStyle: const TextStyle(
+                color: Color.fromARGB(255, 135, 135, 135),
+                fontFamily: 'Poppins',
+              ),
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
                   color: Color(0xFFCA771A),
                 ),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xFFCA771A),
+                ),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              prefixIcon: const Icon(
+                Icons.search,
+                color: Color(0xFFCA771A),
               ),
             ),
-            const SizedBox(height: 20), // Adding space between search bar and cards
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator()) // Show loading indicator while data is being fetched
-                  : _filteredProducts.isEmpty
-                      ? const Center(child: Text('No available agricultural products found.'))
-                      : GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                          ),
-                      itemCount: _filteredProducts.length,
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: _isLoading
+                ? Skeletonizer(
+                    // Adjust the height and width as needed
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: 4, // Number of skeletons to show
                       itemBuilder: (context, index) {
-                        final product = _filteredProducts[index];
-                        final productPic = product['ProductPic'];
-                        final productName = product['ProductName'] ?? 'Unnamed Product';
-                        final quantity = '${product['Inventory'] ?? 0} ${product['Unit'] ?? ''}';
-                        final price = extractDecimalValue(product['Price']);
-                        final productDetails = product['ProductDetails'] ?? 'No details available';
-                        final farmerName = product['FarmerName'] ?? 'Unknown Farmer';
-                        final orgname= product['OrgName'] ?? 'Unknown Organization';
-
-                         return SizedBox(
-                          height: 250, // Fixed height for the card
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProductDetailsClass(
-                                      productPic: productPic,
-                                      productName: productName,
-                                      quantity: quantity,
-                                      price: price,
-                                      productDetails: productDetails,
-                                      farmerName: farmerName,
-                                      organization: orgname,
-                                    ),
-                                  ),
-                                );
-                              },
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  productPic.isNotEmpty
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(8.0),
-                                          child: Image.network(
-                                            productPic,
-                                            width: double.infinity,
-                                            height: 120, // Height for the image
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                      : const Icon(Icons.image, size: 120, color: Colors.grey),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    productName,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Color(0xFFCA771A),
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 3),
-                                  Text(
-                                    'Unit: $quantity',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xFFCA771A),
-                                      fontFamily: 'Poppins',
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Price: PHP $price',
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      color: Color(0xFFCA771A),
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        return Container(
+                          height: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         );
                       },
                     ),
+                  )
+                : _filteredProducts.isEmpty
+                    ? const Center(child: Text('No available agricultural products found.'))
+                    : GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: _filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = _filteredProducts[index];
+                          final productPic = product['ProductPic'];
+                          final productName = product['ProductName'] ?? 'Unnamed Product';
+                          final quantity = '${product['Inventory'] ?? 0} ${product['Unit'] ?? ''}';
+                          final price = extractDecimalValue(product['Price']);
+                          final productDetails = product['ProductDetails'] ?? 'No details available';
+                          final farmerName = product['FarmerName'] ?? 'Unknown Farmer';
+                          final orgname = product['OrgName'] ?? 'Unknown Organization';
+
+                          return SizedBox(
+                            height: 250,
+                            child: Card(
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailsClass(
+                                        productPic: productPic,
+                                        productName: productName,
+                                        quantity: quantity,
+                                        price: price,
+                                        productDetails: productDetails,
+                                        farmerName: farmerName,
+                                        organization: orgname,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      productPic.isNotEmpty
+                                          ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(8.0),
+                                              child: Image.network(
+                                                productPic,
+                                                width: double.infinity,
+                                                height: 120,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : const Icon(Icons.image, size: 120, color: Colors.grey),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        productName,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Color(0xFFCA771A),
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 3),
+                                      Text(
+                                        'Unit: $quantity',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xFFCA771A),
+                                          fontFamily: 'Poppins',
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        'Price: PHP $price',
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Color(0xFFCA771A),
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                   ),
-                ],
-              ),
+              ],
             ),
-          );
-        }
+          ),
+  ); 
+}
 
   @override
   void dispose() {

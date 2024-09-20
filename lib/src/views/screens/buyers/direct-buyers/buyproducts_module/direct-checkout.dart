@@ -5,18 +5,18 @@ import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_mod
 import 'package:intl/intl.dart'; // For date formatting
 
 class CheckoutPage extends StatefulWidget {
-  final String? productPic;
-  final String? productName;
-  final String? quantity;
-  final String? price;
+  final String productPic;
+  final String productName;
+  final String quantity;
+  final String price;
   final Map<String, dynamic>? serviceInfo; // Add serviceInfo parameter
 
   const CheckoutPage({
     super.key,
-    this.productPic,
-    this.productName,
-    this.quantity,
-    this.price,
+    required this.productPic,
+    required this.productName,
+    required this.quantity,
+    required this.price,
     this.serviceInfo, // Initialize serviceInfo
   });
 
@@ -25,13 +25,12 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
+  String? _selectedDeliveryOption;
+  String? _selectedPaymentOption; // Add this line to track selected payment option
 
   @override
   Widget build(BuildContext context) {
-
-     final List<String>? paymentModes = widget.serviceInfo?['modeOfPayment']?.cast<String>();
+    final List<String>? paymentModes = widget.serviceInfo?['modeOfPayment']?.cast<String>();
 
     return Scaffold(
       appBar: AppBar(
@@ -60,254 +59,311 @@ class _CheckoutPageState extends State<CheckoutPage> {
         ),
         actions: const [SizedBox(width: 56)],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 5),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Image.network(
-                  widget.productPic ?? 'https://via.placeholder.com/150', // Placeholder image in case productPic is null
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  fit: BoxFit.cover,
+      body: Container(
+        color: Colors.white, // Set background color to white
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 5),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.network(
+                    widget.productPic ,
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.productName ?? 'Unknown Product', // Default value if productName is null
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Color(0xFFCA771A),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.productName,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 0, 0, 0),
+                            ),
                           ),
-                        ),
-                        Text(
-                          widget.quantity ?? 'Unknown Quantity', // Default value if quantity is null
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Color(0xFFCA771A),
+                          Text(
+                            widget.quantity,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 0, 0, 0),
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "PHP ${widget.price}",
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                if (widget.serviceInfo != null && widget.serviceInfo!['modeOfDelivery'] != null)
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Background color for the container
+                      borderRadius: BorderRadius.circular(12.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 2),
+                          blurRadius: 2,
                         ),
                       ],
                     ),
-                  ),
-                  Text(
-                    "PHP ${widget.price ?? '0.00'}", // Default value if price is null
-                    style: const TextStyle(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Mode of Delivery:",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ),
+                        const SizedBox(height: 20.0),
+                        ... (widget.serviceInfo!['modeOfDelivery'] as List<dynamic>)
+                          .map<Widget>((item) => Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedDeliveryOption = item as String;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(12.0),
+                                    width: double.infinity, // Ensure the container takes full width of its parent
+                                    decoration: BoxDecoration(
+                                      color: _selectedDeliveryOption == item
+                                          ? const Color.fromARGB(10, 202, 119, 26)
+                                          : Colors.white, // Use white for unselected options
+                                      border: Border.all(
+                                        color: _selectedDeliveryOption == item
+                                            ? const Color.fromARGB(255, 202, 119, 26)
+                                            : const Color.fromARGB(255, 177, 176, 176),
+                                        width: _selectedDeliveryOption == item
+                                            ? 2.0
+                                            : 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Text(
+                                      '$item',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: _selectedDeliveryOption == item
+                                            ? const Color.fromARGB(255, 0, 0, 0)
+                                            : const Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      ],
+                    ),
+                  )
+                else
+                  const Text(
+                    'No delivery options available',
+                    style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Color(0xFFCA771A),
+                      fontSize: 14,
+                      color: Colors.grey,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Mode of Delivery:",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Color(0xFFCA771A),
+                const SizedBox(height: 10),
+            
+               if (paymentModes != null && paymentModes.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Background color for the container
+                    borderRadius: BorderRadius.circular(12.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 2),
+                        blurRadius: 2,
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              if (widget.serviceInfo != null && widget.serviceInfo!['modeOfDelivery'] != null)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: (widget.serviceInfo!['modeOfDelivery'] as List<dynamic>)
-                      .map<Widget>((item) => Padding(
-                            padding: const EdgeInsets.only(bottom: 5.0),
-                            child: Text(
-                              '$item',
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                color: Colors.black,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Available Mode of Payment:",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ...paymentModes.map((mode) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _selectedPaymentOption = mode;
+                              });
+                              // Handle payment options here
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(12.0),
+                              width: double.infinity,
+                        
+                              decoration: BoxDecoration(
+                              
+                                color: _selectedPaymentOption == mode
+                                    ?  const Color.fromARGB(10, 202, 119, 26)
+                                    : Colors.white,
+                                border: Border.all(
+                                  color: _selectedPaymentOption == mode
+                                      ? const Color.fromARGB(255, 202, 119, 26)
+                                      : const Color.fromARGB(255, 177, 176, 176),
+                                  width: _selectedPaymentOption == mode
+                                      ? 2.0
+                                      : 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Text(
+                                mode,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14,
+                                  color: _selectedPaymentOption == mode
+                                      ? const Color.fromARGB(255, 0, 0, 0)
+                                      : const Color.fromARGB(255, 0, 0, 0),
+                                ),
                               ),
                             ),
-                          ))
-                      .toList(),
-                )
-              else
-                const Text(
-                  'No delivery options available',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        _selectDate(context);
-                      },
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            labelText: selectedDate != null
-                                ? DateFormat.yMd().format(selectedDate!)
-                                : 'Select Date',
-                            border: const OutlineInputBorder(),
-                            suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFCA771A)),
                           ),
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                )
+
+                else
+                  const Text(
+                    'No payment options available',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+            
+                const SizedBox(height: 20),
+               // Proceed to Payment Button
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: double.infinity, // Make the button span the full width
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Add your logic for proceeding to payment here
+                          print('product name : ${widget.productName}');
+                          print('payment amount : ${widget.price}');
+                          print('quantity : ${widget.quantity}');
+                          print('mode of delivery : ${_selectedDeliveryOption}');
+                          print('payment method : ${_selectedPaymentOption}');
+
+                         if (_selectedPaymentOption != null) {
+                            // Navigate to QR page with the appropriate QR file
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  String? qrFilePath;
+
+                                  // Determine the QR file path based on the selected payment option
+                                  if (_selectedPaymentOption == 'GCash') {
+                                    qrFilePath = widget.serviceInfo?['gcashQrFile'];
+                                  } else if (_selectedPaymentOption == 'BankTransfer') {
+                                    qrFilePath = widget.serviceInfo?['bankTransferQrFile'];
+                                  }
+                                  // Handle the case for 'Cash' or other payment methods if needed
+
+                                  return DirectQRPage(
+                                    qrFilePath: qrFilePath,
+                                    productName: widget.productName,
+                                    price: widget.price,
+                                    quantity: widget.quantity,
+                                    selectedDeliveryOption: _selectedDeliveryOption,
+                                    selectedPaymentOption: _selectedPaymentOption,
+                                  );
+                                },
+                              ),
+                            );
+                          } else {
+                            // Show a message or alert if no payment option is selected
+                            ScaffoldMessenger.of(context).showSnackBar(
+                               const SnackBar(
+                                content: Text('Please select a payment option.'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFCA771A), // Button background color
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Proceed to Payment',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        _selectTime(context);
-                      },
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            labelText: selectedTime != null
-                                ? selectedTime!.format(context)
-                                : 'Select Time',
-                            border: const OutlineInputBorder(),
-                            suffixIcon: const Icon(Icons.access_time, color: Color(0xFFCA771A)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-               const SizedBox(height: 20),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Available Mode of Payment:",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Color(0xFFCA771A),
-                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              
-              // Display buttons for the available modes of payment
-              if (paymentModes != null && paymentModes.isNotEmpty)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: paymentModes.map((mode) {
-                    return _buildPaymentButton(context, mode);
-                  }).toList(),
-                )
-              else
-                const Text(
-                  'No payment options available',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-              const SizedBox(height: 20), // Space provided but no buttons here
-            ],
+                const SizedBox(height: 20),
+
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  // Helper function to build payment buttons based on mode
-  Widget _buildPaymentButton(BuildContext context, String mode) {
-    return ElevatedButton(
-      onPressed: () {
-        if (mode == 'GCash') {
-          // Navigate to QR page with the GCash QR file
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DirectQRPage(
-                qrFilePath: widget.serviceInfo?['gcashQrFile'], // Pass the GCash QR file
-              ),
-            ),
-          );
-        } else if (mode == 'BankTransfer') {
-          // Navigate to QR page with the Bank Transfer QR file
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DirectQRPage(
-                qrFilePath: widget.serviceInfo?['bankTransferQrFile'], // Pass the Bank Transfer QR file
-              ),
-            ),
-          );
-        }
-        // Handle Cash separately, you can add other logic here if needed
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white, // White button background
-        side: const BorderSide(color: Color(0xFFCA771A)), // Border color
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-      ),
-      child: Text(
-        mode,
-        style: const TextStyle(
-          color: Color(0xFFCA771A), // Text color
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
-    );
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null && pickedDate != selectedDate) {
-      setState(() {
-        selectedDate = pickedDate;
-      });
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: selectedTime ?? TimeOfDay.now(),
-    );
-    if (pickedTime != null && pickedTime != selectedTime) {
-      setState(() {
-        selectedTime = pickedTime;
-      });
-    }
   }
 }
