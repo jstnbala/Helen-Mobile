@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_build_context_synchronously, unnecessary_string_interpolations
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:helen_app/main.dart';
@@ -14,6 +16,7 @@ class DirectQRPage extends StatelessWidget {
   final String price;
   final String? selectedDeliveryOption;
   final String? selectedPaymentOption;
+  final String farmerName; // Add farmerName parameter
 
   const DirectQRPage({
     super.key,
@@ -23,6 +26,7 @@ class DirectQRPage extends StatelessWidget {
     required this.price,
     required this.selectedDeliveryOption,
     required this.selectedPaymentOption,
+    required this.farmerName, // Make it required
   });
 
   Future<void> _downloadImage(BuildContext context, String url) async {
@@ -382,6 +386,7 @@ class DirectQRPage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => DirectReceipt(
+                      farmerName: farmerName, 
                       productName: productName,
                       quantity: quantity,
                       price: price,

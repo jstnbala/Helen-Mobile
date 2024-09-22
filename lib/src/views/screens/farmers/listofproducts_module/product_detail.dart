@@ -216,7 +216,7 @@ class _FarmerProductDetailState extends State<FarmerProductDetail> {
                         Icon(Icons.check_circle, color: Color(0xFFCA771A)),
                         SizedBox(width: 8.0),
                         Text(
-                          "Your product status is currently:",
+                          "Your product status is now:",
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 18.0,

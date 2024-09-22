@@ -1,10 +1,11 @@
-// ignore_for_file: file_names, library_private_types_in_public_api
+// ignore_for_file: file_names, library_private_types_in_public_api, avoid_print, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-qr_page.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
 class CheckoutPage extends StatefulWidget {
+  final String farmerName; // Add farmerName parameter
   final String productPic;
   final String productName;
   final String quantity;
@@ -13,6 +14,7 @@ class CheckoutPage extends StatefulWidget {
 
   const CheckoutPage({
     super.key,
+    required this.farmerName, // Make it required
     required this.productPic,
     required this.productName,
     required this.quantity,
@@ -92,7 +94,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: Color.fromARGB(255, 0, 0, 0),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                           Text(
@@ -101,7 +103,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: Color.fromARGB(255, 0, 0, 0),
+                              color: Color(0xFFCA771A),
                             ),
                           ),
                         ],
@@ -113,7 +115,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: Color.fromARGB(255, 0, 0, 0),
+                        color: Color(0xFFCA771A),
                       ),
                     ),
                   ],
@@ -138,12 +140,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          "Mode of Delivery:",
+                          "Select Mode of Delivery:",
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Color.fromARGB(255, 0, 0, 0),
+                             color: Color(0xFFCA771A),
                           ),
                         ),
                         const SizedBox(height: 20.0),
@@ -220,58 +222,80 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Available Mode of Payment:",
+                        "Select Mode of Payment:",
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Color(0xFFCA771A),
                         ),
                       ),
                       const SizedBox(height: 20),
                       ...paymentModes.map((mode) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _selectedPaymentOption = mode;
-                              });
-                              // Handle payment options here
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(12.0),
-                              width: double.infinity,
-                        
-                              decoration: BoxDecoration(
-                              
+                      // Determine the correct image path based on the payment mode
+                      String imagePath;
+                      if (mode == 'Cash') {
+                        imagePath = 'images/buyers/cash.jpg';
+                      } else if (mode == 'GCash') {
+                        imagePath = 'images/buyers/gcash.png';
+                      } else if (mode == 'BankTransfer') {
+                        imagePath = 'images/buyers/bank-transfer.png';
+                      } else {
+                        imagePath = ''; // Default case if needed
+                      }
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedPaymentOption = mode;
+                            });
+                            // Handle payment options here
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12.0),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: _selectedPaymentOption == mode
+                                  ? const Color.fromARGB(10, 202, 119, 26)
+                                  : Colors.white,
+                              border: Border.all(
                                 color: _selectedPaymentOption == mode
-                                    ?  const Color.fromARGB(10, 202, 119, 26)
-                                    : Colors.white,
-                                border: Border.all(
-                                  color: _selectedPaymentOption == mode
-                                      ? const Color.fromARGB(255, 202, 119, 26)
-                                      : const Color.fromARGB(255, 177, 176, 176),
-                                  width: _selectedPaymentOption == mode
-                                      ? 2.0
-                                      : 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
+                                    ? const Color.fromARGB(255, 202, 119, 26)
+                                    : const Color.fromARGB(255, 177, 176, 176),
+                                width: _selectedPaymentOption == mode ? 2.0 : 1.0,
                               ),
-                              child: Text(
-                                mode,
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  color: _selectedPaymentOption == mode
-                                      ? const Color.fromARGB(255, 0, 0, 0)
-                                      : const Color.fromARGB(255, 0, 0, 0),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
+                                  child: Image.asset(
+                                    imagePath,
+                                    width: 30.0,  // Adjust the size of the icon as needed
+                                    height: 24.0,
+                                    fit: BoxFit.cover, // Ensures the image fits within the rounded container
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(width: 10), // Space between the icon and the text
+                                Text(
+                                  mode,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: _selectedPaymentOption == mode
+                                        ? const Color.fromARGB(255, 0, 0, 0)
+                                        : const Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      }).toList(),
+                        ),
+                      );
+                    }).toList(),
                     ],
                   ),
                 )
@@ -318,6 +342,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   // Handle the case for 'Cash' or other payment methods if needed
 
                                   return DirectQRPage(
+                                    farmerName: widget.farmerName, 
                                     qrFilePath: qrFilePath,
                                     productName: widget.productName,
                                     price: widget.price,
