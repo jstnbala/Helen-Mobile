@@ -244,7 +244,7 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
                                 Icon(Icons.delivery_dining, color: Color(0xFFCA771A), size: 20.0),
                                 SizedBox(width: 8.0),
                                 Text(
-                                  'Mode of Delivery',
+                                  'Available Mode of Delivery',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 16.0,
@@ -363,6 +363,7 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => CheckoutPage(
+                                            farmerName: widget.farmerName, 
                                             productPic: widget.productPic,
                                             productName: widget.productName,
                                             quantity: widget.quantity,

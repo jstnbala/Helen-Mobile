@@ -129,7 +129,7 @@ Widget build(BuildContext context) {
                                       event.title, // Event title
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
-                                        fontSize: 16.0,
+                                        fontSize: 14.0,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFFCA771A),
                                       ),
@@ -137,9 +137,7 @@ Widget build(BuildContext context) {
                                       softWrap: true,  // Enable soft wrapping of text
                                     ),
                                     const SizedBox(height: 4.0),
-                                    buildEventRow(Icons.calendar_today, 'Start Date: ', formatDate(event.startDate)),
-                                    const SizedBox(height: 4.0),
-                                    buildEventRow(Icons.calendar_today, 'End Date: ', formatDate(event.endDate)),
+                                    buildEventRow(Icons.calendar_today, 'Date: ', formatDate(event.startDate)),
                                     const SizedBox(height: 4.0),
                                     buildEventRow(Icons.access_time, 'Time: ', formatTime(event.startDate)),
                                     const SizedBox(height: 4.0),

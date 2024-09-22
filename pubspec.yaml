@@ -86,6 +86,10 @@
       - images/splashlogo.png
       - images/farmers/pending_header.png
       - images/farmers/history_header.png
+      - images/buyers/bank-transfer.png
+      - images/buyers/cash.jpg
+      - images/buyers/gcash.png
+
 
     fonts:
       - family: Poppins
