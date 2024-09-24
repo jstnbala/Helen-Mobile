@@ -27,6 +27,10 @@ class _AddProductPageState extends State<AddProductPage> {
   final TextEditingController _productDetailsController = TextEditingController();
   final TextEditingController _inventoryController = TextEditingController();
 
+  // Loading state variable
+  bool _isLoading = false;
+
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
 
@@ -58,8 +62,13 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
         );
         return;
-      }
+       }
 
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
+    try {
       // Convert price to a valid format if necessary (e.g., removing PHP sign)
       const storage = FlutterSecureStorage();
       String? farmerName = await storage.read(key: 'FullName');
@@ -98,7 +107,20 @@ class _AddProductPageState extends State<AddProductPage> {
             content: Text('Failed to add product. Please try again.'),
             backgroundColor: Colors.red,
           ),
+          );
+        }
+      } catch (e) {
+        // Handle any unexpected errors
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An error occurred: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
@@ -470,16 +492,26 @@ class _AddProductPageState extends State<AddProductPage> {
               ),
               const SizedBox(height: 20),
 
-              // Add Button
+             // Add Button
               ElevatedButton(
-                onPressed: _addProduct,
+                onPressed: _isLoading ? null : _addProduct,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFCA771A),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
-                child: const Text(
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 2.0,
+                        ),
+                      )
+                    : const Text(
                   'Add',
                   style: TextStyle(
                     fontFamily: 'Poppins',

@@ -22,6 +22,7 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   
+  
   bool _isLoading = false;
 
   PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'PH');
@@ -338,33 +339,33 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 const SizedBox(height: 10),
 
                 // Business Permit field
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Business Permit',
-                    hintText: _businessPermitFileName ?? 'Upload your business permit',
-                    hintStyle: const TextStyle(
-                      color: Color.fromARGB(255, 183, 180, 180), // Setting the hint text color to #D3D3D3
-                      fontFamily: 'Poppins',
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                   ),
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
-                    suffixIcon: IconButton(
-                      icon: const Icon(
-                        Icons.upload_file,
-                        color: Color(0xFFCA771A),
-                      ),
-                      onPressed: _pickFile,
-                    ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Business Permit',
+                  hintText: _businessPermitFileName == null ? 'Upload your business permit' : null, // Remove hint when file is uploaded
+                  labelStyle: const TextStyle(fontFamily: 'Poppins'),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  readOnly: true,
-                  style: const TextStyle(fontFamily: 'Poppins'),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.upload_file,
+                      color: Color(0xFFCA771A),
+                    ),
+                    onPressed: _pickFile,
+                  ),
                 ),
+                readOnly: true,
+                style: const TextStyle(fontFamily: 'Poppins'),
+                controller: TextEditingController(
+                  text: _businessPermitFileName ?? '', // Display file name in the field
+                ),
+              ),
+
                 const SizedBox(height: 10),
 
                 // Account Type field
