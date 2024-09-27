@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/price_breakdown.dart';
+import 'package:helen_app/src/services/api_service.dart'; 
 
 class OrderForm extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class OrderForm extends StatefulWidget {
 
 class _OrderFormState extends State<OrderForm> {
   String? _selectedLocation;
+  final List<String> _organizations = []; // List to hold organizations
   final List<Map<String, dynamic>> _products = [
     {'product': null, 'quantity': '', 'price': 0.0},
   ];
@@ -24,6 +26,19 @@ class _OrderFormState extends State<OrderForm> {
     'Pechay': 50.0,
     'Sitaw': 30.0,
   };
+
+   @override
+  void initState() {
+    super.initState();
+    _fetchOrganizations(); // Fetch organizations when the widget initializes
+  }
+
+  Future<void> _fetchOrganizations() async {
+    final organizations = await fetchOrganizations(); // Call your API service
+    setState(() {
+      _organizations.addAll(organizations); // Add organizations to the list
+    });
+  }
 
   void _addProduct() {
     if (_products.length < 10) {
@@ -101,40 +116,36 @@ class _OrderFormState extends State<OrderForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Location',
+                      'Organization',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         color: Color(0xFFCA771A),
                       ),
                     ),
-                    const SizedBox(height: 8.0),
+                   const SizedBox(height: 8.0),
                     DropdownButtonFormField<String>(
                       hint: const Text(
-                        'Select a Location',
-                        style: TextStyle(
+                        'Select an Organization',
+                        style: TextStyle( 
                           fontFamily: 'Poppins',
                           color: Colors.grey,
                         ),
                       ),
                       value: _selectedLocation,
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'Lucban Trading Center',
-                          child: Text('Lucban Trading Center'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'Sairaya Agricultural Trading Center',
-                          child: Text('Sairaya Agricultural Trading Center'),
-                        ),
-                      ],
+                      items: _organizations.map((organization) {
+                        return DropdownMenuItem(
+                          value: organization,
+                          child: Text(organization),
+                        );
+                      }).toList(),
                       onChanged: (value) {
                         setState(() {
                           _selectedLocation = value;
                         });
                       },
                       validator: (value) =>
-                          value == null ? 'Location is required' : null,
+                          value == null ? 'Organization is required' : null,
                       decoration: InputDecoration(
                         labelStyle: const TextStyle(color: Color(0xFFCA771A)),
                         border: OutlineInputBorder(
