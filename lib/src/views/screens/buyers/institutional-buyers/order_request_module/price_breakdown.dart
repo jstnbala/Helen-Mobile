@@ -1,14 +1,20 @@
-
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables
 
-// price_breakdown.dart
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/services/post_request.dart'; // Ensure to import your API class
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:helen_app/src/views/common/navbar.dart';
 
 class PriceBreakdownScreen extends StatelessWidget {
   final String location;
+  final String description;
   final List<Map<String, dynamic>> products;
 
-  PriceBreakdownScreen({required this.location, required this.products});
+  PriceBreakdownScreen({
+    required this.location,
+    required this.products,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +72,12 @@ class PriceBreakdownScreen extends StatelessWidget {
                     final product = entry.value;
                     final productName = product['product'] ?? 'Unknown';
                     final price = product['price'] ?? 0.0;
-                    final quantity = int.tryParse(product['quantity']) ?? 0;
+                    final quantity = int.tryParse(product['quantity'].toString()) ?? 0;
                     final total = price * quantity;
                     totalSum += total;
+
+                    // Debugging output
+                    print('Product Name: $productName, Price: $price, Quantity: $quantity');
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
@@ -114,7 +123,7 @@ class PriceBreakdownScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'PHP ${price.toStringAsFixed(2)}',
+                                'PHP ${price.toStringAsFixed(2)}', // Correct display format for price
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.normal,
@@ -157,7 +166,7 @@ class PriceBreakdownScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'PHP ${total.toStringAsFixed(2)}',
+                                'PHP ${total.toStringAsFixed(2)}', // Correct display format for total
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.normal,
@@ -213,8 +222,42 @@ class PriceBreakdownScreen extends StatelessWidget {
             const SizedBox(height: 20.0),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // Add functionality for moving to the next step
+                onPressed: () async {
+                  const storage = FlutterSecureStorage();
+                  final String? buyerName = await storage.read(key: 'FullName');
+                  // Gather the relevant data to post
+                  for (var product in products) {
+                    String productName = product['product'] ?? 'Unknown';
+                    double price = product['price'] ?? 0.0;
+                    int quantity = int.tryParse(product['quantity'].toString()) ?? 0;
+                    String unit = product['unit'] ?? 'kg'; // Adjust if necessary
+
+                    // Call the API for each product
+                    final success = await PostRequestAPI.postRequest(
+                      buyerName: buyerName ?? '',
+                      productName: productName,
+                      price: price,
+                      quantity: quantity,
+                      unit: unit,
+                      description: description,
+                    );
+
+                    if (success) {
+                       // Show the dialog after successful request
+                      _showOrderRequestedDialog(context);
+                
+                      // Handle success (e.g., s
+                      //how a confirmation dialog)
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Order Request Submitted Successfully!')),
+                      );
+                    } else {
+                      // Handle failure
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Failed to Submit Order Request.')),
+                      );
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFCA771A),
@@ -241,4 +284,29 @@ class PriceBreakdownScreen extends StatelessWidget {
       ),
     );
   }
+void _showOrderRequestedDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Order Requested"),
+        content: const Text("Successfully requested your order. Wait for the organization to accept to proceed to payment."),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              // Navigate to the navbar page when "OK" is pressed
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => NavBar()), // Replace NavBar with your main navigation page class
+                (Route<dynamic> route) => false, // Remove all previous routes
+              );
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }
