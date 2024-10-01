@@ -60,4 +60,62 @@ class GetUserToChatService {
     _logger.e('Failed to load user');
     throw Exception('Failed to load user');
   }
+
+  Future<Map<String, String>> getUserToChatDetailsByFullName(String fullName) async {
+  _logger.i('Attempting to get userToChat from admin by FullName: $fullName...');
+  
+ 
+  // Fetch organizations and check in each organization's farmers API
+  List<String> organizations = await FetchOrgApi.fetchAllOrganizations();
+  
+  for (String organization in organizations) {
+    _logger.i('Checking organization: $organization');
+    final farmerResponse = await http.get(Uri.parse('https://helen-server-lmp4.onrender.com/api/organizations/$organization/farmers'));
+
+    if (farmerResponse.statusCode == 200) {
+      final List<dynamic> farmers = json.decode(farmerResponse.body);
+      final farmer = farmers.firstWhere(
+        (farmer) => farmer['FullName'] == fullName,
+        orElse: () => null,
+      );
+
+      if (farmer != null) {
+        _logger.i('User found in farmers of $organization: ${farmer['FullName']}');
+        return {
+          'ProfilePicture': farmer['ProfilePicture'],
+          'id': farmer['_id'],
+        };
+      }
+    } else {
+      _logger.e('Failed to load farmers from organization: $organization');
+    }
+  }
+
+  // If user not found in farmers, check buyers
+  _logger.w('User not found in any farmers, checking buyers...');
+  final buyerResponse = await http.get(Uri.parse('https://helen-server-lmp4.onrender.com/api/buyers'));
+
+  if (buyerResponse.statusCode == 200) {
+    final List<dynamic> buyers = json.decode(buyerResponse.body);
+    final buyer = buyers.firstWhere(
+      (buyer) => buyer['FullName'] == fullName,
+      orElse: () => null,
+    );
+
+    if (buyer != null) {
+      _logger.i('User found in buyers: ${buyer['FullName']}');
+      return {
+        'ProfilePicture': buyer['ProfilePicture'] ?? '',
+        'id': buyer['_id'],
+      };
+    }
+  } else {
+    _logger.e('Failed to load buyers');
+  }
+
+  _logger.e('User not found in admin, farmers, or buyers');
+  throw Exception('User not found in admin, farmers, or buyers');
 }
+
+}
+

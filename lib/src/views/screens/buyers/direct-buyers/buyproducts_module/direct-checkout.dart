@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-qr_page.dart';
-import 'package:intl/intl.dart'; // For date formatting
+
 
 class CheckoutPage extends StatefulWidget {
   final String farmerName; // Add farmerName parameter

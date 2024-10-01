@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/price_breakdown.dart';
 import 'package:helen_app/src/services/api_service.dart'; 
+import 'package:helen_app/src/services/get_org_products.dart'; // Import your GetOrgProductsAPI
 
 class OrderForm extends StatefulWidget {
   @override
@@ -13,19 +14,14 @@ class OrderForm extends StatefulWidget {
 
 class _OrderFormState extends State<OrderForm> {
   String? _selectedLocation;
+  String _description = ''; // Add a variable to hold the description
   final List<String> _organizations = []; // List to hold organizations
+  Map<String, dynamic> _productsFromOrg = {}; // To store products and their details
   final List<Map<String, dynamic>> _products = [
     {'product': null, 'quantity': '', 'price': 0.0},
   ];
 
-  final Map<String, double> _productPrices = {
-    'Carrots': 40.0,
-    'Tomatoes': 30.0,
-    'Coconut': 40.0,
-    'Cabbage': 60.0,
-    'Pechay': 50.0,
-    'Sitaw': 30.0,
-  };
+  final GetOrgProductsAPI getOrgProductsAPI = GetOrgProductsAPI(); // Create instance of your API class
 
    @override
   void initState() {
@@ -39,6 +35,22 @@ class _OrderFormState extends State<OrderForm> {
       _organizations.addAll(organizations); // Add organizations to the list
     });
   }
+Future<void> _fetchProductsForOrganization(String organization) async {
+  final products = await getOrgProductsAPI.getOrgProducts(organization); // Call to fetch products
+  if (products != null) {
+    setState(() {
+      _productsFromOrg = {
+        for (var product in products)
+          if (product['productName'] != null && product['unit'] != null && product['price'] != null)
+            product['productName']: {
+              'unit': product['unit'],
+              'price': product['price']
+            }
+      }; // Store product name as key, and unit and price as a map
+    });
+  }
+}
+
 
   void _addProduct() {
     if (_products.length < 10) {
@@ -58,6 +70,7 @@ class _OrderFormState extends State<OrderForm> {
 
   bool _validateFields() {
     if (_selectedLocation == null) return false;
+    if (_description.isEmpty) return false; // Check if description is not empty
     for (var product in _products) {
       if (product['product'] == null || product['quantity'] == '') return false;
       final quantity = int.tryParse(product['quantity']);
@@ -142,6 +155,8 @@ class _OrderFormState extends State<OrderForm> {
                       onChanged: (value) {
                         setState(() {
                           _selectedLocation = value;
+                          _fetchProductsForOrganization(value!); // Fetch products for selected organization
+
                         });
                       },
                       validator: (value) =>
@@ -167,8 +182,47 @@ class _OrderFormState extends State<OrderForm> {
                         ),
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 12.0),
+                      ),          
+                    ),
+                        // Add the multiline TextField for Description
+                    const SizedBox(height: 16.0),
+                    const Text(
+                      'Description',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFCA771A),
                       ),
                     ),
+                    const SizedBox(height: 8.0),
+                    TextField(
+                      maxLines: 4, // Allow for multiple lines
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFCA771A),
+                            width: 2.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Color(0xFFCA771A)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Color(0xFFCA771A)),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _description = value; // Update the description
+                        });
+                      },
+                    ),
+
+                    
                     const SizedBox(height: 16.0),
                     ..._products.asMap().entries.map((entry) {
                       int index = entry.key;
@@ -202,19 +256,18 @@ class _OrderFormState extends State<OrderForm> {
                                       ),
                                     ),
                                     value: _products[index]['product'],
-                                    items: _productPrices.keys
-                                        .map((product) =>
-                                            DropdownMenuItem(
-                                              value: product,
-                                              child: Text(product),
-                                            ))
-                                        .toList(),
+                                    items: _productsFromOrg.keys.map((product) {
+                                      return DropdownMenuItem(
+                                        value: product,
+                                        child: Text(product),
+                                      );
+                                    }).toList(),
                                     onChanged: (value) {
                                       setState(() {
                                         _products[index]['product'] = value;
-                                        _products[index]['price'] =
-                                            _productPrices[value] ?? 0.0;
-                                        _products[index]['quantity'] = '';
+                                        _products[index]['unit'] = _productsFromOrg[value]?['unit'] ?? ''; // Update unit
+                                        _products[index]['price'] = _productsFromOrg[value]?['price'] ?? 0.0; // Update price
+                                        _products[index]['quantity'] = ''; // Reset quantity
                                       });
                                     },
                                     validator: (value) =>
@@ -323,24 +376,22 @@ class _OrderFormState extends State<OrderForm> {
                         ),
                       );
                     }).toList(),
-                    ElevatedButton(
+                  TextButton(
                       onPressed: _addProduct,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFCA771A),
+                      style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8), // Rounded corners
                         ),
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 15.0, horizontal: 70.0),
+                        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 70.0),
                         child: Text(
-                          'Add More Products',
+                          '+ Add More Products',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color:  Color(0xFFCA771A), 
                           ),
                         ),
                       ),
@@ -358,6 +409,7 @@ class _OrderFormState extends State<OrderForm> {
                       builder: (context) => PriceBreakdownScreen(
                         location: _selectedLocation!,
                         products: _products,
+                        description: _description,
                       ),
                     ),
                   );

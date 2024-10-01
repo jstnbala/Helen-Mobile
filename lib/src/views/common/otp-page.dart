@@ -152,39 +152,41 @@ class _OtpPageState extends State<OtpPage> {
 
   
 
- Future<void> sendOtp(String? phoneNumber) async {
-    if (phoneNumber == null || phoneNumber.isEmpty) {
-      print('Invalid phone number');
-      return;
-    }
-
-    final otp = generateOtp(); // Generate the OTP
-    final message = "Your OTP code for Helen is: $otp"; // The SMS message with the OTP
-
-    // Save OTP for later verification (you might want to store this in a backend or in a secure place)
-    _verificationId = otp;
-
-    final response = await http.post(
-      Uri.parse('https://api.semaphore.co/api/v4/messages'),
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: {
-        'apikey': 'b95d4ce6dca75dcd54cea894194715f1',
-        'number': phoneNumber,
-        'message': message,
-    // 'sendername': senderName, // You may omit this if you're using a default sender name
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      // OTP sent successfully
-      print('OTP has been sent successfully!');
-      // You can display a Snackbar or toast to notify the user
-    } else {
-      print('Failed to send OTP: ${response.body}');
-    }
+Future<void> sendOtp(String? phoneNumber) async {
+  if (phoneNumber == null || phoneNumber.isEmpty) {
+    print('Invalid phone number');
+    return;
   }
+
+  final otp = generateOtp(); // Generate the OTP
+  final message = "Your OTP code for Helen is %code%"; // Use %code% as a placeholder for the OTP
+
+  // Save OTP for later verification (you might want to store this in a backend or in a secure place)
+  _verificationId = otp;
+
+  final response = await http.post(
+    Uri.parse('https://api.semaphore.co/api/v4/otp'),  // Use Semaphore's OTP endpoint
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {
+      'apikey': 'b95d4ce6dca75dcd54cea894194715f1',  // Your actual API key
+      'number': phoneNumber,  // Recipient's phone number
+      'message': message,  // The message with %code% placeholder for OTP
+      'sendername': 'Helen',  // Optional, your sender name registered with Semaphore
+      'code': otp,  // The generated OTP code
+    },
+  );
+
+  print(response.body);
+  if (response.statusCode == 200) {
+    // OTP sent successfully
+    print('OTP has been sent successfully!');
+    // You can display a Snackbar or toast to notify the user
+  } else {
+    print('Failed to send OTP: ${response.body}');
+  }
+}
 
  bool verifyOtp(String enteredOtp) {
     if (_verificationId == null) {
