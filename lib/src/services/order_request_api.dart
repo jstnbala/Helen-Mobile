@@ -21,19 +21,8 @@ Future<List<dynamic>> fetchRequests() async {
    
     // Check if data is stored in Shared Preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? cachedData = prefs.getString('cachedRequests');
-    int? cacheTimestamp = prefs.getInt('cacheTimestamp');
-
-    // Check if cached data is available and valid
-    if (cachedData != null && cacheTimestamp != null) {
-      // If the cache is less than 5 minutes old, return cached data
-      if (DateTime.now().millisecondsSinceEpoch - cacheTimestamp < Duration(minutes: 5).inMilliseconds) {
-        logger.i('Using cached data.');
-        // Parse the cached data and return it
-        return jsonDecode(cachedData);
-      }
-    }
-
+  
+    
     // Construct the URL with the BuyerName as a query parameter
     final url = Uri.parse('https://helen-server-lmp4.onrender.com/api/requests?BuyerName=$fullName');
 
@@ -50,6 +39,7 @@ Future<List<dynamic>> fetchRequests() async {
     if (response.statusCode == 200) {
       // Parse the response JSON
       final List<dynamic> data = jsonDecode(response.body);
+
  // Store the fetched data in Shared Preferences
       await prefs.setString('cachedRequests', response.body);
       await prefs.setInt('cacheTimestamp', DateTime.now().millisecondsSinceEpoch); // Update the cache timestamp  
@@ -84,19 +74,9 @@ Future<List<dynamic>> fetchRequestsForPayment() async {
    
     // Check if data is stored in Shared Preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? cachedData = prefs.getString('cachedRequestsForPayment');
-    int? cacheTimestamp = prefs.getInt('cacheTimestamp');
 
-    // Check if cached data is available and valid
-    if (cachedData != null && cacheTimestamp != null) {
-      // If the cache is less than 5 minutes old, return cached data
-      if (DateTime.now().millisecondsSinceEpoch - cacheTimestamp < Duration(minutes: 5).inMilliseconds) {
-        logger.i('Using cached data.');
-        // Parse the cached data and return it
-        return jsonDecode(cachedData);
-      }
-    }
 
+   
     // Construct the URL with the BuyerName as a query parameter
     final url = Uri.parse('https://helen-server-lmp4.onrender.com/api/requests-ForPayment?BuyerName=$fullName');
 
