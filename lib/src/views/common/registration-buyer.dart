@@ -364,8 +364,13 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                 controller: TextEditingController(
                   text: _businessPermitFileName ?? '', // Display file name in the field
                 ),
-              ),
-
+              validator: (value) {
+                if (_businessPermitFileName == null || _businessPermitFileName!.isEmpty) {
+                  return 'No file selected. Please upload your file'; // Error message
+                }
+                return null;
+              },
+            ),
                 const SizedBox(height: 10),
 
                 // Account Type field
@@ -450,19 +455,19 @@ class _BuyerRegistrationPageState extends State<BuyerRegistrationPage> {
                       return 'Password is required';
                     }
                     if (value.length < 8) {
-                      return 'Password must be at least 8 characters long';
+                      return 'Password must be at least 8 characters\nlong';
                     }
                     if (!RegExp(r'(?=.*?[A-Z])').hasMatch(value)) {
-                      return 'Password must include at least one uppercase letter';
+                      return 'Password must include at least one uppercase\nletter';
                     }
                     if (!RegExp(r'(?=.*?[a-z])').hasMatch(value)) {
-                      return 'Password must include at least one lowercase letter';
+                      return 'Password must include at least one lowercase\nletter';
                     }
                     if (!RegExp(r'(?=.*?[0-9])').hasMatch(value)) {
                       return 'Password must include at least one number';
                     }
                     if (!RegExp(r'(?=.*?[!@#\$%\^&*()_+\-=\{\}\[\]|:;\"<>,.?/])').hasMatch(value)) {
-                      return 'Password must include at least one special character';
+                      return 'Password must include at least one special\ncharacter';
                     }
                     return null;
                   },

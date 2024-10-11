@@ -30,6 +30,9 @@ class _AddProductPageState extends State<AddProductPage> {
   // Loading state variable
   bool _isLoading = false;
 
+  // New state variable for image error
+  bool _isImageErrorVisible = false;
+
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -37,6 +40,7 @@ class _AddProductPageState extends State<AddProductPage> {
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
+        _isImageErrorVisible = false;
       });
     }
   }
@@ -51,18 +55,15 @@ class _AddProductPageState extends State<AddProductPage> {
     super.dispose();
   }
 
-  Future<void> _addProduct() async {
+   Future<void> _addProduct() async {
     if (_formKey.currentState!.validate()) {
       if (_image == null) {
-        // Show an error message if the image is not selected
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select a product image.'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        // Set the error message visibility if no image is selected
+        setState(() {
+          _isImageErrorVisible = true;
+        });
         return;
-       }
+      }
 
     setState(() {
       _isLoading = true; // Start loading
@@ -256,6 +257,22 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                 ),
               ),
+
+              // Show the error message if no image is selected
+              if (_isImageErrorVisible)
+                const Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Text(
+                    'No image is selected. Please upload a product image.',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                
               const SizedBox(height: 20),
 
               // Product Name
@@ -292,7 +309,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 maxLength: 30,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'This field is required';
+                    return 'Product Name is required';
                   }
                   return null;
                 },
@@ -333,7 +350,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'This field is required';
+                    return 'Selling Price is required';
                   }
                   if (!RegExp(r'^\₱?\d+(\.\d{2})?$').hasMatch(value)) {
                     return 'Enter a valid price (₱0.00)';
@@ -378,7 +395,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'This field is required';
+                    return 'Product Details is required';
                   }
                   return null;
                 },
@@ -387,7 +404,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
               // Inventory
               const Text(
-                'Inventory',
+                'Quantity',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.bold,
@@ -423,7 +440,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'This field is required';
+                          return 'Quantity is required';
                         }
                         if (!RegExp(r'^\d+$').hasMatch(value)) {
                           return 'Only numbers are allowed';
@@ -482,7 +499,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a unit';
+                          return 'Please select\na type unit';
                         }
                         return null;
                       },

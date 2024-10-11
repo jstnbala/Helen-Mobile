@@ -91,6 +91,8 @@
       - images/buyers/bank-transfer.png
       - images/buyers/cash.jpg
       - images/buyers/gcash.png
+      - images/Help Buyer.png
+      - images/Help Farmer.png
 
 
     fonts:

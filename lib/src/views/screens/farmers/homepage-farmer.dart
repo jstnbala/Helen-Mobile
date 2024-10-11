@@ -53,19 +53,6 @@ class HomePageFarmer extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned(
-                          bottom: 10,
-                          right: 15,
-                          child: Text(
-                            '00',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),

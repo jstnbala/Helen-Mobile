@@ -8,6 +8,26 @@ import 'package:helen_app/src/views/common/navbar.dart';
 import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/context/socket_context.dart'; // Import your SocketContext
+
+// Show Error Dialog function
+void showErrorDialog(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Login Error'),
+      content: Text(message),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -222,8 +242,13 @@ class _LoginPageState extends State<LoginPage> {
                   width: size.width * 0.7,
                   child: ElevatedButton(
                     onPressed: _isLoading
-                        ? null
+                         ? null
                         : () async {
+                            if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+                              showErrorDialog(context, 'Username or Password cannot be empty. Please try again.');
+                              return; // Exit early if either field is blank
+                            }
+
                             setState(() {
                               _isLoading = true;
                             });

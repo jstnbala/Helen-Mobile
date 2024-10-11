@@ -318,6 +318,32 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     width: double.infinity, // Make the button span the full width
                     child: ElevatedButton(
                       onPressed: () {
+
+                        // Collecting user selections
+        final bool isDeliveryOptionSelected = _selectedDeliveryOption != null;
+        final bool isPaymentOptionSelected = _selectedPaymentOption != null;
+
+        // Define error messages
+        String errorMessage = '';
+
+        // Determine which options are missing and set the error message accordingly
+        if (!isDeliveryOptionSelected && !isPaymentOptionSelected) {
+          errorMessage = 'Please select both mode of delivery and payment.';
+        } else if (!isDeliveryOptionSelected) {
+          errorMessage = 'Please select a mode of delivery.';
+        } else if (!isPaymentOptionSelected) {
+          errorMessage = 'Please select a payment option.';
+        }
+
+        if (errorMessage.isNotEmpty) {
+          // Show error message if any selection is missing
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        } else {
                         // Add your logic for proceeding to payment here
                           print('product name : ${widget.productName}');
                           print('payment amount : ${widget.price}');
@@ -325,7 +351,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           print('mode of delivery : ${_selectedDeliveryOption}');
                           print('payment method : ${_selectedPaymentOption}');
 
-                         if (_selectedPaymentOption != null) {
+                        
                             // Navigate to QR page with the appropriate QR file
                             Navigator.push(
                               context,
@@ -353,15 +379,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 },
                               ),
                             );
-                          } else {
-                            // Show a message or alert if no payment option is selected
-                            ScaffoldMessenger.of(context).showSnackBar(
-                               const SnackBar(
-                                content: Text('Please select a payment option.'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
+                          } 
                         },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFCA771A), // Button background color

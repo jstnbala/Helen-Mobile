@@ -1,5 +1,8 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/views/common/faqs_buyer.dart';
+import 'package:helen_app/src/views/common/faqs_farmer.dart';
 
 class HelpFarmerScreen extends StatelessWidget {
   const HelpFarmerScreen({super.key});
@@ -9,15 +12,21 @@ class HelpFarmerScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xFFCA771A),
+        backgroundColor: const Color(0xFFCA771A),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15.0),
+            bottomRight: Radius.circular(15.0),
+          ),
+        ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context); // Go back to the previous screen
           },
         ),
-        title: Text(
-          'Help',
+        title: const Text(
+          'Help Center',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 20.0,
@@ -27,105 +36,252 @@ class HelpFarmerScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text(
-                'Hi, Farmer how may I help you?',
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Centered Bold Big Text
+              const Text(
+                "Are you a Farmer or a Buyer looking for assistance?",
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 24.0,
+                  fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFCA771A),
                 ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(height: 16.0),
-            Card(
-              color: Color(0xFFCA771A),
-              margin: EdgeInsets.only(top: 8.0), // Adjusted top margin
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'Frequently Asked Questions',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+              const SizedBox(height: 10),
+
+              // Centered Not Bold Small Text
+              const Text(
+                "Choose the category that best describes your needs:",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFFCA771A),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 15),
+
+              // Farmer Option with Text on the Left and Image on the Right
+              Row(
+                children: [
+                  const Flexible(
+                    flex: 3,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.account_circle,
+                          size: 40.0,
+                          color: Color(0xFFCA771A),
+                        ),
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Bold Big Text beside the Icon
+                              Text(
+                                "I’m a Farmer",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFCA771A),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+
+                              // Justified Not Bold Small Text beside the Icon
+                              Text(
+                                "If you’re here to get support for your farmer account, product listings, or event listings, click the image option on the right.",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal,
+                                  color: Color.fromARGB(255, 107, 107, 107),
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
                           ),
                         ),
-                        Icon(Icons.arrow_drop_down, color: Colors.white),
                       ],
                     ),
-                    SizedBox(height: 8.0),
-                    _buildFAQItem(
-                      question: 'How can I create an account?',
-                      answer: 'What are the steps I need to follow in order to successfully set up a new account on the e-commerce platform?',
+                  ),
+                  const SizedBox(width: 20),
+
+                  // Farmer Image with Border and Click Navigation on the Right
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const FAQsFarmer()),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xFFCA771A),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0), // Adding Border Radius
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0), // Same Radius for Image
+                        child: Image.asset(
+                          'images/Help Farmer.png',
+                          height: 150.0,
+                          width: 150.0,
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 8.0),
-                    _buildFAQItem(
-                      question: 'Where can I message my Farmer Organization to which I belong?',
-                      answer: 'What are the various methods or contact points available for me to send a message or communicate with the Farmer Organization I am a member of?',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+
+              // Buyer Option with Text on the Left and Image on the Right
+              Row(
+                children: [
+                  const Flexible(
+                    flex: 3,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.shopping_cart,
+                          size: 40.0,
+                          color: Color(0xFFCA771A),
+                        ),
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Bold Big Text beside the Icon
+                              Text(
+                                "I’m a Buyer",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFCA771A),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+
+                              // Justified Not Bold Small Text beside the Icon
+                              Text(
+                                "If you need help with finding products, placing orders, or managing your buyer account, click the image option on the right.",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal,
+                                  color: Color.fromARGB(255, 107, 107, 107),
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 8.0),
-                    _buildFAQItem(
-                      question: 'If I have questions about my crops, where can I reach out for help?',
-                      answer: 'Where can I seek assistance or find answers if I have specific questions or concerns regarding the cultivation or management of my crops?',
+                  ),
+                  const SizedBox(width: 20),
+
+                  // Buyer Image with Border and Click Navigation on the Right
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const FAQsBuyer()),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xFFCA771A),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0), // Adding Border Radius
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0), // Same Radius for Image
+                        child: Image.asset(
+                          'images/Help Buyer.png',
+                          height: 150.0,
+                          width: 150.0,
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 8.0),
-                    _buildFAQItem(
-                      question: 'Where should I list the products I want to sell?',
-                      answer: 'In which section or area of the e-commerce platform should I enter or display the details of the products that I intend to sell?',
-                    ),
-                    SizedBox(height: 8.0),
-                    _buildFAQItem(
-                      question: 'Where can I find information about upcoming events?',
-                      answer: 'Where can I access details or find announcements about events that are scheduled to take place, relevant to my interests or activities?',
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+           const SizedBox(height: 10),
+
+              // Gray Divider
+              const Divider(
+                color: Colors.grey,
+                thickness: 1.0,
+              ),
+              const SizedBox(height: 10),
+
+              // Footer Text and Email Contact
+              const Center(
+                child: Text(
+                  "For direct support, feel free to reach out to us:",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.normal,
+                    color: Color(0xFFCA771A),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 5),
+
+              // Email Contact with Icon
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.email,
+                    color: Color(0xFFCA771A),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "Email: ",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFFCA771A),
+                    ),
+                  ),
+                  Text(
+                    "opa_quezon@yahoo.com",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFCA771A),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildFAQItem({required String question, required String answer}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          question,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 13.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(height: 4.0),
-        Text(
-          answer,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 13.0,
-            fontStyle: FontStyle.italic,
-            color: Colors.white,
-          ),
-        ),
-      ],
     );
   }
 }
