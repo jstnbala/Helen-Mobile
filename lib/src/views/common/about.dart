@@ -28,29 +28,25 @@ class AboutPage extends StatelessWidget {
           ),
         ),
       ),
-      body: PageView(
-        children: [
-          buildImageContainer('images/farmers/about-cover.jpg'),
-          buildImageContainer('images/farmers/vision-mission.jpg'),
-          buildImageContainer('images/farmers/dev-goals.jpg'),
-        ],
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0), // Consistent padding for entire PageView
+        child: PageView(
+          children: [
+            buildImageContainer('images/farmers/about-cover.jpg'),
+            buildImageContainer('images/farmers/vision-mission.jpg'),
+            buildImageContainer('images/farmers/dev-goals.jpg'),
+          ],
+        ),
       ),
     );
   }
 
   Widget buildImageContainer(String imagePath) {
-    return Container(
-      margin: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Color(0xFFCA771A), width: 3),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.asset(
-          imagePath,
-          fit: BoxFit.contain,
-        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20), // Adjusted to give a softer appearance
+      child: Image.asset(
+        imagePath,
+        fit: BoxFit.fill, // Ensure image covers the entire container space
       ),
     );
   }

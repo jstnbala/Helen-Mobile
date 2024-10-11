@@ -70,8 +70,31 @@ class _OrderInformationState extends State<OrderInformation> {
     final orderToDisplay = updatedOrder ?? widget.order;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Order Information'),
+        backgroundColor: const Color(0xFFCA771A),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15.0),
+            bottomRight: Radius.circular(15.0),
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
+        ),
+        title: const Text(
+          'Order Information',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -163,6 +186,7 @@ class _OrderInformationState extends State<OrderInformation> {
                     child: const Text(
                       'Message',
                       style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: Color(0xFFCA771A),
                       ),
                     ),

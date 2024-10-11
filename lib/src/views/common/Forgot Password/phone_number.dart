@@ -15,6 +15,8 @@ class ForgotPassPage extends StatefulWidget {
 class _ForgotPassPageState extends State<ForgotPassPage> {
   final TextEditingController controller = TextEditingController();
   final PhoneNumber initialNumber = PhoneNumber(isoCode: 'PH'); // Default to PH format
+  String errorMessage = ''; // Error message state
+  bool isLoading = false; // Add a state for loading
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +90,18 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: InternationalPhoneNumberInput(
                 onInputChanged: (PhoneNumber number) {
-                  // Handle phone number input change if necessary
+                  final phoneNumberString = controller.text.trim();
+                  // Check if the input contains any non-numeric characters
+                  if (phoneNumberString.isNotEmpty &&
+                      !RegExp(r'^[0-9]+$').hasMatch(phoneNumberString.replaceAll(' ', ''))) {
+                    setState(() {
+                      errorMessage = 'Invalid format: use numbers only.'; // Update error message
+                    });
+                  } else {
+                    setState(() {
+                      errorMessage = ''; // Clear error message if valid
+                    });
+                  }
                 },
                 selectorConfig: const SelectorConfig(
                   selectorType: PhoneInputSelectorType.DROPDOWN,
@@ -129,6 +142,19 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 },
               ),
             ),
+            // Display error message below the input field
+            if (errorMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                child: Text(
+                  errorMessage,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                  ),
+                ),
+              ),
             const SizedBox(height: 30),
 
             // Change Password Button
@@ -143,9 +169,31 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () async {
+                    setState(() {
+                    errorMessage = ''; // Clear previous error message
+                    isLoading = true; // Set loading to true
+                  });
+
+                  // Check if the phone number field is empty
+                  if (controller.text.trim().isEmpty) {
+                    setState(() {
+                      errorMessage = 'Phone Number is required'; // Update error message
+                      isLoading = false; // Set loading to false
+                    });
+                    return;
+                  }
                 // Remove spaces from the phone number
                 final phoneNumberString = '+63${controller.text.replaceAll(' ', '')}';
                 final UpdatePasswordApi updatePasswordApi = UpdatePasswordApi();
+
+                 // Check if the input contains any non-numeric characters
+                if (!RegExp(r'^[0-9]+$').hasMatch(controller.text.replaceAll(' ', ''))) {
+                  setState(() {
+                    errorMessage = 'Invalid format: use numbers only.'; // Update error message
+                    isLoading = false; // Set loading to false
+                  });
+                  return;
+                }
 
                 // Call getAccount method to verify the phone number
                 final data = await updatePasswordApi.getAccount(phoneNumberString);
@@ -164,16 +212,21 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                     ),
                   );
                 } else {
-                  // Show an error message if the account is not found
-                  // ignore: use_build_context_synchronously
+                  setState(() {
+                  isLoading = false; // Set loading to false
+                });
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Phone number not found in the system')),
                   );
                 }
               },
 
-                child: const Center(
-                  child: Text(
+                child: Center(
+                child: isLoading // Show CircularProgressIndicator when loading
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : const Text(
                     'Send me the code',
                     style: TextStyle(
                       fontSize: 18,

@@ -142,19 +142,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           return 'New Password is required';
                         }
                         if (value.length < 8) {
-                          return 'New Password must be at least 8 characters long';
+                          return 'New Password must be at least 8 characters\nlong';
                         }
                         if (!RegExp(r'(?=.*?[A-Z])').hasMatch(value)) {
-                          return 'New Password must include at least one uppercase \n letter';
+                          return 'New Password must include at least one uppercase\nletter';
                         }
                         if (!RegExp(r'(?=.*?[a-z])').hasMatch(value)) {
-                          return 'New Password must include at least one lowercase \n letter';
+                          return 'New Password must include at least one lowercase\nletter';
                         }
                         if (!RegExp(r'(?=.*?[0-9])').hasMatch(value)) {
                           return 'New Password must include at least one number';
                         }
                         if (!RegExp(r'(?=.*?[!@#\$%\^&*()_+\-=\{\}\[\]|:;\"<>,.?/])').hasMatch(value)) {
-                          return 'New Password must include at least one special \n character';
+                          return 'New Password must include at least one special\ncharacter';
                         }
                         return null;
                       },

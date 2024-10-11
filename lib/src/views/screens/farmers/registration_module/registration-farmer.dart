@@ -445,19 +445,19 @@ class _FarmerRegistrationPageState extends State<FarmerRegistrationPage> {
                       return 'Password is required';
                     }
                     if (value.length < 8) {
-                      return 'Password must be at least 8 characters long';
+                      return 'Password must be at least 8 characters\nlong';
                     }
                     if (!RegExp(r'^(?=.*?[A-Z])').hasMatch(value)) {
-                      return 'Password must include at least one uppercase letter';
+                      return 'Password must include at least one uppercase\nletter';
                     }
                     if (!RegExp(r'^(?=.*?[a-z])').hasMatch(value)) {
-                      return 'Password must include at least one lowercase letter';
+                      return 'Password must include at least one lowercase\nletter';
                     }
                     if (!RegExp(r'^(?=.*?[0-9])').hasMatch(value)) {
                       return 'Password must include at least one number';
                     }
                     if (!RegExp(r'^(?=.*?[!@#\$%\^&*()_+\-=\{\}\[\]|:;\"\<>,.\?/])').hasMatch(value)) {
-                      return 'Password must include at least one special character';
+                      return 'Password must include at least one special\ncharacter';
                     }
                     return null;
                   },
