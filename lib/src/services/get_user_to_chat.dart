@@ -6,7 +6,7 @@ import 'fetch_org_api.dart';
 class GetUserToChatService {
   final Logger _logger = Logger();
 
-  Future<Map<String, String>> getUserToChatDetailsById(String usertoChatId) async {
+  Future<Map<String, dynamic>> getUserToChatDetailsById(String usertoChatId) async {
     _logger.i('Attempting to get userToChat from admin...');
     
     // Fetch from admin API first
@@ -15,10 +15,7 @@ class GetUserToChatService {
     if (adminResponse.statusCode == 200) {
       final data = json.decode(adminResponse.body);
       _logger.i('User found in admin: ${data['FullName']}');
-      return {
-        'FullName': data['FullName'],
-        'ProfilePicture': data['ProfilePicture'],
-      };
+      return data;
     } else if (adminResponse.statusCode == 404) {
       _logger.w('User not found in admin, checking farmers...');
       
@@ -32,10 +29,7 @@ class GetUserToChatService {
         if (farmerResponse.statusCode == 200) {
           final data = json.decode(farmerResponse.body);
           _logger.i('User found in farmers of $organization: ${data['FullName']}');
-          return {
-            'FullName': data['FullName'],
-            'ProfilePicture': data['ProfilePicture'],
-          };
+          return data;
         } 
       }
       
@@ -47,10 +41,7 @@ class GetUserToChatService {
         final data = json.decode(buyerResponse.body);
         _logger.i('User found in buyers: ${data['FullName']}');
         _logger.i('ProfilePicture ${data['ProfilePicture']}');
-        return {
-          'FullName': data['FullName'],
-          'ProfilePicture': data['ProfilePicture'] ?? '',
-        };
+        return data;
       } else if (buyerResponse.statusCode == 404) {
         _logger.e('User not found in admin, farmers, or buyers');
         throw Exception('User not found in admin, farmers, or buyers');

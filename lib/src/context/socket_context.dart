@@ -30,6 +30,7 @@ class SocketProvider with ChangeNotifier {
 
     _socket?.on('getOnlineUsers', (users) {
       _onlineUsers = List<String>.from(users);
+      print('Online users in context: ${_onlineUsers.join(', ')}'); // Join the list into a single string
       notifyListeners();
     });
 
@@ -49,7 +50,6 @@ class SocketProvider with ChangeNotifier {
   }
   void _listenForMessages() {
     _socket?.on("newMessage", (newMessage) {
-      // Handle new messages
       print('New message received globally: $newMessage');
     });
   }
@@ -87,7 +87,7 @@ SocketProvider useSocketProvider(BuildContext context) {
 }
 
 List<String> useOnlineUsers(BuildContext context) {
-  return Provider.of<SocketProvider>(context).onlineUsers;
+  return Provider.of<SocketProvider>(context,  listen: false).onlineUsers;
 }
 
 int useNotificationCount(BuildContext context) {

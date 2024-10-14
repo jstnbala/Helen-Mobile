@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/get_conversations_api.dart';
 import 'package:helen_app/src/widgets/messageCard_widget.dart';
+import 'package:skeletonizer/skeletonizer.dart'; // Import Skeletonizer package
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({super.key});
@@ -33,6 +34,10 @@ class _MessagesPageState extends State<MessagesPage> {
     });
   }
 
+  Future<void> _refreshMessages() async {
+    await _loadUserIdAndMessages(); // Refresh the messages by calling the load function again
+  }
+
   void _onButtonPressed(String buttonName) {
     setState(() {
       _selectedButton = buttonName;
@@ -40,11 +45,34 @@ class _MessagesPageState extends State<MessagesPage> {
     });
   }
 
+  Widget _buildSkeletonLoader() {
+    return Skeletonizer(
+      enabled: true, // Enable skeleton loading
+      child: ListView.builder(
+        itemCount: 5, // Display 5 skeleton items
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Container(
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
         title: const Text(
           'Messages',
           style: TextStyle(
@@ -59,36 +87,37 @@ class _MessagesPageState extends State<MessagesPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const SizedBox(height: 16.0),
             Expanded(
-              child: FutureBuilder<List<dynamic>>(
-                future: _messagesFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text("Error: ${snapshot.error}"));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text("No messages found"));
-                  } else {
-                    final messages = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        final message = messages[index];
-                        final participantId = message['participants']
-                          .firstWhere((participant) => participant != _userId, orElse: () => 'Unknown');
-                        final messageText = message['message'] ?? 'No message';
+              child: RefreshIndicator(
+                onRefresh: _refreshMessages, // Pull to refresh
+                child: FutureBuilder<List<dynamic>>(
+                  future: _messagesFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return _buildSkeletonLoader(); // Show skeleton loader while waiting
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error: ${snapshot.error}"));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No messages found"));
+                    } else {
+                      final messages = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: messages.length,
+                        itemBuilder: (context, index) {
+                          final message = messages[index];
+                          final participantId = message['participants']
+                            .firstWhere((participant) => participant != _userId, orElse: () => 'Unknown');
+                          final messageText = message['message'] ?? 'No message';
 
-                        return MessageCard(
-                          receiverId: participantId,
-                          message: messageText,
-                          
-                        );
-                      },
-                    );
-                  }
-                },
+                          return MessageCard(
+                            receiverId: participantId,
+                            message: messageText,
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
             ),
           ],

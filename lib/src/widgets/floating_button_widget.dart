@@ -9,22 +9,22 @@ class FloatingActionButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 0,
-      left: MediaQuery.of(context).size.width / 2 - 30,
+      bottom: 20,
+      left: MediaQuery.of(context).size.width / 2 - 25,
       child: GestureDetector(
         onTap: onPressed,
         child: Container(
-          width: 60,
-          height: 80,
+          width: 55,
+          height: 75,
           decoration: const BoxDecoration(
-            color: Color(0xFFCA771A),
+            color: Colors.white,
             shape: BoxShape.circle,
           ),
           child: const Center(
             child: Icon(
               Icons.add,
-              color: Colors.white,
-              size: 40,
+              color: Color(0xFFCA771A),
+              size: 30,
             ),
           ),
         ),

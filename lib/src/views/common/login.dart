@@ -46,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final socketProvider = useSocketProvider(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -265,10 +264,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             if (success) {
                               // Get user ID from the response or context (e.g., from storage or API)
-                              String userId = await storage.read(key: 'id') ?? '';
-
-                              // On successful login, connect the socket with the userId
-                              socketProvider.connectSocket(userId);
+                          
                                Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => const NavBar())

@@ -31,8 +31,9 @@ class _NavBarState extends State<NavBar> {
 
   final storage = const FlutterSecureStorage();
 
-  static const Color selectedColor = Color(0xFFCA771A);
-  static const Color unselectedColor = Color(0xFF606060);
+  static const Color selectedColor = Color.fromARGB(255, 145, 75, 28);
+  static const Color unselectedColor = Colors.white;
+ 
 
   @override
   void initState() {
@@ -40,6 +41,22 @@ class _NavBarState extends State<NavBar> {
     _selectedIndex = widget.initialIndex;
     _loadUserAndAccountType();
     _loadNotificationCount();
+    _connectToSocket();
+  }
+
+    Future<void> _connectToSocket() async {
+    final socketProvider = useSocketProvider(context);
+    
+    // Read the userId from secure storage
+    String? userId = await storage.read(key: 'id');
+    
+    if (userId != null && userId.isNotEmpty) {
+      // Connect the socket with the userId
+      socketProvider.connectSocket(userId);
+      print("Socket connected for userId: $userId");
+    } else {
+      print("No userId found in secure storage.");
+    }
   }
 
   Future<void> _loadUserAndAccountType() async {
@@ -92,6 +109,7 @@ class _NavBarState extends State<NavBar> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        backgroundColor: Colors.white,
         drawer: const HalfWhiteDrawer(),
         body: Column(
           children: [
@@ -99,8 +117,8 @@ class _NavBarState extends State<NavBar> {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(27),
+                    bottomRight: Radius.circular(27),
                   ),
                   child: Container(
                     color: const Color(0xFFCA771A),
@@ -125,7 +143,7 @@ class _NavBarState extends State<NavBar> {
                       icon: const Icon(
                         Icons.menu,
                         color: Colors.white,
-                        size: 30,
+                        size: 27,
                       ),
                       onPressed: () {
                         Scaffold.of(context).openDrawer();
@@ -142,7 +160,7 @@ class _NavBarState extends State<NavBar> {
                         const Icon(
                           Icons.notifications,
                           color: Colors.white,
-                          size: 30,
+                          size: 27,
                         ),
                         if (totalNotif > 0)
                           Positioned(
@@ -182,79 +200,105 @@ class _NavBarState extends State<NavBar> {
                 ),
               ],
             ),
-            Expanded(
-              child: IndexedStack(
-                index: _selectedIndex,
-                children: isFarmer
+          Expanded(
+        child: Container(
+          color: Colors.white, // Set your desired background color here
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: isFarmer
+                ? const [
+                    HomePageFarmer(),
+                    MessagesPage(),
+                    OrdersPage(),
+                    ProfilePage(),
+                  ]
+                : isDirectBuyer
                     ? const [
-                        HomePageFarmer(),
+                        HomePageBuyer(),
                         MessagesPage(),
                         OrdersPage(),
                         ProfilePage(),
                       ]
-                    : isDirectBuyer
-                        ? const [
-                            HomePageBuyer(),
-                            MessagesPage(),
-                            OrdersPage(),
-                            ProfilePage(),
-                          ]
-                        : const [
-                            HomepageInsti(),
-                            MessagesPage(),
-                            OrdersPage(),
-                            ProfilePage(),
-                          ],
-              ),
-            ),
+                    : const [
+                        HomepageInsti(),
+                        MessagesPage(),
+                        OrdersPage(),
+                        ProfilePage(),
+                      ],
+          ),
+        ),
+      ),
           ],
         ),
-        bottomNavigationBar: Stack(
-          children: [
-            BottomAppBar(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.home),
-                    color: _selectedIndex == 0 ? selectedColor : unselectedColor,
-                    iconSize: 30,
-                    onPressed: () => _onItemTapped(0),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.message),
-                    color: _selectedIndex == 1 ? selectedColor : unselectedColor,
-                    iconSize: 30,
-                    onPressed: () => _onItemTapped(1),
-                  ),
-                  if (isFarmer)
-                    const SizedBox(width: 50),
-                  IconButton(
-                    icon: const Icon(Icons.shopping_cart),
-                    color: _selectedIndex == 2 ? selectedColor : unselectedColor,
-                    iconSize: 30,
-                    onPressed: () => _onItemTapped(2),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.person),
-                    color: _selectedIndex == 3 ? selectedColor : unselectedColor,
-                    iconSize: 30,
-                    onPressed: () => _onItemTapped(3),
-                  ),
-                ],
+      bottomNavigationBar: Stack(
+        children: [
+          Container(
+            height: 64.0, // Set a fixed height for the BottomAppBar
+            margin: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 24.0), // Different margins for x and y axes
+            decoration: BoxDecoration(
+              color: Colors.transparent, // Set the background color of the BottomAppBar
+              borderRadius: BorderRadius.circular(16.0), // Rounded corners
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2), // Shadow color
+                  spreadRadius: 1, // Spread of the shadow
+                  blurRadius: 5, // Blur effect for the shadow
+                  offset: const Offset(2, 4), // Offset to elevate
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0), // Apply rounded corners here
+              child: BottomAppBar(
+                color: const Color.fromARGB(255, 201, 129, 52), // Set BottomAppBar color
+                shape: const CircularNotchedRectangle(), // Maintain the notched shape
+                elevation: 0, // Set elevation to 0 since we handle shadows manually
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.home),
+                      color: _selectedIndex == 0 ? selectedColor : unselectedColor,
+                      iconSize: 27,
+                      onPressed: () => _onItemTapped(0),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.message),
+                      color: _selectedIndex == 1 ? selectedColor : unselectedColor,
+                      iconSize: 27,
+                      onPressed: () => _onItemTapped(1),
+                    ),
+                    if (isFarmer)
+                      const SizedBox(width: 50),
+                    IconButton(
+                      icon: const Icon(Icons.shopping_cart),
+                      color: _selectedIndex == 2 ? selectedColor : unselectedColor,
+                      iconSize: 27,
+                      onPressed: () => _onItemTapped(2),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.person),
+                      color: _selectedIndex == 3 ? selectedColor : unselectedColor,
+                      iconSize: 27,
+                      onPressed: () => _onItemTapped(3),
+                    ),
+                  ],
+                ),
               ),
             ),
-            if (isFarmer)
-              FloatingActionButtonWidget(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AddProductPage()),
-                  );
-                },
-              ),
-          ],
-        ),
+          ),
+          if (isFarmer)
+            FloatingActionButtonWidget(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddProductPage()),
+                );
+              },
+            ),
+        ],
+      ),
+
       ),
     );
   }

@@ -38,6 +38,10 @@
     device_info_plus: ^10.1.2
     shared_preferences: ^2.3.2
     mongo_dart: ^0.10.3
+    webview_flutter: ^4.10.0
+    flutter_inappwebview: ^6.1.5
+    flutter_dotenv: ^5.2.1
+    timeago: ^3.7.0
     
 
     
@@ -55,6 +59,7 @@
   flutter:
     uses-material-design: true
     assets:
+      - .env
       - images/farmers/white-helen.png
       - images/farmers/login-bg.jpg
       - images/farmers/logo-opa.png
@@ -91,8 +96,10 @@
       - images/buyers/bank-transfer.png
       - images/buyers/cash.jpg
       - images/buyers/gcash.png
+      - images/AgriKaChatBot.png
       - images/Help Buyer.png
       - images/Help Farmer.png
+
 
 
     fonts:

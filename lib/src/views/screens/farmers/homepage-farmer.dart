@@ -11,191 +11,195 @@ class HomePageFarmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 15),
+      body: Container(
+        color: const Color(0xFFF5F5F5), // Dirty white background color
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 15),
 
-              // Orders Section
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NavBar(initialIndex: 2)
-                    ), 
-                  );
-                },
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
-                  height: 120,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20), // Added border radius
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'images/farmers/orders.png',
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 15,
-                          child: Text(
-                            'Orders',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+                // Orders Section
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NavBar(initialIndex: 2),
+                      ),
+                    );
+                  },
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20), // Added border radius
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'images/farmers/orders.png',
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: 100,
+                            fit: BoxFit.cover,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-
-              // List of Products Section
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProductListFarmer()),
-                  );
-                },
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
-                  height: 120,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20), // Added border radius
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'images/farmers/listofproduct.png', // Assuming same image for list of products
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 15,
-                          child: Text(
-                            'List of Products',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-
-              // Upcoming Events Section
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UpcomingEvents()),
-                  );
-                },
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
-                  height: 120,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20), // Added border radius
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'images/farmers/events.png',
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 15,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Upcoming',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
+                          Positioned(
+                            bottom: 10,
+                            left: 15,
+                            child: Text(
+                              'Orders',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
                               ),
-                              Text(
-                                'Events',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-
-              // AgriKaChat Section
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChatAI()),
-                  );
-                },
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
-                  height: 130,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20), // Added border radius
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'images/farmers/agrikachat.png',
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: 140,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 15,
-                          child: Text(
-                            'AgriKaChat',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 15),
+
+                // List of Products Section
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProductListFarmer()),
+                    );
+                  },
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20), // Added border radius
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'images/farmers/listofproduct.png', // Assuming same image for list of products
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            left: 15,
+                            child: Text(
+                              'List of Products',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+
+                // Upcoming Events Section
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UpcomingEvents()),
+                    );
+                  },
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20), // Added border radius
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'images/farmers/events.png',
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            left: 15,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Upcoming',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                Text(
+                                  'Events',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+
+                // AgriKaChat Section
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChatAI()),
+                    );
+                  },
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9, // Adjusted width
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20), // Added border radius
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'images/farmers/agrikachat.png',
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: 140,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            left: 15,
+                            child: Text(
+                              'AgriKaChat',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

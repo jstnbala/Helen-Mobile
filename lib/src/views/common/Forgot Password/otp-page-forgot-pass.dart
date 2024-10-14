@@ -43,53 +43,14 @@ class _OtpPageState extends State<OtpPage> {
   final FocusNode _focusNode6 = FocusNode();
 
   String _verificationId = '';
-
+  
   @override
   void initState() {
     super.initState();
-    // Automatically send OTP when the page is loaded
     _sendOtp();
-    _setupOtpListeners();
-  }
-
-    void _setupOtpListeners() {
-    _otpController1.addListener(() {
-      if (_otpController1.text.length == 1) {
-        FocusScope.of(context).requestFocus(_focusNode2);
-      }
-    });
-    _otpController2.addListener(() {
-      if (_otpController2.text.length == 1) {
-        FocusScope.of(context).requestFocus(_focusNode3);
-      } else if (_otpController2.text.isEmpty) {
-        FocusScope.of(context).requestFocus(_focusNode1);
-      }
-    });
-    _otpController3.addListener(() {
-      if (_otpController3.text.length == 1) {
-        FocusScope.of(context).requestFocus(_focusNode4);
-      } else if (_otpController3.text.isEmpty) {
-        FocusScope.of(context).requestFocus(_focusNode2);
-      }
-    });
-    _otpController4.addListener(() {
-      if (_otpController4.text.length == 1) {
-        FocusScope.of(context).requestFocus(_focusNode5);
-      } else if (_otpController4.text.isEmpty) {
-        FocusScope.of(context).requestFocus(_focusNode3);
-      }
-    });
-    _otpController5.addListener(() {
-      if (_otpController5.text.length == 1) {
-        FocusScope.of(context).requestFocus(_focusNode6);
-      } else if (_otpController5.text.isEmpty) {
-        FocusScope.of(context).requestFocus(_focusNode4);
-      }
-    });
-    _otpController6.addListener(() {
-      if (_otpController6.text.isEmpty) {
-        FocusScope.of(context).requestFocus(_focusNode5);
-      }
+    // Automatically focus on the first input when the page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_focusNode1);
     });
   }
 
@@ -276,25 +237,25 @@ class _OtpPageState extends State<OtpPage> {
             const SizedBox(height: 20),
  
             // OTP Fields
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center, // Center OTP fields
-               children: [
-                  _buildOtpField(_otpController1, _focusNode1),
-                  const SizedBox(width: 10),
-                  _buildOtpField(_otpController2, _focusNode2),
-                  const SizedBox(width: 10),
-                  _buildOtpField(_otpController3, _focusNode3),
-                  const SizedBox(width: 10),
-                  _buildOtpField(_otpController4, _focusNode4),
-                  const SizedBox(width: 10),
-                  _buildOtpField(_otpController5, _focusNode5),
-                  const SizedBox(width: 10),
-                  _buildOtpField(_otpController6, _focusNode6),
-                ],
-              ),
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Center OTP fields
+            children: [
+              _buildOtpField(_otpController1, _focusNode1, _focusNode2), // First field, no prevFocus
+              const SizedBox(width: 10),
+              _buildOtpField(_otpController2, _focusNode2, _focusNode3, prevFocus: _focusNode1),
+              const SizedBox(width: 10),
+              _buildOtpField(_otpController3, _focusNode3, _focusNode4, prevFocus: _focusNode2),
+              const SizedBox(width: 10),
+              _buildOtpField(_otpController4, _focusNode4, _focusNode5, prevFocus: _focusNode3),
+              const SizedBox(width: 10),
+              _buildOtpField(_otpController5, _focusNode5, _focusNode6, prevFocus: _focusNode4),
+              const SizedBox(width: 10),
+              _buildOtpField(_otpController6, _focusNode6, FocusNode(), prevFocus: _focusNode5), // Last field, no nextFocus
+            ],
+          ),
+        ),
             const SizedBox(height: 20),
  
             // Resend Code Button
@@ -394,12 +355,13 @@ class _OtpPageState extends State<OtpPage> {
   }
  
   // Widget for individual OTP fields
-   Widget _buildOtpField(TextEditingController controller, FocusNode focusNode) {
+  Widget _buildOtpField(
+      TextEditingController controller, FocusNode currentFocus, FocusNode nextFocus, {FocusNode? prevFocus}) {
     return SizedBox(
       width: 50,
       child: TextField(
         controller: controller,
-        focusNode: focusNode,
+        focusNode: currentFocus,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: const BorderSide(
@@ -420,7 +382,16 @@ class _OtpPageState extends State<OtpPage> {
         ),
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
-        maxLength: 1,
+        maxLength: 1, 
+        onChanged: (value) {
+          if (value.length == 1) {
+            // Move focus to the next field if one character is entered
+            FocusScope.of(context).requestFocus(nextFocus);
+          } else if (value.isEmpty && prevFocus != null) {
+            // Move focus back to the previous field if the current one is cleared
+            FocusScope.of(context).requestFocus(prevFocus);
+          }
+        },
       ),
     );
   }

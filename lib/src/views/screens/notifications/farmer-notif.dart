@@ -1,7 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/services/get_notifications_api.dart'; // Import the GetNotifications class
+import 'package:helen_app/src/services/get_notifications_api.dart';
+import 'package:helen_app/src/views/screens/notifications/specific_notif.dart'; // Import the GetNotifications class
 
 class FarmerNotifPage extends StatefulWidget {
   const FarmerNotifPage({super.key});
@@ -73,7 +74,22 @@ class _FarmerNotifPageState extends State<FarmerNotifPage> {
                   itemCount: _notificationList.length,
                   itemBuilder: (context, index) {
                     final notif = _notificationList[index];
-                    return _buildNotificationCard(notif, index);
+                      return GestureDetector(
+                      onTap: () {
+                        // Navigate to the SpecificNotif page on tap
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SpecificNotif(
+                              notification: notif,
+                              onDelete: _refreshNotifications, // Pass the callback here
+
+                              ),
+                          ),
+                        );
+                         },
+                      child: _buildNotificationCard(notif, index),
+                    );
                   },
                 );
               }
@@ -94,6 +110,11 @@ class _FarmerNotifPageState extends State<FarmerNotifPage> {
       ),
     );
   }
+  void _refreshNotifications() {
+  setState(() {
+    _notifications = GetNotifications().getNotifications(); // Re-fetch notifications
+  });
+}
 
   Widget _buildNotificationCard(Map<String, dynamic> notif, int index) {
     return Card(

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:helen_app/src/views/screens/chatSupport/chat_support.dart';
 import 'package:helen_app/src/widgets/profile_widgets.dart';
 import 'package:helen_app/src/widgets/name_widgets.dart';
 
@@ -11,6 +12,7 @@ import 'package:helen_app/src/views/common/login.dart';
 
 import 'package:helen_app/src/context/socket_context.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class HalfWhiteDrawer extends StatefulWidget {
   const HalfWhiteDrawer({super.key});
 
@@ -68,6 +70,18 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const HelpFarmerScreen()),
+                  );
+                },
+              ),
+              const SizedBox(height: 5.0),
+                _drawerItem(
+                context,
+                icon: Icons.admin_panel_settings,
+                text: 'Chat Support',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  ChatSupport()),
                   );
                 },
               ),
@@ -155,6 +169,10 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
                 // Clear secure storage
                 await storage.deleteAll();
 
+                // Clear all cached data in SharedPreferences
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.clear(); // Clear all cached data
+
                 // Ensure navigation happens after the dialog is dismissed
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (mounted) {
@@ -183,4 +201,5 @@ class _HalfWhiteDrawerState extends State<HalfWhiteDrawer> {
       },
     );
   }
+
 }

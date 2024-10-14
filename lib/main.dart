@@ -11,6 +11,8 @@ import 'package:helen_app/src/utils/constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 final Logger logger = Logger();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -37,6 +39,10 @@ void main() async {
     // Handle foreground messages and show notification
     _showNotification(message);
   });
+  await dotenv.load(fileName: ".env"); 
+  logger.i('Attempting to load .env file...');
+  logger.i('OPEN_AI_API_KEY: ${dotenv.env['OPEN_AI_API_KEY']}');
+
 
   runApp(const MyApp());
 }

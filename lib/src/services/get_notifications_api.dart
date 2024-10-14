@@ -19,7 +19,6 @@ class GetNotifications {
   if (userId == null) {
     throw Exception('User ID not found in secure storage');
   }
-
   final url = Uri.parse('https://helen-server-lmp4.onrender.com/api/notifications/$userId');
 
   try {
@@ -42,7 +41,32 @@ class GetNotifications {
 }
 
   Future<int> getNotificationCount() async {
+    
     final notifications = await getNotifications();
     return notifications.isNotEmpty ? notifications.length : 0; // Return count, 0 if empty
   }
+
+  Future<bool> deleteNotifications(String id) async {
+    final url = Uri.parse('https://helen-server-lmp4.onrender.com/api/notifications/$id');
+
+    try {
+      final response = await http.delete(url);
+
+      // Check if the response status code is 200 (OK)
+      if (response.statusCode == 200) {
+        // Optionally, you can decode the response body if needed
+        final responseBody = jsonDecode(response.body);
+        print('Notification deleted successfully: ${responseBody['message']}'); // Log success message
+        return true; // Return true on successful deletion
+      } else {
+        // Handle error responses
+        print('Failed to delete notification: ${response.statusCode}');
+        return false; // Return false if deletion was not successful
+      }
+    } catch (e) {
+      print('Error deleting notification: $e');
+      return false; // Return false on error
+    }
+  }
+
 }

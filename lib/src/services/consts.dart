@@ -1,2 +1,1 @@
 // ignore: constant_identifier_names
-const OPENAI_API_KEY = "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";

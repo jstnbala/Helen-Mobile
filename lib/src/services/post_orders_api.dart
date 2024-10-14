@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart'; // Import the logger package
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Create a logger instance
 final Logger logger = Logger();
@@ -88,8 +89,6 @@ Future<bool> postOrders(
   }
 }
 
-
-
 Future<bool> updateProduct(String productName, String farmerName) async {
   try {
     // Step 1: Fetch the product details using the product name and farmer name
@@ -154,11 +153,15 @@ Future<bool> updateProduct(String productName, String farmerName) async {
   }
 }
 
+// Constants
+const String pendingOrderCacheKey = 'PendingOrderCache';
+const String cacheTimestampKey = 'PendingOrderCacheTimestamp';
+const Duration cacheDuration = Duration(minutes: 5);
 
 Future<List<dynamic>?> getPendingOrders() async {
   // Retrieve the FullName and type from secure storage
   String? fullName = await secureStorage.read(key: 'FullName');
-  String? userType = await secureStorage.read(key: 'UserType'); // Assuming the key for type is 'UserType'
+  String? userType = await secureStorage.read(key: 'UserType');
 
   // Check if the required data is available
   if (fullName == null || userType == null) {
@@ -179,6 +182,27 @@ Future<List<dynamic>?> getPendingOrders() async {
   logger.i('Fetching orders with URL: $url'); // Log the URL being queried
 
   try {
+    // Check SharedPreferences for cached orders
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cachedOrders = prefs.getString(pendingOrderCacheKey);
+    int? cacheTimestamp = prefs.getInt(cacheTimestampKey);
+
+    // Check if cached data is valid
+    if (cachedOrders != null && cacheTimestamp != null) {
+      final DateTime cacheDateTime = DateTime.fromMillisecondsSinceEpoch(cacheTimestamp);
+      if (DateTime.now().difference(cacheDateTime) < cacheDuration) {
+        // Return cached orders if still valid
+        List<dynamic> orders = json.decode(cachedOrders);
+        logger.i('Returning cached orders: $orders');
+        return orders;
+      } else {
+        // Cache expired, remove old cache
+        await prefs.remove(pendingOrderCacheKey);
+        await prefs.remove(cacheTimestampKey);
+        logger.i('Cache expired, fetching new orders.');
+      }
+    }
+
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -188,19 +212,24 @@ Future<List<dynamic>?> getPendingOrders() async {
 
       // Iterate over each order and get the ProductPic
       for (var order in orders) {
-        String productName = order['ProductName']; 
-        String farmerName = order['FarmerName']; 
+        String productName = order['ProductName'];
+        String farmerName = order['FarmerName'];
 
         // Get the product pic for the respective order
         String? productPic = await getProductPic(productName, farmerName);
-       
+
         order['productPic'] = productPic;
         if (productPic != null) {
-          logger.i('Product Pic for ${order['OrderId']}: $productPic'); // Assuming there is an OrderId field
+          logger.i('Product Pic for ${order['OrderId']}: $productPic');
         } else {
           logger.w('No Product Pic found for ${order['OrderId']}.');
         }
       }
+
+      // Save orders to shared preferences as PendingOrderCache
+      await prefs.setString(pendingOrderCacheKey, json.encode(orders)); // Encode orders to JSON
+      await prefs.setInt(cacheTimestampKey, DateTime.now().millisecondsSinceEpoch); // Store current timestamp
+
       return orders; // Return the list of orders with ProductPics added
     } else {
       logger.e('Failed to fetch orders. Status code: ${response.statusCode}');
@@ -221,6 +250,24 @@ Future<List<dynamic>?> getCompletedOrders() async {
   if (fullName == null || userType == null) {
     logger.e('FullName or UserType not found in secure storage.');
     return null; // Exit if any required information is missing
+  }
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? cachedOrders = prefs.getString('CompletedOrderCache');
+  int? cacheTimestamp = prefs.getInt('CompletedOrderCacheTimestamp');
+
+  // Check if the cached orders are still valid (less than 5 minutes old)
+  if (cachedOrders != null && cacheTimestamp != null) {
+    final DateTime cacheTime = DateTime.fromMillisecondsSinceEpoch(cacheTimestamp);
+    if (DateTime.now().difference(cacheTime).inMinutes < 5) {
+      // Cached orders are still valid
+      logger.i('Loaded orders from cache: $cachedOrders');
+      return json.decode(cachedOrders); // Return cached orders
+    } else {
+      // Cache expired; clear the cache
+      await prefs.remove('CompletedOrderCache');
+      await prefs.remove('CompletedOrderCacheTimestamp');
+    }
   }
 
   // Construct the API URL based on the user type, filtering out completed and received orders
@@ -258,6 +305,11 @@ Future<List<dynamic>?> getCompletedOrders() async {
           logger.w('No Product Pic found for ${order['OrderId']}.');
         }
       }
+
+      // Save orders to shared preferences as CompletedOrderCache
+      await prefs.setString('CompletedOrderCache', json.encode(orders));
+      await prefs.setInt('CompletedOrderCacheTimestamp', DateTime.now().millisecondsSinceEpoch);
+
       return orders; // Return the list of orders with ProductPics added
     } else {
       logger.e('Failed to fetch orders. Status code: ${response.statusCode}');
