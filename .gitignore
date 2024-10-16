@@ -9,6 +9,8 @@
 .history
 .svn/
 migrate_working_dir/
+.env
+lib/src/vuews/buyers
 
 # IntelliJ related
 *.iml
@@ -30,8 +32,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-.env/
-# Symbolication related
+
+# Symbolicatio related
 app.*.symbols
 
 # Obfuscation related
