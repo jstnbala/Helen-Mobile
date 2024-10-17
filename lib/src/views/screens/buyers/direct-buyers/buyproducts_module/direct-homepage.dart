@@ -104,6 +104,7 @@ class _HomePageBuyerState extends State<HomePageBuyer> {
  @override
 Widget build(BuildContext context) {
   return Scaffold(
+    backgroundColor: Colors.white, // Set the background color to #f7f1ec
     body: Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -143,6 +144,7 @@ Widget build(BuildContext context) {
                 ? Skeletonizer(
                     // Adjust the height and width as needed
                     child: GridView.builder(
+                      
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.75,
@@ -182,8 +184,10 @@ Widget build(BuildContext context) {
                           final orgname = product['OrgName'] ?? 'Unknown Organization';
 
                           return SizedBox(
+                            
                             height: 250,
                             child: Card(
+                              color: Colors.white, // Set the background color of the card to white
                               elevation: 10,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),

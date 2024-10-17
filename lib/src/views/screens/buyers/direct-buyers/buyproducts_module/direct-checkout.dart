@@ -1,8 +1,8 @@
-// ignore_for_file: file_names, library_private_types_in_public_api, avoid_print, unnecessary_brace_in_string_interps, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: file_names, library_private_types_in_public_api, avoid_print, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
-import 'package:helen_app/src/api/paymongo_API.dart';
-import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/web_view_payment_screen.dart';
+import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-qr_page.dart';
+
 
 class CheckoutPage extends StatefulWidget {
   final String farmerName; // Add farmerName parameter
@@ -74,7 +74,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20.0),
                   child: Image.network(
-                    widget.productPic,
+                    widget.productPic ,
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height * 0.3,
                     fit: BoxFit.cover,
@@ -269,8 +269,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
+                                  child: Image.asset(
+                                    imagePath,
+                                    width: 30.0,  // Adjust the size of the icon as needed
+                                    height: 24.0,
+                                    fit: BoxFit.cover, // Ensures the image fits within the rounded container
+                                  ),
+                                ),
+                                const SizedBox(width: 10), // Space between the icon and the text
                                 Text(
                                   mode,
                                   style: TextStyle(
@@ -281,12 +290,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         : const Color.fromARGB(255, 0, 0, 0),
                                   ),
                                 ),
-                                if (imagePath.isNotEmpty)
-                                  Image.asset(
-                                    imagePath,
-                                    height: 20,
-                                    width: 20,
-                                  ),
                               ],
                             ),
                           ),
@@ -295,110 +298,110 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     }).toList(),
                     ],
                   ),
-                ),
-                const SizedBox(height: 20.0),
-                ElevatedButton(
-                    onPressed: () async {
-                      PayMongoService payMongoService = PayMongoService();
-                      String selectedPaymentMethod;
-                      Map<String, dynamic> paymentMethodDetails;
-                      const returnUrl = 'https://helen-opaquezon.online/success'; // Replace with your actual return URL
+                )
 
-
-                      if (_selectedPaymentOption == null) {
-                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please select a payment option')),
-                        );
-                        return; // Exit the function if no payment option is selected
-                      }
-
-                      if (_selectedPaymentOption == 'GCash') {
-                        selectedPaymentMethod = 'gcash';
-                        paymentMethodDetails = {
-                          'mobile_number': '09123456789', // Replace with actual mobile number
-                          // Add any other required fields
-                        };
-                      } else if (_selectedPaymentOption == 'BankTransfer') {
-                        selectedPaymentMethod = 'card'; // Use appropriate value based on PayMongo documentation
-                        paymentMethodDetails = {
-                          'account_number': '1234567890', // Replace with actual account number
-                          'account_name': 'Your Account Name',
-                          // Add any other required fields
-                        };
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Invalid payment option selected')),
-                        );
-                        return; // Exit the function if the payment option is invalid
-                      }
-                                          
-                      // Create a payment intent with PayMongo based on the selected payment method
-                      final paymentIntentId = await payMongoService.createPaymentIntent(
-                        amount: (double.parse(widget.price) * 100).toInt(), // Amount in cents
-                        paymentMethod: _selectedPaymentOption!,
-                        description: 'Payment for ${widget.productName}',
-                      );
-
-                      
-                      if (paymentIntentId == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to create payment intent')),
-                        );
-                        return;
-                      }
-        
-                      final paymentMethodId = await payMongoService.createPaymentMethod(selectedPaymentMethod, paymentMethodDetails);
-
-                      if (paymentMethodId == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to create payment intent')),
-                        );
-                        return;
-                      }
-   
-                      // Attach the payment method to the created payment intent
-                      final paymentLink = await payMongoService.attachPaymentMethod(paymentIntentId, paymentMethodId, returnUrl: returnUrl);
-
-                      if (paymentLink == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to attach payment method')),
-                        );
-                        return;
-                      }
-
-                      // Navigate to the WebViewPaymentScreen with the payment link
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WebViewScreen(
-                            paymentLink: paymentLink,
-                            paymentIntentId: paymentIntentId,
-                            farmerName: widget.farmerName, 
-                            productName: widget.productName,
-                            price: widget.price,
-                            quantity: widget.quantity,
-                            selectedDeliveryOption: _selectedDeliveryOption,
-                            selectedPaymentOption: _selectedPaymentOption,
-                          ),
-                        ),
-                      );
-                    
-                       
-                     
-                    },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFCA771A),
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  ),
-                  child: const Text(
-                    'Proceed to Payment',
+                else
+                  const Text(
+                    'No payment options available',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 16,
-                      color: Colors.white,
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+            
+                const SizedBox(height: 20),
+               // Proceed to Payment Button
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: double.infinity, // Make the button span the full width
+                    child: ElevatedButton(
+                      onPressed: () {
+
+                        // Collecting user selections
+        final bool isDeliveryOptionSelected = _selectedDeliveryOption != null;
+        final bool isPaymentOptionSelected = _selectedPaymentOption != null;
+
+        // Define error messages
+        String errorMessage = '';
+
+        // Determine which options are missing and set the error message accordingly
+        if (!isDeliveryOptionSelected && !isPaymentOptionSelected) {
+          errorMessage = 'Please select both mode of delivery and payment.';
+        } else if (!isDeliveryOptionSelected) {
+          errorMessage = 'Please select a mode of delivery.';
+        } else if (!isPaymentOptionSelected) {
+          errorMessage = 'Please select a payment option.';
+        }
+
+        if (errorMessage.isNotEmpty) {
+          // Show error message if any selection is missing
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        } else {
+                        // Add your logic for proceeding to payment here
+                          print('product name : ${widget.productName}');
+                          print('payment amount : ${widget.price}');
+                          print('quantity : ${widget.quantity}');
+                          print('mode of delivery : ${_selectedDeliveryOption}');
+                          print('payment method : ${_selectedPaymentOption}');
+
+                        
+                            // Navigate to QR page with the appropriate QR file
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  String? qrFilePath;
+
+                                  // Determine the QR file path based on the selected payment option
+                                  if (_selectedPaymentOption == 'GCash') {
+                                    qrFilePath = widget.serviceInfo?['gcashQrFile'];
+                                  } else if (_selectedPaymentOption == 'BankTransfer') {
+                                    qrFilePath = widget.serviceInfo?['bankTransferQrFile'];
+                                  }
+                                  // Handle the case for 'Cash' or other payment methods if needed
+
+                                  return DirectQRPage(
+                                    farmerName: widget.farmerName, 
+                                    qrFilePath: qrFilePath,
+                                    productName: widget.productName,
+                                    price: widget.price,
+                                    quantity: widget.quantity,
+                                    selectedDeliveryOption: _selectedDeliveryOption,
+                                    selectedPaymentOption: _selectedPaymentOption,
+                                  );
+                                },
+                              ),
+                            );
+                          } 
+                        },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFCA771A), // Button background color
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Proceed to Payment',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
+
               ],
             ),
           ),

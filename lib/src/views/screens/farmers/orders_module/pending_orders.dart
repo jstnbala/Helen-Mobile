@@ -74,6 +74,7 @@ class _PendingOrdersState extends State<PendingOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: refreshOrders,
         child: ScrollbarTheme(
@@ -132,6 +133,7 @@ class _PendingOrdersState extends State<PendingOrders> {
           );
         },
         child: Card(
+          color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),

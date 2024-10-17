@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/views/common/navbar.dart';
+import 'package:helen_app/src/views/screens/farmers/orders_module/orderspage.dart';
 
 class DirectReceipt extends StatefulWidget {
   final String farmerName;
@@ -371,7 +372,11 @@ class _DirectReceiptState extends State<DirectReceipt> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Add functionality for orders
+                      Navigator.push(context, 
+                        MaterialPageRoute(
+                          builder: (context) => const NavBar(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFCA771A),

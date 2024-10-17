@@ -92,6 +92,7 @@ class _OrderHistoryState extends State<OrderHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: _refreshOrders, // Set up pull-to-refresh
         child: ScrollbarTheme(
@@ -150,6 +151,7 @@ class _OrderHistoryState extends State<OrderHistory> {
         );
       },
       child: Card(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
