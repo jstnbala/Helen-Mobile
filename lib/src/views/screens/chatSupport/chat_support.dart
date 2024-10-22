@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/context/socket_context.dart';
 import 'package:helen_app/src/services/get_admin.dart';
