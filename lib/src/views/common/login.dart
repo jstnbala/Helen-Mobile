@@ -7,7 +7,6 @@ import 'package:helen_app/src/views/common/Forgot Password/phone_number.dart';
 import 'package:helen_app/src/views/common/navbar.dart'; 
 import 'package:helen_app/src/views/common/getstarted.dart'; // Import FarmerRegistrationPage class
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:helen_app/src/context/socket_context.dart'; // Import your SocketContext
 
 // Show Error Dialog function
 void showErrorDialog(BuildContext context, String message) {

@@ -26,6 +26,10 @@ class _AddProductPageState extends State<AddProductPage> {
   final TextEditingController _sellingPriceController = TextEditingController();
   final TextEditingController _productDetailsController = TextEditingController();
   final TextEditingController _inventoryController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _tagController = TextEditingController();
+
+
 
   // Loading state variable
   bool _isLoading = false;
@@ -309,13 +313,114 @@ class _AddProductPageState extends State<AddProductPage> {
                 maxLength: 30,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Product Name is required';
+                    return 'Category is required';
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 10),
 
+
+            Row(
+  children: [
+    // Category Column
+    Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Category',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+              color: Color(0xFFCA771A),
+            ),
+          ),
+          TextFormField(
+            controller: _categoryController,
+            decoration: InputDecoration(
+              hintText: 'Type Here...',
+              hintStyle: const TextStyle(
+                fontFamily: 'Poppins',
+                fontStyle: FontStyle.italic,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFCA771A),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFCA771A),
+                ),
+              ),
+            ),
+            maxLength: 30,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Product Name is required';
+              }
+              return null;
+            },
+          ),
+        ],
+      ),
+    ),
+
+    const SizedBox(width: 10), // Spacing between the two fields
+
+    // Tags Column
+    Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Tags',
+            style: TextStyle( 
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+              color: Color(0xFFCA771A),
+            ),
+          ),
+          TextFormField(
+            controller: _tagController,
+            decoration: InputDecoration(
+              hintText: 'Type Here...',
+              hintStyle: const TextStyle(
+                fontFamily: 'Poppins',
+                fontStyle: FontStyle.italic,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFCA771A),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFCA771A),
+                ),
+              ),
+            ),
+            maxLength: 30,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Tag is required';
+              }
+              return null;
+            },
+          ),
+        ],
+      ),
+    ),
+  ],
+),
+
+              
               // Selling Price
               const Text(
                 'Selling Price',
@@ -404,7 +509,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
               // Inventory
               const Text(
-                'Quantity',
+                'Stock/Inventory',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.bold,
@@ -484,16 +589,16 @@ class _AddProductPageState extends State<AddProductPage> {
                           child: Text('Grams'),
                         ),
                         DropdownMenuItem(
-                          value: 'kilos',
-                          child: Text('Kilos'),
+                          value: 'Kg',
+                          child: Text('Kg'),
                         ),
                         DropdownMenuItem(
                           value: 'tonne',
                           child: Text('Tonne'),
                         ),
                         DropdownMenuItem(
-                          value: 'pounds',
-                          child: Text('Pounds'),
+                          value: 'lb',
+                          child: Text('lb'),
                         ),
                         // Add more items as needed
                       ],

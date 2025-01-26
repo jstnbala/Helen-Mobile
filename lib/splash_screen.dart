@@ -38,42 +38,45 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFCA771A),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/splashlogo.png',
-              width: 200, // adjust the width as needed
-              height: 200, // adjust the height as needed
-            ),
-            const SizedBox(height: 20), // space between image and text
-            const Text(
-              'Harnessing, Expanding, Livelihood, Enterprise, Network',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
-                fontSize: 18, // adjust the size as needed
-                color: Colors.white,
-                height: 1.2, // line spacing adjustment
+    Widget build(BuildContext context) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFCA771A),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'images/splashlogo.png',
+                width: 200, // adjust the width as needed
+                height: 200, // adjust the height as needed
               ),
-            ),
-            const SizedBox(height: 20), // space between text and loading bar
-            SizedBox(
-              width: 250, // adjust the width of the loading bar
-              child: LinearProgressIndicator(
-                backgroundColor: Colors.white.withOpacity(0.5),
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                minHeight: 8, // adjust the height of the loading bar
+              const SizedBox(height: 20), // space between image and text
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.0), // left and right padding
+                child: Text(
+                  'Harnessing, Expanding, Livelihood, Enterprise, Network',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18, // adjust the size as needed
+                    color: Colors.white,
+                    height: 1.2, // line spacing adjustment
+                  ),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 20), // space between text and loading bar
+              SizedBox(
+                width: 250, // adjust the width of the loading bar
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.white.withOpacity(0.5),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  minHeight: 8, // adjust the height of the loading bar
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 }

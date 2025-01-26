@@ -10,7 +10,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:helen_app/src/utils/constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final Logger logger = Logger();
@@ -117,3 +116,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+ 

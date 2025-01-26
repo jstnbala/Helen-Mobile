@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, prefer_const_declarations, non_constant_identifier_names
 
 import 'dart:io';
+import 'package:helen_app/src/services/update_fcm_token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // For jsonEncode
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -384,6 +385,30 @@ Future<bool> login({
       if (responseData['success'] == true) {
         print('Login successful');
 
+         // Retrieve the FCM token from the response
+      String? serverFcmToken = responseData['FCM_Token'];
+      print('FCP from account: $serverFcmToken');
+
+      // Retrieve the stored FCM token from secure storage
+      String? storedFcmToken = await storage.read(key: 'FCM_Token');
+      print('storedFCM $storedFcmToken');
+
+      // Check if the tokens are the same
+      if (serverFcmToken != storedFcmToken || serverFcmToken == null) {
+        // Tokens are different, update the token in secure storage
+        print('FCM Token are different uploading new token or null');
+      
+        // Call the server to update the FCM token
+        await updateFcmTokenOnServer(storedFcmToken, responseData["UserType"], responseData['_id']);
+
+      } else {
+        print('FCM Token is the same, no action taken');
+      }
+
+
+      
+      
+
         await storage.write(key: 'UserType', value: responseData["UserType"]);
         await storage.write(key: 'id', value: responseData['_id']);
 
@@ -427,5 +452,43 @@ Future<bool> login({
   } catch (e) {
     print('An error occurred: $e');
     return false;
+  }
+}
+
+Future<List<dynamic>> fetchProjects() async {
+  final url = 'https://helen-server-lmp4.onrender.com/api/projects';
+
+  try {
+    final response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+
+      // Ensure responseData is indeed a list
+      final List<dynamic> projects = responseData.map((project) {
+        return {
+          'id': project['_id'],
+          'dateAdded': project['DateAdded'], // Directly access the string
+          'title': project['Title'],
+          'description': project['Description'],
+          'status': project['status'], // Ensure this field exists in the response
+          'createdAt': project['createdAt'], // This may not be in the response, check if needed
+          'updatedAt': project['updatedAt'], // This may not be in the response, check if needed
+          'projectPic': project['ProjectPic'], // Check if this field exists
+        };
+      }).toList();
+
+      print('Projects fetched successfully');
+      return projects;
+        } else {
+      print('Failed to fetch projects: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+    return [];
   }
 }

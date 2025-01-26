@@ -1,14 +1,18 @@
 // ignore_for_file: file_names, avoid_print, use_build_context_synchronously
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/services/get_farmer_api.dart';
+import 'package:helen_app/src/utils/check_account_verification.dart';
 import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/direct-checkout.dart';
 import 'package:helen_app/src/views/screens/messages_module/specific_message.dart';
 import 'package:helen_app/src/services/get_serviceInfo_api.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:logger/logger.dart'; // Import the logger package
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:helen_app/src/views/screens/buyers/direct-buyers/buyproducts_module/review_screen.dart';
+
+
 class ProductDetailsClass extends StatefulWidget {
   final String productPic;
   final String productName;
@@ -48,15 +52,15 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
     _loadServiceInfo(); // Fetch service info when the widget is initialized
   }
 
-
   Future<void> _loadServiceInfo() async {
     try {
       // Fetch the farmer's data using the API
       final farmer = await GetFarmerApi().getFarmer(widget.farmerName);
-      
+
       if (farmer != null && farmer['serviceInfo'] != null) {
         // Fetch the service info using the serviceInfo field
-        final jsonString = await GetServiceInfoAPI().getServiceInfo(farmer['serviceInfo']);
+        final jsonString =
+            await GetServiceInfoAPI().getServiceInfo(farmer['serviceInfo']);
 
         if (jsonString != null && jsonString.isNotEmpty) {
           setState(() {
@@ -72,271 +76,122 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
     } catch (e) {
       logger.e('Error loading service info $e'); // Error log with stack trace
     } finally {
-    if (mounted) { // Check if the widget is still mounted
-      setState(() {
-        isLoading = false; // Stop loading
-      });
+      if (mounted) {
+        // Check if the widget is still mounted
+        setState(() {
+          isLoading = false; // Stop loading
+        });
+      }
     }
   }
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              expandedHeight: 300.0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: widget.productPic.isNotEmpty
+                    ? Image.network(
+                        widget.productPic,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      )
+                    : const Icon(
+                        Icons.image,
+                        size: 300.0,
+                        color: Colors.grey,
+                      ),
+              ),
+              pinned: true,
             ),
-            expandedHeight: 300.0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: widget.productPic.isNotEmpty
-                  ? Image.network(
-                      widget.productPic,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )
-                  : const Icon(
-                      Icons.image,
-                      size: 300.0,
-                      color: Colors.grey,
-                    ),
-            ),
-            pinned: true,
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Skeletonizer(
-                  enabled: isLoading,
-                  child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50.0),
-                      topRight: Radius.circular(50.0),
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(50.0),
-                      topRight: Radius.circular(50.0),
-                    ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Skeletonizer(
+                    enabled: isLoading,
                     child: Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const Divider(),
-                            
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50.0),
+                          topRight: Radius.circular(50.0),
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50.0),
+                          topRight: Radius.circular(50.0),
+                        ),
+                        child: Container(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Divider(),
+
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        widget.productName,
-                                        style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFFCA771A),
-                                        ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            widget.productName,
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFFCA771A),
+                                            ),
+                                          ),
+                                          Text(
+                                            widget.quantity,
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 10,
+                                              color: Color(0xFFCA771A),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       Text(
-                                        widget.quantity,
+                                        'PHP ${widget.price}',
                                         style: const TextStyle(
                                           fontFamily: 'Poppins',
-                                          fontSize: 16.0,
+                                          fontSize: 24.0,
+                                          fontWeight: FontWeight.bold,
                                           color: Color(0xFFCA771A),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    'PHP ${widget.price}',
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFCA771A),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Divider(),
-                            // Farmer Information Section
-                            const Row(
-                              children: [
-                                Icon(Icons.person, color: Color(0xFFCA771A), size: 20.0),
-                                SizedBox(width: 8.0),
-                                Text(
-                                  'Farmer Information',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFCA771A),
-                                  ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              'Farmer Name: ${widget.farmerName}',
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              'Organization: ${widget.organization}',
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const Divider(),
-                            // Product Details Section
-                            const Row(
-                              children: [
-                                Icon(Icons.info, color: Color(0xFFCA771A), size: 20.0),
-                                SizedBox(width: 8.0),
-                                Text(
-                                  'Product Details',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFCA771A),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              widget.productDetails,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const Divider(),
-                           // Mode of Delivery Section
-                            const Row(
-                              children: [
-                                Icon(Icons.delivery_dining, color: Color(0xFFCA771A), size: 20.0),
-                                SizedBox(width: 8.0),
-                                Text(
-                                  'Available Mode of Delivery',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFCA771A),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-
-                            // Check if the serviceInfo is still being fetched
-                            if (serviceInfo == null)
-                              // Show a loading indicator while the serviceInfo is being loaded
-                              const Center(
-                                child: Text(
-                                  'Loading delivery options...',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14.0,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              )
-                            else if (serviceInfo!['modeOfDelivery'] != null)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: (serviceInfo!['modeOfDelivery'] as List<dynamic>)
-                                    .map<Widget>((item) => Padding(
-                                          padding: const EdgeInsets.only(bottom: 5.0),
-                                          child: Text(
-                                            '$item',
-                                            style: const TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontSize: 14.0,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ))
-                                    .toList(),
-                              )
-                            else
-                              // If no delivery options are available
-                              const Center(
-                                child: Text(
-                                  'No delivery options available',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14.0,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-
-                            const SizedBox(height: 20.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: const Color(0xFFCA771A),
-                                      side: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      // Get the farmer data by awaiting the API call
-                                      Map<String, dynamic>? farmer =
-                                          await GetFarmerApi().getFarmer(widget.farmerName);
-
-                                      // Check if a farmer was found
-                                      if (farmer != null) {
-                                        // Navigate to the SpecificMessagePage with farmer's details
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => SpecificMessage(
-                                              senderId: farmer['_id'],
-                                              senderName: farmer['FullName'],
-                                              senderProfile: farmer['ProfilePicture'],
-                                            ),
-                                          ),
-                                        );
-                                      } else {
-                                        // Handle case when no farmer is found, e.g., show an error message
-                                        print('Farmer not found');
-                                      }
-                                    },
-                                    child: const Text(
-                                      'Message',
+                                const Divider(),
+                                // Farmer Information Section
+                                const Row(
+                                  children: [
+                                    Icon(Icons.person,
+                                        color: Color(0xFFCA771A), size: 20.0),
+                                    SizedBox(width: 8.0),
+                                    Text(
+                                      'Farmer Information',
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 16.0,
@@ -344,61 +199,380 @@ class _ProductDetailsClassState extends State<ProductDetailsClass> {
                                         color: Color(0xFFCA771A),
                                       ),
                                     ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  'Farmer Name: ${widget.farmerName}',
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14.0,
+                                    color: Colors.black,
                                   ),
                                 ),
-                                const SizedBox(width: 10.0),
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: const Color(0xFFCA771A),
-                                      side: const BorderSide(color: Color(0xFFCA771A), width: 2.0),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0),
+                                const SizedBox(height: 4.0),
+                                Text(
+                                  'Organization: ${widget.organization}',
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const Divider(),
+                                // Product Details Section
+                                const Row(
+                                  children: [
+                                    Icon(Icons.info,
+                                        color: Color(0xFFCA771A), size: 20.0),
+                                    SizedBox(width: 8.0),
+                                    Text(
+                                      'Product Details',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFCA771A),
                                       ),
                                     ),
-                                    onPressed: () {
-                                      // Passing product details to the checkout page
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CheckoutPage(
-                                            farmerName: widget.farmerName, 
-                                            productPic: widget.productPic,
-                                            productName: widget.productName,
-                                            quantity: widget.quantity,
-                                            price: widget.price,
-                                            serviceInfo: serviceInfo,
+                                  ],
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  widget.productDetails,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const Divider(),
+                                // Mode of Delivery Section
+                                const Row(
+                                  children: [
+                                    Icon(Icons.delivery_dining,
+                                        color: Color(0xFFCA771A), size: 20.0),
+                                    SizedBox(width: 8.0),
+                                    Text(
+                                      'Available Mode of Delivery',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFCA771A),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8.0),
+
+                                // Check if the serviceInfo is still being fetched
+                                if (serviceInfo == null)
+                                  // Show a loading indicator while the serviceInfo is being loaded
+                                  const Center(
+                                    child: Text(
+                                      'Loading delivery options...',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  )
+                                else if (serviceInfo!['modeOfDelivery'] != null)
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: (serviceInfo!['modeOfDelivery']
+                                            as List<dynamic>)
+                                        .map<Widget>((item) => Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 5.0),
+                                              child: Text(
+                                                '$item',
+                                                style: const TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                  )
+                                else
+                                  // If no delivery options are available
+                                  const Center(
+                                    child: Text(
+                                      'No delivery options available',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+
+                                const SizedBox(height: 20.0),
+
+                                Container(
+                                  color:
+                                      const Color.fromARGB(255, 240, 240, 240),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Reviews Header
+                                         Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Row(
+                                                children: [
+                                                  Text('5'),
+                                                  Icon(Icons.star,
+                                                      color: Colors.amber,
+                                                      size: 18.0),
+                                                  Text(
+                                                    'Reviews',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Poppins',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16.0,
+                                                      color: Color(0xFFCA771A),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => ReviewScreen(), // Replace with your screen
+                                                    ),
+                                                  );
+                                                },
+                                                child: const Text(
+                                                  'View All >',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 12.0,
+                                                    color: Color.fromARGB(255, 34, 34, 34),
+                                                    decoration: TextDecoration.underline, // Optional for clickable feel
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Order',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFFCA771A),
-                                      ),
+                                        const SizedBox(height: 10.0),
+                                        // User Review Card
+                                        Column(
+                                          children: [
+                                            Card(
+                                              color: Colors.white,
+                                              elevation: 2.0,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              child: const Padding(
+                                                padding: EdgeInsets.all(12.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    // User Info and Rating
+                                                    Row(
+                                                      children: [
+                                                        CircleAvatar(
+                                                          backgroundColor:
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  218,
+                                                                  218,
+                                                                  218),
+                                                          child: Icon(
+                                                              Icons.person,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
+                                                        SizedBox(width: 10.0),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                'John Doe',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      14.0,
+                                                                ),
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      size:
+                                                                          16.0),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      size:
+                                                                          16.0),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      size:
+                                                                          16.0),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      size:
+                                                                          16.0),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .star_border,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      size:
+                                                                          16.0),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          '2 days ago',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            fontSize: 12.0,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 10.0),
+                                                    // Comment Text
+                                                    Text(
+                                                      'The product quality is excellent! I’m very satisfied with the delivery and packaging. Highly recommend to others.',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Poppins',
+                                                        fontSize: 14.0,
+                                                        color: Colors.black87,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.white,
+          shape: const CircularNotchedRectangle(),
+          elevation: 4.0,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFFCA771A),
+                      side: const BorderSide(
+                          color: Color(0xFFCA771A), width: 2.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    onPressed: () async {
+                      // Message button logic
+                    },
+                    child: const Text(
+                      'Message',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFCA771A),
                       ),
                     ),
                   ),
                 ),
-                )
-                
+                const SizedBox(width: 10.0),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFFCA771A),
+                      side: const BorderSide(
+                          color: Color(0xFFCA771A), width: 2.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    onPressed: () async {
+                      // Checkout button logic
+                    },
+                    child: const Text(
+                      'Checkout',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFCA771A),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-        ],
-      ),
-    );
+        ));
   }
 }

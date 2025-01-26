@@ -1,11 +1,14 @@
 // ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously, unused_import, prefer_const_declarations, avoid_print
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:helen_app/src/views/common/Forgot%20Password/create_new_password.dart';
 
-import 'dart:io';
+import 'dart:async';
 
+import 'dart:io';
+import 'dart:math'; // For generating OTP
 import 'package:helen_app/src/services/api_service.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -40,9 +43,15 @@ class _OtpPageState extends State<OtpPage> {
   final FocusNode _focusNode3 = FocusNode();
   final FocusNode _focusNode4 = FocusNode();
   final FocusNode _focusNode5 = FocusNode();
+  
   final FocusNode _focusNode6 = FocusNode();
+  bool _isLoading = false; // Add a loading state
 
   String _verificationId = '';
+
+  int _remainingSeconds = 60; // Timer countdown in seconds
+  Timer? _resendTimer;
+  bool _isResendEnabled = false; // Whether the resend button is enabled
   
   @override
   void initState() {
@@ -68,14 +77,36 @@ class _OtpPageState extends State<OtpPage> {
     _focusNode4.dispose();
     _focusNode5.dispose();
     _focusNode6.dispose();
+    _resendTimer?.cancel(); // Cancel the timer if the widget is disposed
+
     super.dispose();
   }
+
+  void _startResendCountdown() {
+  setState(() {
+    _remainingSeconds = 60;
+    _isResendEnabled = false;
+  });
+
+  _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    setState(() {
+      if (_remainingSeconds > 0) {
+        _remainingSeconds--;
+      } else {
+        _isResendEnabled = true;
+        _resendTimer?.cancel(); // Stop the timer when countdown ends
+      }
+    });
+  });
+}
   
   void _sendOtp() {
-      final phoneNumber ='+1 234-567-8999';
+      final phoneNumber =widget.phoneNumber;
       
       if (phoneNumber.isNotEmpty) {
         sendOtp(phoneNumber);
+        _startResendCountdown(); // Start the countdown when OTP is sent
+
       } else {
         print('Phone number is not provided.');
       }
@@ -91,61 +122,57 @@ class _OtpPageState extends State<OtpPage> {
     String middlePart = '*' * (phoneNumber.length - 7); // Replace middle part with asterisks
     return '$firstPart$middlePart$lastPart';
   }
-
-  Future<void> sendOtp(String? phoneNumber) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-
-    await auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-    
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // Auto-retrieval or instant verification succeeded
-        await auth.signInWithCredential(credential);
-        // Navigate to next page if needed
-      },
-      
-      verificationFailed: (FirebaseAuthException e) {
-        // Handle error
-        if (e.code == 'invalid-phone-number') {
-          print('The provided phone number is not valid.');
-        } else {
-          print('Something went wrong: ${e.message}');
-        }
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        // Save the verificationId for later when verifying OTP
-        setState(() {
-          _verificationId = verificationId;
-        });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('OTP has been sent successfully!'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        // Handle timeout
-      },
-    );
+  
+  String generateOtp({int length = 6}) {
+    final random = Random();
+    final otp = List.generate(length, (_) => random.nextInt(10)).join();
+    return otp;
   }
 
-  Future<bool> verifyOtp(String otp) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: _verificationId,
-      smsCode: otp,
-    );
-    
-    try {
-      await auth.signInWithCredential(credential);
-      // Navigate to next page after successful verification
+  Future<void> sendOtp(String? phoneNumber) async {
+  if (phoneNumber == null || phoneNumber.isEmpty) {
+    print('Invalid phone number');
+    return;
+  }
+
+  final otp = generateOtp(); // Generate the OTP
+  final message = "Thank you for registering at Helen!"; // Use as a placeholder for the OTP
+
+  // Save OTP for later verification (you might want to store this in a backend or in a secure place)
+  _verificationId = otp;
+
+  final response = await http.post(
+    Uri.parse('https://api.semaphore.co/api/v4/otp'),  // Use Semaphore's OTP endpoint
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {
+      'apikey': 'b95d4ce6dca75dcd54cea894194715f1',  // Your actual API key
+      'number': phoneNumber,  // Recipient's phone number
+      'message': message,  // The message with %code% placeholder for OTP
+      'sendername': 'Helen',  // Optional, your sender name registered with Semaphore
+      'code': otp,  // The generated OTP code
+    },
+  );
+
+  print(response.body);
+  if (response.statusCode == 200) {
+    // OTP sent successfully
+    print('OTP has been sent successfully!');
+    // You can display a Snackbar or toast to notify the user
+  } else {
+    print('Failed to send OTP: ${response.body}');
+  }
+}
+
+
+
+ bool verifyOtp(String enteredOtp) {
+    if (enteredOtp == _verificationId) {
+      print('OTP verification successful!');
       return true;
-    } catch (e) {
-      // Handle error, e.g., invalid OTP
-      print('Error verifying OTP: $e');
+    } else {
+      print('OTP verification failed!');
       return false;
     }
   }
@@ -259,18 +286,18 @@ class _OtpPageState extends State<OtpPage> {
             const SizedBox(height: 20),
  
             // Resend Code Button
-            Padding(
+              Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                        sendOtp('+1 234-567-8999');
-                    },
-                    child: const Text(
-                      'Resend Code',
-                      style: TextStyle(
+                    TextButton(
+                    onPressed: _isResendEnabled ? () => _sendOtp() : null,
+                    child: Text(
+                      _isResendEnabled
+                        ? 'Resend Code'
+                        : 'Resend in $_remainingSeconds sec',
+                      style: const TextStyle(
                         color: Color(0xFFCA771A),
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
@@ -294,7 +321,12 @@ class _OtpPageState extends State<OtpPage> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
-                onPressed: () async {
+                onPressed: _isLoading
+                ? null
+                : () async {
+                   setState(() {
+                    _isLoading = true; // Set loading state to true
+                  });
                   String otp = _otpController1.text + _otpController2.text + _otpController3.text + _otpController4.text + _otpController5.text + _otpController6.text;
       
                  
@@ -332,9 +364,35 @@ class _OtpPageState extends State<OtpPage> {
                         const SnackBar(content: Text('Invalid OTP, please try again.')),
                       );
                     }
+
+                     setState(() {
+                      _isLoading = false; // Reset loading state
+                    });
                 },
                   
-                child: const Center(
+                  child: _isLoading // Show loading indicator when loading
+              ? const Row(
+                  mainAxisSize: MainAxisSize.min, // Center the content
+                  children: [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 2, // Adjust thickness if needed
+                    ),
+                    SizedBox(width: 10), // Space between spinner and text
+                     Center(
+                      child: Text(
+                        'Verifying...',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                ),
+                  ],
+                )
+              : const Center(
                   child: Text(
                     'Verify OTP',
                     style: TextStyle(

@@ -1,11 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously, unnecessary_null_comparison, prefer_const_declarations, avoid_print
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:helen_app/src/views/common/login.dart';
 import 'dart:io';
 import 'dart:math'; // For generating OTP
 import 'package:helen_app/src/services/api_service.dart';
+import 'dart:async';
 
 
 class OtpPage extends StatefulWidget {
@@ -52,6 +52,12 @@ class _OtpPageState extends State<OtpPage> {
   final FocusNode _focusNode5 = FocusNode();
   final FocusNode _focusNode6 = FocusNode();
 
+  bool _isLoading = false; // Add a loading state
+
+  int _remainingSeconds = 60; // Timer countdown in seconds
+  Timer? _resendTimer;
+  bool _isResendEnabled = false; // Whether the resend button is enabled
+
   String _verificationId = '';
 
    @override
@@ -78,6 +84,8 @@ class _OtpPageState extends State<OtpPage> {
     _focusNode4.dispose();
     _focusNode5.dispose();
     _focusNode6.dispose();
+    _resendTimer?.cancel(); // Cancel the timer if the widget is disposed
+
     super.dispose();
   }
 
@@ -93,12 +101,34 @@ class _OtpPageState extends State<OtpPage> {
     return '$firstPart$middlePart$lastPart';
   }
 
+   void _startResendCountdown() {
+    setState(() {
+      _remainingSeconds = 60;
+      _isResendEnabled = false;
+    });
+
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingSeconds > 0) {
+        setState(() {
+          _remainingSeconds--;
+        });
+      } else {
+        setState(() {
+          _isResendEnabled = true;
+        });
+        _resendTimer?.cancel(); // Stop the timer when countdown ends
+      }
+    });
+  }
+
   
   void _sendOtp() {
       final phoneNumber = widget.registrationData['contactNo'];
       print('phoneNumber: $phoneNumber');
       if (phoneNumber != null && phoneNumber.isNotEmpty) {
         sendOtp(phoneNumber);
+        _startResendCountdown(); // Start the countdown when OTP is sent
+
       } else {
         print('Phone number is not provided.');
       }
@@ -120,7 +150,7 @@ Future<void> sendOtp(String? phoneNumber) async {
   }
 
   final otp = generateOtp(); // Generate the OTP
-  final message = "Your OTP code for Helen is %code%"; // Use %code% as a placeholder for the OTP
+  final message = "Forgot Password"; // Use as a placeholder for the OTP
 
   // Save OTP for later verification (you might want to store this in a backend or in a secure place)
   _verificationId = otp;
@@ -162,6 +192,7 @@ Future<void> sendOtp(String? phoneNumber) async {
       return false;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -275,13 +306,13 @@ Future<void> sendOtp(String? phoneNumber) async {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                        sendOtp(widget.registrationData['contactNo']);
-                    },
-                    child: const Text(
-                      'Resend Code',
-                      style: TextStyle(
+                    TextButton(
+                    onPressed: _isResendEnabled ? () => _sendOtp() : null,
+                    child: Text(
+                      _isResendEnabled
+                        ? 'Resend Code'
+                        : 'Resend in $_remainingSeconds sec',
+                      style: const TextStyle(
                         color: Color(0xFFCA771A),
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
@@ -305,12 +336,18 @@ Future<void> sendOtp(String? phoneNumber) async {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
-                onPressed: () async {
+                onPressed: _isLoading
+                ? null
+                :() async {
+                  setState(() {
+                    _isLoading = true; // Set loading state to true
+                  });
+
                   String otp = _otpController1.text + _otpController2.text + _otpController3.text + _otpController4.text + _otpController5.text + _otpController6.text;
                   bool isSuccess = false;
                  
                  print('otp: $otp');
-                  bool isVerified = await verifyOtp(otp);  
+                  bool isVerified = verifyOtp(otp);  
      
                   if (isVerified && mounted ) {
                   // Show a success dialog or SnackBar
@@ -399,9 +436,35 @@ Future<void> sendOtp(String? phoneNumber) async {
                   } else {
                     print('Failed to verify');
                   }
+
+                   setState(() {
+                      _isLoading = false; // Reset loading state
+                    });
                 },
                   
-                child: const Center(
+                child: _isLoading // Show loading indicator when loading
+              ? const Row(
+                  mainAxisSize: MainAxisSize.min, // Center the content
+                  children: [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 2, // Adjust thickness if needed
+                    ),
+                    SizedBox(width: 10), // Space between spinner and text
+                     Center(
+                      child: Text(
+                        'Verifying...',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                ),
+                  ],
+                )
+              : const Center(
                   child: Text(
                     'Verify OTP',
                     style: TextStyle(

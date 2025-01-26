@@ -158,62 +158,10 @@ class _FarmerNotifPageState extends State<FarmerNotifPage> {
                 ],
               ),
             ),
-            // Add the 3-circle icon and the popup menu
-            PopupMenuButton<String>(
-              icon: const Icon(
-                Icons.more_vert,
-                color: Color(0xFFCA771A),
-              ),
-              onSelected: (String result) {
-                if (result == 'remove') {
-                  _removeNotification(index);
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: 'remove',
-                  child: Text(
-                    'Remove this notification',
-                    style: TextStyle(
-                      fontFamily: 'Poppins', // Poppins font for remove option
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        
           ],
         ),
       ),
     );
-  }
-
-  // Function to remove a notification and show an undo option
-  void _removeNotification(int index) {
-    final removedNotif = _notificationList[index];
-
-    setState(() {
-      _notificationList.removeAt(index);
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(
-          'Notification Removed',
-          style: TextStyle(
-            fontFamily: 'Poppins', // Poppins font for "Notification Removed"
-          ),
-        ),
-        action: SnackBarAction(
-          label: 'Undo',
-          textColor: Colors.white,  // Optional: add color to the undo text
-          onPressed: () {
-            // Undo removal by adding the notification back to the list
-            setState(() {
-              _notificationList.insert(index, removedNotif);
-            });
-          },
-        ),
-      ),
-    );
-  }
+  }  
 }

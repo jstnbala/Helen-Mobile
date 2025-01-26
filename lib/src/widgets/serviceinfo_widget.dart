@@ -183,15 +183,7 @@ class _ServiceInfoWidgetState extends State<ServiceInfoWidget> {
                   ),
                 const SizedBox(height: 15.0),
                 
-                if (serviceInfo != null && serviceInfo!['bankTransferQrFile'] != null)
-                  Text(
-                    'Bank Transfer QR File: ${serviceInfo!['bankTransferQrFile']}',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 18.0,
-                      color: Colors.white,
-                    ),
-                  ),
+               
               ],
             ),
           );

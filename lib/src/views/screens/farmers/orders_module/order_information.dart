@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/services/get_user_to_chat.dart';
 import 'package:helen_app/src/services/post_orders_api.dart';
+import 'package:helen_app/src/views/screens/farmers/orders_module/view_receipt.dart';
 import 'package:helen_app/src/views/screens/messages_module/specific_message.dart';
 
 class OrderInformation extends StatefulWidget {
@@ -363,6 +364,51 @@ class _OrderInformationState extends State<OrderInformation> {
                     fontSize: 16.0,
                   ),
                 ),
+              ],
+            ),
+             const SizedBox(height: 16.0), // Add some space before buttons
+
+            // Farmer Status
+            const Divider(
+              color: Colors.grey,
+              thickness: 1.0,
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Receipt'
+                ),
+                 OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Color(0xFFCA771A)),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    onPressed: () async {
+
+          
+                          // Navigate to SpecificMessage with sender details
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewReceipt(
+                                order: widget.order,
+                              ),
+                            ),
+                          );
+                
+                      },
+                    child: const Text(
+                      'View Receipt',
+                      style: TextStyle(
+                        color: Color(0xFFCA771A),
+                      ),
+                    ),
+                  ),
               ],
             ),
                 

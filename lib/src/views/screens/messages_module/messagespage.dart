@@ -30,6 +30,7 @@ class _MessagesPageState extends State<MessagesPage> {
 
     setState(() {
       _userId = userId;
+      // Fetch messages only if userId is not null
       _messagesFuture = userId != null ? apiService.getMessages() : Future.value([]);
     });
   }
@@ -41,7 +42,7 @@ class _MessagesPageState extends State<MessagesPage> {
   void _onButtonPressed(String buttonName) {
     setState(() {
       _selectedButton = buttonName;
-      _loadUserIdAndMessages();
+      _loadUserIdAndMessages(); // Reload messages based on selected button
     });
   }
 

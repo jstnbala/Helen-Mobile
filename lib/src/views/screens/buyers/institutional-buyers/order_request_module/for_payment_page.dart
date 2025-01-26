@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
+import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/insti_receipt.dart';
 
 class PriceBreakdownScreen extends StatefulWidget {
   final Map<String, dynamic> request;
@@ -15,6 +16,7 @@ class PriceBreakdownScreen extends StatefulWidget {
 
 class _PriceBreakdownScreenState extends State<PriceBreakdownScreen> {
   String? _selectedPaymentOption; // Variable to store selected payment option
+  String? _selectedDeliveryOption;
   double totalSum = 0.0;
   
   List<String>? get paymentModes => widget.request['paymentOptions']?.cast<String>();
@@ -145,26 +147,78 @@ class _PriceBreakdownScreenState extends State<PriceBreakdownScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 5.0),
+
+            _buildDeliveryOptions(),
+           
             // Payment options section
             _buildPaymentOptions(),
             const SizedBox(height: 20.0),
+
             Center(
               child: ElevatedButton(
-                onPressed: () async {
-                  if (_selectedPaymentOption == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Please select a payment method.',
-                          style: TextStyle(fontFamily: 'Poppins'),
-                        ),
-                      ),
-                    );
-                  } else {
-                    // Handle payment confirmation with selected option
-                  }
-                },
+              onPressed: () async {
+  if (_selectedPaymentOption == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Please select a payment method.',
+          style: TextStyle(fontFamily: 'Poppins'),
+        ),
+      ),
+    );
+  } else {
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Confirm Payment',
+            style: TextStyle(fontFamily: 'Poppins'),
+          ),
+          content: Text(
+            'Are you sure you want to proceed with $_selectedPaymentOption as your payment method?',
+            style: const TextStyle(fontFamily: 'Poppins'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontFamily: 'Poppins'),
+              ),
+            ),
+            TextButton(
+            onPressed: () {
+                // Set default values for nullable options if they are null
+                String deliveryOption = _selectedDeliveryOption ?? 'DefaultDeliveryOption'; // Replace with your default delivery option
+                String paymentOption = _selectedPaymentOption ?? 'DefaultPaymentOption'; // Replace with your default payment option
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InstiPriceBreakdownScreen(
+                      request: widget.request,
+                      selectedDeliveryOption: deliveryOption,
+                      selectedPaymentOption: paymentOption,
+                    ),
+                  ),
+                );
+              },
+              child: const Text(
+                'Confirm',
+                style: TextStyle(fontFamily: 'Poppins'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFCA771A),
                   shape: RoundedRectangleBorder(
@@ -209,51 +263,221 @@ class _PriceBreakdownScreenState extends State<PriceBreakdownScreen> {
       ],
     );
   }
-
-  Widget _buildPaymentOptions() {
-    return Container(
-   
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-         
-      
-          if (paymentModes != null)
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 2,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Select Mode of Payment:",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Color(0xFFCA771A),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ...paymentModes!.map((mode) => _buildPaymentOptionItem(mode)).toList(),
-                ],
+    Widget _buildPaymentOptions() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+       
+    Container(
+        padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+        decoration: BoxDecoration(
+          color: Colors.white, // Background color for the container
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(0, 2),
+              blurRadius: 2,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Select Mode of Payment:",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Color(0xFFCA771A),
               ),
             ),
-        ],
-      ),
+            const SizedBox(height: 20),
+            // Static payment method
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedPaymentOption = 'Cash';
+                  });
+                  // Handle payment options here
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12.0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: _selectedPaymentOption == 'Cash'
+                        ? const Color.fromARGB(10, 202, 119, 26)
+                        : Colors.white,
+                    border: Border.all(
+                      color: _selectedPaymentOption == 'Cash'
+                          ? const Color.fromARGB(255, 202, 119, 26)
+                          : const Color.fromARGB(255, 177, 176, 176),
+                      width: _selectedPaymentOption == 'Cash' ? 2.0 : 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5.0),
+                        child: Image.asset(
+                          'images/buyers/cash.jpg', // Static image for cash
+                          width: 30.0,
+                          height: 24.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'Cash',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      )
+    
+          
+      ],
     );
   }
+
+Widget _buildDeliveryOptions() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+        decoration: BoxDecoration(
+          color: Colors.white, // Background color for the container
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(0, 2),
+              blurRadius: 2,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Select Mode of Delivery:",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Color(0xFFCA771A),
+              ),
+            ),
+            const SizedBox(height: 20),
+            
+            // Option: Pick Up at Any Area
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedDeliveryOption = 'PickUpAtAnyArea';
+                  });
+                  // Handle delivery option here
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12.0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: _selectedDeliveryOption == 'PickUpAtAnyArea'
+                        ? const Color.fromARGB(10, 202, 119, 26)
+                        : Colors.white,
+                    border: Border.all(
+                      color: _selectedDeliveryOption == 'PickUpAtAnyArea'
+                          ? const Color.fromARGB(255, 202, 119, 26)
+                          : const Color.fromARGB(255, 177, 176, 176),
+                      width: _selectedDeliveryOption == 'PickUpAtAnyArea' ? 2.0 : 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: const Row(
+                    children: [
+                     
+                      SizedBox(width: 10),
+                      Text(
+                        'Pick Up at Any Area',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // Option: Deliver at Any Area
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedDeliveryOption = 'DeliverAtAnyArea';
+                  });
+                  // Handle delivery option here
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12.0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: _selectedDeliveryOption == 'DeliverAtAnyArea'
+                        ? const Color.fromARGB(10, 202, 119, 26)
+                        : Colors.white,
+                    border: Border.all(
+                      color: _selectedDeliveryOption == 'DeliverAtAnyArea'
+                          ? const Color.fromARGB(255, 202, 119, 26)
+                          : const Color.fromARGB(255, 177, 176, 176),
+                      width: _selectedDeliveryOption == 'DeliverAtAnyArea' ? 2.0 : 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: const Row(
+                    children: [
+                    
+                      SizedBox(width: 10),
+                      Text(
+                        'Deliver at Any Area',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      )
+    ],
+  );
+}
+
 
   Widget _buildPaymentOptionItem(String mode) {
     String imagePath;
@@ -306,7 +530,7 @@ class _PriceBreakdownScreenState extends State<PriceBreakdownScreen> {
                 ),
               ),
               if (_selectedPaymentOption == mode)
-                Icon(Icons.check_circle, color: const Color(0xFFCA771A)),
+                const Icon(Icons.check_circle, color: Color(0xFFCA771A)),
             ],
           ),
         ),

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:helen_app/main.dart';
 import 'package:helen_app/src/views/common/navbar.dart';
-import 'package:helen_app/src/views/screens/farmers/orders_module/orderspage.dart';
+import 'package:screenshot/screenshot.dart';
 
 class DirectReceipt extends StatefulWidget {
   final String farmerName;
@@ -22,11 +26,14 @@ class DirectReceipt extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _DirectReceiptState createState() => _DirectReceiptState();
 }
 
 class _DirectReceiptState extends State<DirectReceipt> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+    final ScreenshotController _screenshotController = ScreenshotController();
+
   String? buyerFullName;
 
   @override
@@ -48,6 +55,50 @@ class _DirectReceiptState extends State<DirectReceipt> {
       });
     }
   }
+
+Future<void> _downloadReceipt() async {
+  try {
+    // Define the Downloads directory path
+    Directory downloadsDir = Directory('/storage/emulated/0/Download');
+
+    // Ensure the Downloads directory exists
+    if (!await downloadsDir.exists()) {
+      await downloadsDir.create(recursive: true);
+    }
+
+    // Set the full path where the file will be saved
+    String filePath = '${downloadsDir.path}/receipt.png';
+
+    // Capture the widget and save it directly to the Downloads directory
+    await _screenshotController.captureAndSave(downloadsDir.path, fileName: "receipt.png");
+
+    // Show a notification after saving
+    await _showDownloadNotification();
+
+    print('Receipt saved at: $filePath');
+  } catch (onError) {
+    print('Error capturing receipt: $onError');
+  }
+}
+Future<void> _showDownloadNotification() async {
+  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    'download_channel', // Channel ID
+    'Downloads',        // Channel name
+    channelDescription: 'Notifications for downloaded files',
+    importance: Importance.max,
+    priority: Priority.high,
+  );
+
+  const NotificationDetails notificationDetails =
+      NotificationDetails(android: androidDetails);
+
+  await flutterLocalNotificationsPlugin.show(
+    0, // Notification ID
+    'Receipt Downloaded',
+    'Your receipt has been saved successfully.',
+    notificationDetails,
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +150,9 @@ class _DirectReceiptState extends State<DirectReceipt> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              Screenshot(
+              controller: _screenshotController,
+              child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -344,14 +397,13 @@ class _DirectReceiptState extends State<DirectReceipt> {
                   ),
                 ),
               ),
+              ),
               const SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   OutlinedButton.icon(
-                    onPressed: () {
-                      // Add functionality for download
-                    },
+                    onPressed: _downloadReceipt,
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFFCA771A), width: 2),
                       shape: RoundedRectangleBorder(

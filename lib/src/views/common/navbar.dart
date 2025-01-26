@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helen_app/src/services/get_notifications_api.dart';
 import 'package:helen_app/src/context/socket_context.dart';
+import 'package:helen_app/src/utils/check_account_verification.dart';
 import 'package:helen_app/src/views/screens/notifications/farmer-notif.dart';
 import 'package:helen_app/src/views/screens/farmers/addproducts_module/addproduct.dart';
 import 'package:helen_app/src/widgets/floating_button_widget.dart';
@@ -12,6 +13,7 @@ import '../screens/farmers/orders_module/orderspage.dart';
 import 'profilepage.dart';
 import '../screens/buyers/direct-buyers/buyproducts_module/direct-homepage.dart';
 import '../screens/buyers/institutional-buyers/order_request_module/insti-homepage.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class NavBar extends StatefulWidget {
   final int initialIndex;
@@ -32,7 +34,6 @@ class _NavBarState extends State<NavBar> {
   final storage = const FlutterSecureStorage();
 
   static const Color selectedColor = Color.fromARGB(255, 145, 75, 28);
-  static const Color unselectedColor = Colors.white;
  
 
   @override
@@ -219,7 +220,7 @@ class _NavBarState extends State<NavBar> {
                         OrdersPage(),
                         ProfilePage(),
                       ]
-                    : const [
+                    : const [ 
                         HomepageInsti(),
                         MessagesPage(),
                         OrdersPage(),
@@ -230,76 +231,81 @@ class _NavBarState extends State<NavBar> {
       ),
           ],
         ),
-      bottomNavigationBar: Stack(
-        children: [
-          Container(
-            height: 64.0, // Set a fixed height for the BottomAppBar
-            margin: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 24.0), // Different margins for x and y axes
-            decoration: BoxDecoration(
-              color: Colors.transparent, // Set the background color of the BottomAppBar
-              borderRadius: BorderRadius.circular(16.0), // Rounded corners
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2), // Shadow color
-                  spreadRadius: 1, // Spread of the shadow
-                  blurRadius: 5, // Blur effect for the shadow
-                  offset: const Offset(2, 4), // Offset to elevate
-                ),
-              ],
+   bottomNavigationBar: NavigationBar(
+        height: 70,
+        backgroundColor: Colors.white,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) => _onItemTapped(index),
+        destinations: [
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.home_1_copy,
+              color: _selectedIndex == 0 ? selectedColor : const Color.fromARGB(255, 0, 0, 0),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0), // Apply rounded corners here
-              child: BottomAppBar(
-                color: const Color.fromARGB(255, 201, 129, 52), // Set BottomAppBar color
-                shape: const CircularNotchedRectangle(), // Maintain the notched shape
-                elevation: 0, // Set elevation to 0 since we handle shadows manually
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.home),
-                      color: _selectedIndex == 0 ? selectedColor : unselectedColor,
-                      iconSize: 27,
-                      onPressed: () => _onItemTapped(0),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.message),
-                      color: _selectedIndex == 1 ? selectedColor : unselectedColor,
-                      iconSize: 27,
-                      onPressed: () => _onItemTapped(1),
-                    ),
-                    if (isFarmer)
-                      const SizedBox(width: 50),
-                    IconButton(
-                      icon: const Icon(Icons.shopping_cart),
-                      color: _selectedIndex == 2 ? selectedColor : unselectedColor,
-                      iconSize: 27,
-                      onPressed: () => _onItemTapped(2),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.person),
-                      color: _selectedIndex == 3 ? selectedColor : unselectedColor,
-                      iconSize: 27,
-                      onPressed: () => _onItemTapped(3),
-                    ),
-                  ],
-                ),
-              ),
+            label: 'Home',
+            selectedIcon: const Icon(
+              Iconsax.home,
+              color: selectedColor,
             ),
           ),
-          if (isFarmer)
-            FloatingActionButtonWidget(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddProductPage()),
-                );
-              },
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.message_copy,
+              color: _selectedIndex == 1 ? selectedColor : const Color.fromARGB(255, 0, 0, 0),
             ),
+            label: 'Messages',
+            selectedIcon: const Icon(
+              Iconsax.message,
+              color: selectedColor,
+            ),
+          ),
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.shop_copy,
+              color: _selectedIndex == 2 ? selectedColor : const Color.fromARGB(255, 0, 0, 0),
+            ),
+            label: 'Orders',
+            selectedIcon: const Icon(
+              Iconsax.shop,
+              color: selectedColor,
+            ),
+          ),
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.user_copy,
+              color: _selectedIndex == 3 ? selectedColor : const Color.fromARGB(255, 0, 0, 0),
+            ),
+            label: 'Account',
+            selectedIcon: const Icon(
+              Iconsax.user,
+              color: selectedColor,
+            ),
+          ),
         ],
       ),
+      floatingActionButton: isFarmer
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                // Navigate to Add Product Page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddProductPage(),
+                  ),
+                );
+              },
+              label: const Text("Add Product"),
+              icon: const Icon(Icons.add),
+              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xFFCA771A), // The desired color
+              
+
+            )
+          : null,
 
       ),
     );
   }
 }
+
+

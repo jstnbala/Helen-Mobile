@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:helen_app/src/services/order_request_api.dart';
+import 'package:helen_app/src/utils/check_account_verification.dart';
 import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/for_payment_page.dart';
 import 'package:helen_app/src/views/screens/buyers/institutional-buyers/order_request_module/insti-orderform.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
@@ -133,10 +134,15 @@ Future<void> fetchAcceptedOrders() async {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OrderForm()),
-                  );
+
+                  checkAccountVerification(context, onVerified: (){
+
+                
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OrderForm()),
+                    );
+                  });
                 },
                 child: Container(
                   padding: const EdgeInsets.all(16.0),
@@ -345,6 +351,7 @@ else if (_isAcceptedSelected)
               return GestureDetector(
                 onTap: () {
                   // Navigate to PriceBreakdownScreen with the selected request
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(
